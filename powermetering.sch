@@ -68,7 +68,7 @@ Wire Wire Line
 	3050 6950 3150 6950
 Wire Wire Line
 	3050 7050 3150 7050
-Text GLabel 15100 2300 2    50   Input ~ 0
+Text GLabel 15100 4400 2    50   Input ~ 0
 L1
 $Comp
 L Device:Ferrite_Bead L1
@@ -418,7 +418,7 @@ F 3 "" H 13450 3500 50  0000 C CNN
 	1    13450 3500
 	0    1    1    0   
 $EndComp
-Text GLabel 15100 4400 2    50   Input ~ 0
+Text GLabel 15100 2300 2    50   Input ~ 0
 L3
 $Comp
 L Device:Ferrite_Bead L3
@@ -2253,17 +2253,17 @@ F 3 "~" H 2800 2550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 12550 2550 0    50   ~ 0
-UL1N
+UL3N
 Text Label 13100 2550 0    50   ~ 0
-UL1P
+UL3P
 Text Label 13100 3400 0    50   ~ 0
 UL2P
 Text Label 13100 4300 0    50   ~ 0
-UL3P
+UL1P
 Text Label 12550 3450 0    50   ~ 0
 UL2N
 Text Label 12550 4350 0    50   ~ 0
-UL3N
+UL1N
 Connection ~ 12550 5850
 Wire Wire Line
 	12550 5850 12650 5850
@@ -2796,10 +2796,10 @@ Connection ~ 5000 4000
 Wire Wire Line
 	5000 4000 5100 4000
 $Comp
-L stmbl:C C?
+L stmbl:C C63
 U 1 1 5DA79E78
 P 4100 3450
-F 0 "C?" H 4150 3550 50  0000 L CNN
+F 0 "C63" H 4150 3550 50  0000 L CNN
 F 1 "150n" H 4150 3350 50  0000 L CNN
 F 2 "stmbl:C_1808" H 4138 3300 50  0001 C CNN
 F 3 "" H 4100 3450 50  0000 C CNN
@@ -2810,10 +2810,10 @@ Connection ~ 4100 3300
 Wire Wire Line
 	4100 3300 4400 3300
 $Comp
-L stmbl:C C?
+L stmbl:C C73
 U 1 1 5DA7A654
 P 4100 3850
-F 0 "C?" H 4150 3950 50  0000 L CNN
+F 0 "C73" H 4150 3950 50  0000 L CNN
 F 1 "150n" H 4150 3750 50  0000 L CNN
 F 2 "stmbl:C_1808" H 4138 3700 50  0001 C CNN
 F 3 "" H 4100 3850 50  0000 C CNN
@@ -2830,4 +2830,105 @@ Wire Wire Line
 Connection ~ 4100 3650
 Wire Wire Line
 	4100 3650 4100 3700
+Text Label 8400 6800 0    50   ~ 0
+RESET
+$Comp
+L Mechanical:MountingHole H9
+U 1 1 5DBB8804
+P 4500 7850
+F 0 "H9" H 4600 7896 50  0000 L CNN
+F 1 "MountingHole" H 4600 7805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 4500 7850 50  0001 C CNN
+F 3 "~" H 4500 7850 50  0001 C CNN
+	1    4500 7850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H10
+U 1 1 5DBBF11A
+P 4500 8100
+F 0 "H10" H 4600 8146 50  0000 L CNN
+F 1 "MountingHole" H 4600 8055 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 4500 8100 50  0001 C CNN
+F 3 "~" H 4500 8100 50  0001 C CNN
+	1    4500 8100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H11
+U 1 1 5DBBF269
+P 4500 8350
+F 0 "H11" H 4600 8396 50  0000 L CNN
+F 1 "MountingHole" H 4600 8305 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 4500 8350 50  0001 C CNN
+F 3 "~" H 4500 8350 50  0001 C CNN
+	1    4500 8350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H12
+U 1 1 5DBBF7A6
+P 4500 8600
+F 0 "H12" H 4600 8646 50  0000 L CNN
+F 1 "MountingHole" H 4600 8555 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 4500 8600 50  0001 C CNN
+F 3 "~" H 4500 8600 50  0001 C CNN
+	1    4500 8600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H16
+U 1 1 5DBBF92B
+P 5300 8600
+F 0 "H16" H 5400 8646 50  0000 L CNN
+F 1 "MountingHole" H 5400 8555 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 5300 8600 50  0001 C CNN
+F 3 "~" H 5300 8600 50  0001 C CNN
+	1    5300 8600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H15
+U 1 1 5DBBFB1F
+P 5300 8350
+F 0 "H15" H 5400 8396 50  0000 L CNN
+F 1 "MountingHole" H 5400 8305 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 5300 8350 50  0001 C CNN
+F 3 "~" H 5300 8350 50  0001 C CNN
+	1    5300 8350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H14
+U 1 1 5DBBFF20
+P 5300 8100
+F 0 "H14" H 5400 8146 50  0000 L CNN
+F 1 "MountingHole" H 5400 8055 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 5300 8100 50  0001 C CNN
+F 3 "~" H 5300 8100 50  0001 C CNN
+	1    5300 8100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H13
+U 1 1 5DBC00A9
+P 5300 7850
+F 0 "H13" H 5400 7896 50  0000 L CNN
+F 1 "MountingHole" H 5400 7805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 5300 7850 50  0001 C CNN
+F 3 "~" H 5300 7850 50  0001 C CNN
+	1    5300 7850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Battery_Cell BT1
+U 1 1 5DBD7F45
+P 1800 5750
+F 0 "BT1" H 1918 5846 50  0000 L CNN
+F 1 "Battery_Cell" H 1918 5755 50  0000 L CNN
+F 2 "Battery:BatteryHolder_Keystone_1042_1x18650" V 1800 5810 50  0001 C CNN
+F 3 "~" V 1800 5810 50  0001 C CNN
+	1    1800 5750
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

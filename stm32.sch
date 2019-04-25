@@ -233,10 +233,6 @@ F 3 "" H 14000 950 50  0000 C CNN
 $EndComp
 Text HLabel 8250 6000 0    60   Input ~ 0
 STM_RXER
-Text GLabel 8850 5600 0    60   Input ~ 0
-PS_EN
-Text GLabel 11350 5000 2    60   Input ~ 0
-temp
 Text GLabel 8850 4600 0    60   Input ~ 0
 SWCLK
 Text GLabel 8850 4500 0    60   Input ~ 0
@@ -277,8 +273,6 @@ Wire Wire Line
 Wire Wire Line
 	11250 5500 11950 5500
 Wire Wire Line
-	11250 5200 11350 5200
-Wire Wire Line
 	11250 5100 11950 5100
 Wire Wire Line
 	13200 5750 13300 5750
@@ -287,8 +281,6 @@ Wire Wire Line
 Wire Wire Line
 	8400 1600 8700 1600
 Connection ~ 8700 1600
-Wire Wire Line
-	11250 6500 11350 6500
 Wire Wire Line
 	11250 5900 11950 5900
 Wire Wire Line
@@ -867,190 +859,16 @@ Wire Wire Line
 	7800 3700 8000 3700
 Wire Wire Line
 	8850 3300 8950 3300
-Text GLabel 11350 4600 2    50   Input ~ 0
-probe0
-Text GLabel 8850 4700 0    50   Input ~ 0
-probe1
-Text GLabel 11350 2300 2    50   Input ~ 0
-ENC_A
-Text GLabel 11350 2500 2    50   Input ~ 0
-ENC_B
-Text GLabel 11350 2700 2    50   Input ~ 0
-ENC_Z
-Text GLabel 11350 2400 2    50   Input ~ 0
-EN_A
-Text GLabel 11350 2600 2    50   Input ~ 0
-EN_B
-Text GLabel 11350 2800 2    50   Input ~ 0
-EN_Z
-Text GLabel 11750 2900 2    50   Input ~ 0
-e-stop
-Text GLabel 11350 5300 2    50   Input ~ 0
-ain0
-Text GLabel 8850 3200 0    50   Input ~ 0
-ain1
-Text GLabel 8850 3500 0    50   Input ~ 0
-ain2
-Text GLabel 8850 3600 0    50   Input ~ 0
-ain3
-Text GLabel 8850 3700 0    50   Input ~ 0
-ain4
-Text GLabel 8850 3800 0    50   Input ~ 0
-ain5
-Text GLabel 8850 5000 0    50   Input ~ 0
-ain6
-Text GLabel 8850 5100 0    50   Input ~ 0
-ain7
-Text GLabel 11350 1700 2    50   Input ~ 0
-out0
-Text GLabel 11350 1800 2    50   Input ~ 0
-out1
-Text GLabel 11350 1900 2    50   Input ~ 0
-out2
-Text GLabel 11350 2000 2    50   Input ~ 0
-out3
-Text GLabel 8850 6400 0    50   Input ~ 0
-iso_in0
-Text GLabel 8850 6500 0    50   Input ~ 0
-iso_in1
-Text GLabel 11350 4200 2    50   Input ~ 0
-iso_out0
-Text GLabel 11350 4300 2    50   Input ~ 0
-iso_out1
-Text GLabel 8850 4200 0    50   Input ~ 0
-io0
-Text GLabel 8850 4100 0    50   Input ~ 0
-io2
-Text GLabel 11350 3400 2    50   Input ~ 0
-io3
-Text GLabel 11400 3900 2    50   Input ~ 0
-io4
-Text GLabel 11350 3300 2    50   Input ~ 0
-io5
-Text GLabel 11350 5800 2    50   Input ~ 0
-io6
-Text GLabel 11350 3200 2    50   Input ~ 0
-io7
-Text GLabel 11350 5700 2    50   Input ~ 0
-io8
-Text GLabel 11350 6200 2    50   Input ~ 0
-io9
-Text GLabel 11350 5600 2    50   Input ~ 0
-io10
-Text GLabel 11350 6100 2    50   Input ~ 0
-io11
-Text GLabel 11350 4700 2    50   Input ~ 0
-io12
-Text GLabel 11350 6000 2    50   Input ~ 0
-io13
 Wire Wire Line
 	8950 5700 8850 5700
 Wire Wire Line
-	8950 3500 8850 3500
-Wire Wire Line
-	8950 3200 8850 3200
-Wire Wire Line
-	8950 3600 8850 3600
-Wire Wire Line
-	8850 3700 8950 3700
-Wire Wire Line
-	8950 3800 8850 3800
-Wire Wire Line
-	8850 5000 8950 5000
-Wire Wire Line
-	11350 5000 11250 5000
-Wire Wire Line
-	11350 5300 11250 5300
-Wire Wire Line
-	11250 2800 11350 2800
-Wire Wire Line
-	11250 2900 11350 2900
-Wire Wire Line
-	11250 2700 11350 2700
-Wire Wire Line
-	11250 2600 11350 2600
-Text GLabel 11350 3500 2    50   Input ~ 0
-io1
-Wire Wire Line
-	11250 3200 11350 3200
-Wire Wire Line
-	11250 3300 11350 3300
-Wire Wire Line
-	11250 3400 11350 3400
-Wire Wire Line
-	8850 4700 8950 4700
-Wire Wire Line
-	11250 6000 11350 6000
-Wire Wire Line
-	11250 6100 11350 6100
-Wire Wire Line
-	11250 6200 11350 6200
-Wire Wire Line
-	11250 3500 11350 3500
-Wire Wire Line
-	11250 1600 11350 1600
-Wire Wire Line
-	11250 2100 11400 2100
-Wire Wire Line
-	11250 1500 11350 1500
-Wire Wire Line
-	11250 3900 11400 3900
-Wire Wire Line
-	11250 4000 11350 4000
-Wire Wire Line
-	11250 4100 11350 4100
-Wire Wire Line
-	8750 5800 8950 5800
-Wire Wire Line
-	8750 5900 8950 5900
-Text GLabel 11350 4400 2    50   Input ~ 0
-spindle_pwm
-Wire Wire Line
-	8850 6400 8950 6400
-Wire Wire Line
 	11250 3700 11400 3700
-Wire Wire Line
-	11250 1700 11350 1700
-Wire Wire Line
-	11250 1800 11350 1800
-Wire Wire Line
-	11250 1900 11350 1900
-Wire Wire Line
-	11250 2000 11350 2000
-Wire Wire Line
-	11250 6300 11350 6300
-Wire Wire Line
-	11250 2400 11350 2400
-Wire Wire Line
-	11250 2500 11350 2500
 Wire Wire Line
 	11250 3800 11400 3800
 Wire Wire Line
 	11250 3600 11400 3600
 Wire Wire Line
-	11250 2300 11350 2300
-Wire Wire Line
-	8850 6500 8950 6500
-Text GLabel 11350 6500 2    50   Input ~ 0
-led0
-Wire Wire Line
-	8850 5600 8950 5600
-Text GLabel 11350 6400 2    50   Input ~ 0
-led1
-Text GLabel 11350 6300 2    50   Input ~ 0
-led2
-Wire Wire Line
-	8950 5200 8800 5200
-Wire Wire Line
-	11250 2200 11400 2200
-Wire Wire Line
 	15400 8950 15400 9050
-Text GLabel 11350 4000 2    50   Input ~ 0
-ENC_Z
-Text GLabel 11350 4100 2    50   Input ~ 0
-ENC_A
-Text GLabel 11350 5200 2    60   Input ~ 0
-DC_LINK
 Text GLabel 14200 4450 1    60   Input ~ 0
 DC_LINK
 $Comp
@@ -1084,131 +902,13 @@ Wire Wire Line
 Wire Wire Line
 	14200 4550 14200 4450
 Wire Wire Line
-	8850 5100 8950 5100
-Wire Wire Line
-	11350 4200 11250 4200
-Wire Wire Line
-	11250 4300 11350 4300
-Wire Wire Line
-	11250 4400 11350 4400
-Wire Wire Line
 	11250 4500 11350 4500
 Wire Wire Line
-	11350 5600 11250 5600
-Wire Wire Line
-	11250 5700 11350 5700
-Wire Wire Line
-	11350 5800 11250 5800
-Wire Wire Line
 	8850 4000 8950 4000
-Wire Wire Line
-	8850 4100 8950 4100
-Wire Wire Line
-	8850 4200 8950 4200
-Wire Wire Line
-	11350 4600 11250 4600
-Wire Wire Line
-	11350 4700 11250 4700
 Text GLabel 14850 2250 2    60   Input ~ 0
 SWIO
 Text GLabel 14850 1850 2    60   Input ~ 0
 SWCLK
-Wire Wire Line
-	11350 6400 11250 6400
-$Comp
-L stmbl:R R59
-U 1 1 5BD3D9C6
-P 11500 2900
-F 0 "R59" H 11570 2946 50  0000 L CNN
-F 1 "1k" H 11570 2855 50  0000 L CNN
-F 2 "stmbl:R_0603" V 11430 2900 50  0001 C CNN
-F 3 "" H 11500 2900 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11500 2900
-	0    1    1    0   
-$EndComp
-$Comp
-L stmbl:Led_Small D23
-U 1 1 5C0CA404
-P 8700 5200
-F 0 "D23" V 8746 5132 50  0000 R CNN
-F 1 "green" V 8655 5132 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 8700 5200 50  0001 C CNN
-F 3 "" V 8700 5200 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    8700 5200
-	1    0    0    -1  
-$EndComp
-$Comp
-L stmbl:R R57
-U 1 1 5C0CA40B
-P 8350 5200
-F 0 "R57" H 8420 5246 50  0000 L CNN
-F 1 "470" H 8420 5155 50  0000 L CNN
-F 2 "stmbl:R_0603" V 8280 5200 50  0001 C CNN
-F 3 "" H 8350 5200 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    8350 5200
-	0    1    1    0   
-$EndComp
-$Comp
-L stmbl:GND #PWR0153
-U 1 1 5C0CA412
-P 8100 5200
-F 0 "#PWR0153" H 8100 4950 50  0001 C CNN
-F 1 "GND" H 8105 5027 50  0000 C CNN
-F 2 "" H 8100 5200 50  0000 C CNN
-F 3 "" H 8100 5200 50  0000 C CNN
-	1    8100 5200
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	8100 5200 8200 5200
-Wire Wire Line
-	8600 5200 8500 5200
-$Comp
-L stmbl:Led_Small D27
-U 1 1 5C0D6C44
-P 11500 2200
-F 0 "D27" V 11546 2132 50  0000 R CNN
-F 1 "green" V 11455 2132 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 11500 2200 50  0001 C CNN
-F 3 "" V 11500 2200 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11500 2200
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:R R63
-U 1 1 5C0D6C4B
-P 11850 2200
-F 0 "R63" H 11920 2246 50  0000 L CNN
-F 1 "470" H 11920 2155 50  0000 L CNN
-F 2 "stmbl:R_0603" V 11780 2200 50  0001 C CNN
-F 3 "" H 11850 2200 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11850 2200
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	12100 2200 12000 2200
-Wire Wire Line
-	11600 2200 11700 2200
 $Comp
 L stmbl:Led_Small D29
 U 1 1 5C0E38C7
@@ -1344,237 +1044,64 @@ Wire Wire Line
 	12100 3600 12000 3600
 Wire Wire Line
 	11600 3600 11700 3600
-$Comp
-L stmbl:Led_Small D25
-U 1 1 5C10B89A
-P 11450 1600
-F 0 "D25" V 11496 1532 50  0000 R CNN
-F 1 "green" V 11405 1532 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 11450 1600 50  0001 C CNN
-F 3 "" V 11450 1600 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11450 1600
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:R R61
-U 1 1 5C10B8A1
-P 11800 1600
-F 0 "R61" H 11870 1646 50  0000 L CNN
-F 1 "470" H 11870 1555 50  0000 L CNN
-F 2 "stmbl:R_0603" V 11730 1600 50  0001 C CNN
-F 3 "" H 11800 1600 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11800 1600
-	0    -1   -1   0   
-$EndComp
-$Comp
-L stmbl:GND #PWR0157
-U 1 1 5C10B8A8
-P 12050 1600
-F 0 "#PWR0157" H 12050 1350 50  0001 C CNN
-F 1 "GND" H 12055 1427 50  0000 C CNN
-F 2 "" H 12050 1600 50  0000 C CNN
-F 3 "" H 12050 1600 50  0000 C CNN
-	1    12050 1600
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	12050 1600 11950 1600
-Wire Wire Line
-	11550 1600 11650 1600
-$Comp
-L stmbl:Led_Small D26
-U 1 1 5C1196ED
-P 11500 2100
-F 0 "D26" V 11546 2032 50  0000 R CNN
-F 1 "green" V 11455 2032 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 11500 2100 50  0001 C CNN
-F 3 "" V 11500 2100 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11500 2100
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:R R62
-U 1 1 5C1196F4
-P 11850 2100
-F 0 "R62" H 11920 2146 50  0000 L CNN
-F 1 "470" H 11920 2055 50  0000 L CNN
-F 2 "stmbl:R_0603" V 11780 2100 50  0001 C CNN
-F 3 "" H 11850 2100 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11850 2100
-	0    -1   -1   0   
-$EndComp
-$Comp
-L stmbl:GND #PWR0158
-U 1 1 5C1196FB
-P 12100 2100
-F 0 "#PWR0158" H 12100 1850 50  0001 C CNN
-F 1 "GND" H 12105 1927 50  0000 C CNN
-F 2 "" H 12100 2100 50  0000 C CNN
-F 3 "" H 12100 2100 50  0000 C CNN
-	1    12100 2100
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	12100 2100 12000 2100
-Wire Wire Line
-	11600 2100 11700 2100
-$Comp
-L stmbl:Led_Small D24
-U 1 1 5C1279EE
-P 11450 1500
-F 0 "D24" V 11496 1432 50  0000 R CNN
-F 1 "green" V 11405 1432 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 11450 1500 50  0001 C CNN
-F 3 "" V 11450 1500 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11450 1500
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:R R60
-U 1 1 5C1279F5
-P 11800 1500
-F 0 "R60" H 11870 1546 50  0000 L CNN
-F 1 "470" H 11870 1455 50  0000 L CNN
-F 2 "stmbl:R_0603" V 11730 1500 50  0001 C CNN
-F 3 "" H 11800 1500 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11800 1500
-	0    -1   -1   0   
-$EndComp
-$Comp
-L stmbl:GND #PWR0159
-U 1 1 5C1279FC
-P 12050 1500
-F 0 "#PWR0159" H 12050 1250 50  0001 C CNN
-F 1 "GND" H 12055 1327 50  0000 C CNN
-F 2 "" H 12050 1500 50  0000 C CNN
-F 3 "" H 12050 1500 50  0000 C CNN
-	1    12050 1500
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	12050 1500 11950 1500
-Wire Wire Line
-	11550 1500 11650 1500
-Wire Wire Line
-	11650 2900 11750 2900
-$Comp
-L stmbl:Jumper_NO_Small JP2
-U 1 1 5C207881
-P 8650 5800
-F 0 "JP2" H 8950 5800 50  0000 C CNN
-F 1 "Jumper" H 8650 5973 50  0001 C CNN
-F 2 "stmbl:SOLDER_JUMPER" H 8650 5800 50  0001 C CNN
-F 3 "" H 8650 5800 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    8650 5800
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:Jumper_NO_Small JP3
-U 1 1 5C207D88
-P 8650 5900
-F 0 "JP3" H 8950 5900 50  0000 C CNN
-F 1 "Jumper" H 8650 6073 50  0001 C CNN
-F 2 "stmbl:SOLDER_JUMPER" H 8650 5900 50  0001 C CNN
-F 3 "" H 8650 5900 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    8650 5900
-	-1   0    0    1   
-$EndComp
-$Comp
-L stmbl:GND #PWR0160
-U 1 1 5C208445
-P 8550 5850
-F 0 "#PWR0160" H 8550 5600 50  0001 C CNN
-F 1 "GND" V 8555 5722 50  0001 R CNN
-F 2 "" H 8550 5850 50  0000 C CNN
-F 3 "" H 8550 5850 50  0000 C CNN
-	1    8550 5850
-	0    1    1    0   
-$EndComp
-$Comp
-L stmbl:Jumper_NO_Small JP4
-U 1 1 5C22605B
-P 11550 1400
-F 0 "JP4" H 11900 1400 50  0000 C CNN
-F 1 "Jumper" H 11550 1573 50  0001 C CNN
-F 2 "stmbl:SOLDER_JUMPER" H 11550 1400 50  0001 C CNN
-F 3 "" H 11550 1400 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    11550 1400
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	11450 1400 11250 1400
 Text HLabel 8850 4000 0    50   Input ~ 0
 STM_MCO0
 Wire Wire Line
 	8400 5300 8950 5300
-$Comp
-L stmbl:GND #PWR0161
-U 1 1 5C1EDB8C
-P 12100 2200
-F 0 "#PWR0161" H 12100 1950 50  0001 C CNN
-F 1 "GND" H 12105 2027 50  0000 C CNN
-F 2 "" H 12100 2200 50  0000 C CNN
-F 3 "" H 12100 2200 50  0000 C CNN
-	1    12100 2200
-	0    -1   -1   0   
-$EndComp
-$Comp
-L stmbl:GND #PWR0162
-U 1 1 5C27E378
-P 12100 1400
-F 0 "#PWR0162" H 12100 1150 50  0001 C CNN
-F 1 "GND" H 12105 1227 50  0000 C CNN
-F 2 "" H 12100 1400 50  0000 C CNN
-F 3 "" H 12100 1400 50  0000 C CNN
-	1    12100 1400
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	11650 1400 12100 1400
 Wire Wire Line
 	7850 3400 8950 3400
 Wire Wire Line
 	8300 1800 8300 2400
 Wire Wire Line
-	8550 5800 8550 5900
+	12850 950  13100 950 
 Wire Wire Line
-	12850 950  14850 950 
+	12850 1250 13100 1250
+Connection ~ 14600 950 
 Wire Wire Line
-	12850 1250 14850 1250
+	14600 950  14850 950 
+Connection ~ 14350 950 
+Wire Wire Line
+	14350 950  14600 950 
+Connection ~ 14100 950 
+Wire Wire Line
+	14100 950  14350 950 
+Connection ~ 14000 950 
+Wire Wire Line
+	14000 950  14100 950 
+Connection ~ 13850 950 
+Wire Wire Line
+	13850 950  14000 950 
+Connection ~ 13600 950 
+Wire Wire Line
+	13600 950  13850 950 
+Connection ~ 13350 950 
+Wire Wire Line
+	13350 950  13600 950 
+Connection ~ 13100 950 
+Wire Wire Line
+	13100 950  13350 950 
+Connection ~ 13100 1250
+Wire Wire Line
+	13100 1250 13350 1250
+Connection ~ 13350 1250
+Wire Wire Line
+	13350 1250 13600 1250
+Connection ~ 13600 1250
+Wire Wire Line
+	13600 1250 13850 1250
+Connection ~ 13850 1250
+Wire Wire Line
+	13850 1250 14000 1250
+Connection ~ 14000 1250
+Wire Wire Line
+	14000 1250 14100 1250
+Connection ~ 14100 1250
+Wire Wire Line
+	14100 1250 14350 1250
+Connection ~ 14350 1250
+Wire Wire Line
+	14350 1250 14600 1250
+Connection ~ 14600 1250
+Wire Wire Line
+	14600 1250 14850 1250
 $EndSCHEMATC
