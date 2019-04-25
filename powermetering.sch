@@ -2923,12 +2923,38 @@ $EndComp
 $Comp
 L Device:Battery_Cell BT1
 U 1 1 5DBD7F45
-P 1800 5750
-F 0 "BT1" H 1918 5846 50  0000 L CNN
-F 1 "Battery_Cell" H 1918 5755 50  0000 L CNN
-F 2 "Battery:BatteryHolder_Keystone_1042_1x18650" V 1800 5810 50  0001 C CNN
-F 3 "~" V 1800 5810 50  0001 C CNN
-	1    1800 5750
+P 4650 5500
+F 0 "BT1" H 4768 5596 50  0000 L CNN
+F 1 "Battery_Cell" H 4768 5505 50  0000 L CNN
+F 2 "Battery:BatteryHolder_Keystone_1042_1x18650" V 4650 5560 50  0001 C CNN
+F 3 "~" V 4650 5560 50  0001 C CNN
+	1    4650 5500
 	1    0    0    -1  
 $EndComp
+$Comp
+L Battery_Management:LTC4055 U?
+U 1 1 5DBFE5E8
+P 3900 5500
+F 0 "U?" H 3900 6167 50  0000 C CNN
+F 1 "LTC4055" H 3900 6076 50  0000 C CNN
+F 2 "Package_DFN_QFN:QFN-16-1EP_4x4mm_P0.65mm_EP2.15x2.15mm" H 3900 4600 50  0001 C CNN
+F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/4055fb.pdf" H 3900 5000 50  0001 C CNN
+	1    3900 5500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4300 5300 4650 5300
+$Comp
+L stmbl:GNDPWR #PWR?
+U 1 1 5DC40D57
+P 3900 6200
+F 0 "#PWR?" H 3900 6000 50  0001 C CNN
+F 1 "GNDPWR" H 3904 6046 50  0000 C CNN
+F 2 "" H 3900 6150 50  0001 C CNN
+F 3 "" H 3900 6150 50  0001 C CNN
+	1    3900 6200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3900 6100 3900 6200
 $EndSCHEMATC
