@@ -3,7 +3,7 @@
   (general
     (thickness 1.6)
     (drawings 849)
-    (tracks 330)
+    (tracks 334)
     (zones 0)
     (modules 215)
     (nets 215)
@@ -60,7 +60,7 @@
     (pad_drill 0)
     (pad_to_mask_clearance 0.2)
     (aux_axis_origin 0 0)
-    (visible_elements FFF9F71F)
+    (visible_elements FFF9FF1F)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -755,7 +755,7 @@
   )
 
   (module stmbl:C_1808 (layer F.Cu) (tedit 5AC5647C) (tstamp 5CC5A36B)
-    (at 214.4 116 90)
+    (at 189.9 121 90)
     (descr "Capacitor SMD 1808, reflow soldering, AVX (see smccp.pdf)")
     (tags "capacitor 1808")
     (path /5DA7A654)
@@ -780,15 +780,15 @@
       (net 69 "Net-(C35-Pad2)") (solder_mask_margin 0.1) (zone_connect 2))
     (pad 2 smd roundrect (at 2 0 90) (size 1.5 2) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 134 GNDPWR) (solder_mask_margin 0.1) (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/cap_1808.wrl
+    (model ${KISYS3DMOD}/Capacitor_SMD.3dshapes/C_1806_4516Metric.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 393.7 393.7 393.7))
+      (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
   )
 
   (module stmbl:C_1808 (layer F.Cu) (tedit 5AC5647C) (tstamp 5CC5A24D)
-    (at 214.4 126.9 90)
+    (at 189.9 131.9 90)
     (descr "Capacitor SMD 1808, reflow soldering, AVX (see smccp.pdf)")
     (tags "capacitor 1808")
     (path /5DA79E78)
@@ -813,7 +813,7 @@
       (net 136 VPP) (solder_mask_margin 0.1) (zone_connect 2))
     (pad 2 smd roundrect (at 2 0 90) (size 1.5 2) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 69 "Net-(C35-Pad2)") (solder_mask_margin 0.1) (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/cap_1808.wrl
+    (model ${KISYS3DMOD}/Capacitor_SMD.3dshapes/C_1806_4516Metric.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -1838,7 +1838,7 @@
   )
 
   (module stmbl:SOIC-7 (layer F.Cu) (tedit 5B23AC83) (tstamp 5CC4EC86)
-    (at 228.7 127)
+    (at 204.2 132)
     (path /5DA42676/57F9295B)
     (attr smd)
     (fp_text reference U6 (at 0 3.5) (layer F.SilkS)
@@ -1869,9 +1869,14 @@
     (pad 1 smd roundrect (at -2.45 -1.905 270) (size 0.6 2) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 138 "Net-(C65-Pad1)"))
     (model ${KIPRJMOD}/../lib/stmbl.pretty/SO7.wrl
-      (offset (xyz 0 0 0.7999999879852057))
+      (offset (xyz 0 0 0.8))
       (scale (xyz 393.7 393.7 393.7))
-      (rotate (xyz -90 0 90))
+      (rotate (xyz -90 0 20))
+    )
+    (model ${KISYS3DMOD}/Package_SO.3dshapes/SOIC-8-N7_3.9x4.9mm_P1.27mm.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
     )
   )
 
@@ -2244,7 +2249,7 @@
   )
 
   (module stmbl:NPI31W (layer F.Cu) (tedit 5AC5701B) (tstamp 5CC4E08B)
-    (at 229.4 116.5 90)
+    (at 204.9 121.5 90)
     (path /5DA42676/56657DB8)
     (attr smd)
     (fp_text reference L6 (at 0.142 -0.096 90) (layer F.SilkS)
@@ -2271,8 +2276,13 @@
       (net 137 "Net-(C65-Pad2)"))
     (model ${KIPRJMOD}/../lib/stmbl.pretty/Coilcraft-DT3316P.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 393.7 393.7 393.7))
+      (scale (xyz 200 200 200))
       (rotate (xyz -90 0 90))
+    )
+    (model ${KISYS3DMOD}/Inductor_SMD.3dshapes/L_Bourns_SDR1806.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 0.7 0.6 1))
+      (rotate (xyz 0 0 0))
     )
   )
 
@@ -2340,7 +2350,7 @@
   )
 
   (module stmbl:SMA_Standard (layer F.Cu) (tedit 5AC56647) (tstamp 5CC4D9D0)
-    (at 235.9 111.5 180)
+    (at 211.4 116.5 180)
     (descr "Diode SMA")
     (tags "Diode SMA")
     (path /5DA42676/56657CAE)
@@ -2372,10 +2382,15 @@
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
     )
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module stmbl:SMA_Standard (layer F.Cu) (tedit 5AC56647) (tstamp 5CC4D9BE)
-    (at 236 120.7 90)
+    (at 211.5 125.7 90)
     (descr "Diode SMA")
     (tags "Diode SMA")
     (path /5DA42676/56657C30)
@@ -2405,6 +2420,11 @@
     (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
+      (rotate (xyz 0 0 0))
+    )
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
   )
@@ -4427,7 +4447,7 @@
   )
 
   (module Diode_THT:D_DO-201AE_P15.24mm_Horizontal (layer F.Cu) (tedit 5AE50CD5) (tstamp 5CC5E4E8)
-    (at 219.8 128.9 90)
+    (at 195.3 133.9 90)
     (descr "Diode, DO-201AE series, Axial, Horizontal, pin pitch=15.24mm, , length*diameter=9*5.3mm^2, , http://www.farnell.com/datasheets/529758.pdf")
     (tags "Diode DO-201AE series Axial Horizontal pin pitch 15.24mm  length 9mm diameter 5.3mm")
     (path /5D56470F)
@@ -4480,7 +4500,7 @@
   )
 
   (module Diode_SMD:Diode_Bridge_Diotec_ABS (layer F.Cu) (tedit 5A4F6D53) (tstamp 5CC43FAC)
-    (at 195 116 180)
+    (at 170.5 121 180)
     (descr "SMD diode bridge ABS (Diotec), see https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf")
     (tags "ABS MBLS")
     (path /5D6C9DAC)
@@ -4526,7 +4546,7 @@
   )
 
   (module Diode_SMD:Diode_Bridge_Diotec_ABS (layer F.Cu) (tedit 5A4F6D53) (tstamp 5CC43F93)
-    (at 195 123 180)
+    (at 170.5 128 180)
     (descr "SMD diode bridge ABS (Diotec), see https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf")
     (tags "ABS MBLS")
     (path /5D6C9594)
@@ -4572,7 +4592,7 @@
   )
 
   (module stmbl:R_1206 (layer F.Cu) (tedit 5AC5649A) (tstamp 5CC41F2E)
-    (at 211.3 115.5 90)
+    (at 186.8 120.5 90)
     (descr "Resistor SMD 1206, reflow soldering, Vishay (see dcrcw.pdf)")
     (tags "resistor 1206")
     (path /5D434AA2)
@@ -4597,7 +4617,7 @@
       (net 69 "Net-(C35-Pad2)"))
     (pad 2 smd roundrect (at 1.5 0 90) (size 1 1.6) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 134 GNDPWR))
-    (model Resistors_SMD.3dshapes/R_1206.wrl
+    (model ${KISYS3DMOD}/Resistor_SMD.3dshapes/R_1206_3216Metric.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4605,7 +4625,7 @@
   )
 
   (module stmbl:R_1206 (layer F.Cu) (tedit 5AC5649A) (tstamp 5CC41F1E)
-    (at 211.3 127.4 90)
+    (at 186.8 132.4 90)
     (descr "Resistor SMD 1206, reflow soldering, Vishay (see dcrcw.pdf)")
     (tags "resistor 1206")
     (path /5D434F66)
@@ -4630,7 +4650,7 @@
       (net 136 VPP))
     (pad 2 smd roundrect (at 1.5 0 90) (size 1 1.6) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 69 "Net-(C35-Pad2)"))
-    (model Resistors_SMD.3dshapes/R_1206.wrl
+    (model ${KISYS3DMOD}/Resistor_SMD.3dshapes/R_1206_3216Metric.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5430,7 +5450,7 @@
   )
 
   (module Capacitor_SMD:CP_Elec_8x10 (layer F.Cu) (tedit 5BCA39D0) (tstamp 5CC41238)
-    (at 205 115.47 90)
+    (at 180.5 120.47 90)
     (descr "SMD capacitor, aluminum electrolytic, Nichicon, 8.0x10mm")
     (tags "capacitor electrolytic")
     (path /5D547FF1)
@@ -5489,7 +5509,7 @@
   )
 
   (module Capacitor_SMD:CP_Elec_8x10 (layer F.Cu) (tedit 5BCA39D0) (tstamp 5CC41210)
-    (at 205 127.299999 90)
+    (at 180.5 132.299999 90)
     (descr "SMD capacitor, aluminum electrolytic, Nichicon, 8.0x10mm")
     (tags "capacitor electrolytic")
     (path /5D3C6D53)
@@ -6432,6 +6452,11 @@
       (net 2 "Net-(D13-Pad2)"))
     (pad 2 thru_hole oval (at 2.413 -2.54 90) (size 2.99974 1.50114) (drill 1.00076) (layers *.Cu *.Mask)
       (net 2 "Net-(D13-Pad2)"))
+    (model ${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl
+      (offset (xyz 2.5 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
   )
 
   (module TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol (layer F.Cu) (tedit 0) (tstamp 5CC21F40)
@@ -6563,6 +6588,11 @@
       (net 3 "Net-(D10-Pad1)"))
     (pad 1 thru_hole oval (at -2.54 2.54 90) (size 2.99974 1.50114) (drill 1.00076) (layers *.Cu *.Mask)
       (net 3 "Net-(D10-Pad1)"))
+    (model ${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl
+      (offset (xyz 2.5 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
   )
 
   (module TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol (layer F.Cu) (tedit 0) (tstamp 5CC21DE1)
@@ -6694,6 +6724,11 @@
       (net 8 "Net-(D15-Pad2)"))
     (pad 2 thru_hole oval (at 2.413 -2.54 90) (size 2.99974 1.50114) (drill 1.00076) (layers *.Cu *.Mask)
       (net 8 "Net-(D15-Pad2)"))
+    (model ${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl
+      (offset (xyz 2.5 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
   )
 
   (module TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol (layer F.Cu) (tedit 0) (tstamp 5CC21C82)
@@ -6825,6 +6860,11 @@
       (net 7 "Net-(D16-Pad1)"))
     (pad 1 thru_hole oval (at -2.54 2.54 90) (size 2.99974 1.50114) (drill 1.00076) (layers *.Cu *.Mask)
       (net 7 "Net-(D16-Pad1)"))
+    (model ${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl
+      (offset (xyz 2.5 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
   )
 
   (module TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_4pol (layer F.Cu) (tedit 0) (tstamp 5C3863F0)
@@ -7000,6 +7040,11 @@
       (net 21 "Net-(F1-Pad1)"))
     (pad 1 thru_hole oval (at -7.62 2.54 90) (size 2.99974 1.50114) (drill 1.00076) (layers *.Cu *.Mask)
       (net 21 "Net-(F1-Pad1)"))
+    (model ${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x04_P5.00mm_45-Degree.wrl
+      (offset (xyz 7.5 0.5 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
   )
 
   (module stmbl-kicad-lib:C_0603 (layer F.Cu) (tedit 5AC56310) (tstamp 5CC21BEF)
@@ -8046,7 +8091,7 @@
       (net 2 "Net-(D13-Pad2)"))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8081,7 +8126,7 @@
       (net 1 "Net-(D14-Pad1)") (zone_connect 2))
     (pad 1 smd roundrect (at -2 0 90) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8116,7 +8161,7 @@
       (net 8 "Net-(D15-Pad2)"))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8151,7 +8196,7 @@
       (net 7 "Net-(D16-Pad1)") (zone_connect 2))
     (pad 1 smd roundrect (at -2 0 90) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8186,7 +8231,7 @@
       (net 6 "Net-(D17-Pad2)"))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8221,9 +8266,9 @@
       (net 17 N))
     (pad 1 smd roundrect (at -2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 3 "Net-(D10-Pad1)"))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 393.7 393.7 393.7))
+      (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
   )
@@ -8256,7 +8301,7 @@
       (net 17 N))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 4 "Net-(D11-Pad2)") (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8291,7 +8336,7 @@
       (net 17 N))
     (pad 1 smd roundrect (at -2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 5 "Net-(D12-Pad1)"))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8326,7 +8371,7 @@
       (net 17 N))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 8 "Net-(D15-Pad2)") (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8361,7 +8406,7 @@
       (net 17 N))
     (pad 1 smd roundrect (at -2 0 90) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 7 "Net-(D16-Pad1)"))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8396,7 +8441,7 @@
       (net 17 N))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 6 "Net-(D17-Pad2)") (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8431,7 +8476,7 @@
       (net 5 "Net-(D12-Pad1)") (zone_connect 2))
     (pad 1 smd roundrect (at -2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8466,7 +8511,7 @@
       (net 4 "Net-(D11-Pad2)"))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8501,7 +8546,7 @@
       (net 3 "Net-(D10-Pad1)") (zone_connect 2))
     (pad 1 smd roundrect (at -2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 17 N))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8536,7 +8581,7 @@
       (net 17 N))
     (pad 2 smd roundrect (at 2 0 270) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 2 "Net-(D13-Pad2)") (zone_connect 2))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -8571,7 +8616,7 @@
       (net 17 N))
     (pad 1 smd roundrect (at -2 0 90) (size 2.5 1.75) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25)
       (net 1 "Net-(D14-Pad1)"))
-    (model ${KIPRJMOD}/../lib/stmbl.pretty/sma.wrl
+    (model ${KISYS3DMOD}/Diode_SMD.3dshapes/D_SMA.wrl
       (at (xyz 0 0 0))
       (scale (xyz 393.7 393.7 393.7))
       (rotate (xyz 0 0 0))
@@ -9559,10 +9604,11 @@
   (segment (start 257.200001 145.15) (end 254 145.15) (width 1) (layer F.Cu) (net 13))
   (segment (start 147.3875 111.3875) (end 155 111.3875) (width 1) (layer F.Cu) (net 14))
   (segment (start 143 107) (end 147.3875 111.3875) (width 1) (layer F.Cu) (net 14))
-  (segment (start 155 119.1) (end 155 111.3875) (width 1) (layer F.Cu) (net 14))
-  (segment (start 192.025 125) (end 160.9 125) (width 1) (layer F.Cu) (net 14))
-  (segment (start 160.9 125) (end 155 119.1) (width 1) (layer F.Cu) (net 14))
   (segment (start 252 107) (end 252 113.1) (width 1) (layer F.Cu) (net 14))
+  (segment (start 155 119.1) (end 155 111.3875) (width 1) (layer F.Cu) (net 14))
+  (segment (start 155 120.2) (end 155 119.1) (width 1) (layer F.Cu) (net 14))
+  (segment (start 167.525 130) (end 164.8 130) (width 1) (layer F.Cu) (net 14))
+  (segment (start 164.8 130) (end 155 120.2) (width 1) (layer F.Cu) (net 14))
   (segment (start 257.200001 129.1) (end 254 129.1) (width 1) (layer F.Cu) (net 15))
   (segment (start 257.249999 113.1) (end 254 113.1) (width 1) (layer F.Cu) (net 16))
   (segment (start 261.95 109.649999) (end 262 109.599999) (width 0.25) (layer F.Cu) (net 22))
@@ -9587,25 +9633,27 @@
   (segment (start 269.7 140.35) (end 269.7 136.650001) (width 0.25) (layer F.Cu) (net 30))
   (segment (start 268.75 141.3) (end 269.7 140.35) (width 0.25) (layer F.Cu) (net 30))
   (segment (start 174 113.1) (end 174 111.3875) (width 1) (layer F.Cu) (net 36))
-  (segment (start 176.7 115.8) (end 174 113.1) (width 1) (layer F.Cu) (net 36))
-  (segment (start 192.025 114) (end 190.225 115.8) (width 1) (layer F.Cu) (net 36))
-  (segment (start 190.225 115.8) (end 176.7 115.8) (width 1) (layer F.Cu) (net 36))
   (via (at 174 114.7) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 36))
   (segment (start 174 111.3875) (end 174 114.7) (width 1) (layer F.Cu) (net 36))
   (segment (start 153.1 139) (end 143 139) (width 1) (layer B.Cu) (net 36))
   (segment (start 174 114.7) (end 174 118.1) (width 1) (layer B.Cu) (net 36))
   (segment (start 174 118.1) (end 153.1 139) (width 1) (layer B.Cu) (net 36))
   (segment (start 252 139) (end 252 145.15) (width 1) (layer F.Cu) (net 36))
-  (segment (start 192.025 121) (end 192.025 119.375) (width 1) (layer F.Cu) (net 37))
-  (segment (start 192.025 119.375) (end 192.025 118) (width 1) (layer F.Cu) (net 37))
-  (segment (start 171.9875 119.375) (end 164 111.3875) (width 1) (layer F.Cu) (net 37))
-  (segment (start 192.025 119.375) (end 171.9875 119.375) (width 1) (layer F.Cu) (net 37))
+  (segment (start 167.525 115.875) (end 167.525 119) (width 1) (layer F.Cu) (net 36))
+  (segment (start 174 114.7) (end 168.7 114.7) (width 1) (layer F.Cu) (net 36))
+  (segment (start 168.7 114.7) (end 167.525 115.875) (width 1) (layer F.Cu) (net 36))
+  (segment (start 167.525 126) (end 167.525 124.375) (width 1) (layer F.Cu) (net 37))
+  (segment (start 167.525 124.375) (end 167.525 123) (width 1) (layer F.Cu) (net 37))
   (via (at 164 113) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 37))
   (segment (start 164 111.3875) (end 164 113) (width 1) (layer F.Cu) (net 37))
   (segment (start 156.6 123) (end 143 123) (width 1) (layer B.Cu) (net 37))
   (segment (start 164 113) (end 164 115.6) (width 1) (layer B.Cu) (net 37))
   (segment (start 164 115.6) (end 156.6 123) (width 1) (layer B.Cu) (net 37))
   (segment (start 252 123) (end 252 129.1) (width 1) (layer F.Cu) (net 37))
+  (segment (start 164 113.565685) (end 164 113) (width 1) (layer F.Cu) (net 37))
+  (segment (start 164 120.975) (end 164 113.565685) (width 1) (layer F.Cu) (net 37))
+  (segment (start 166.025 123) (end 164 120.975) (width 1) (layer F.Cu) (net 37))
+  (segment (start 167.525 123) (end 166.025 123) (width 1) (layer F.Cu) (net 37))
   (segment (start 293.1 115.1) (end 293.1 116.6) (width 0.25) (layer F.Cu) (net 38) (tstamp 5CC213D7))
   (segment (start 293.1 116.6) (end 293.1 118.1) (width 0.25) (layer F.Cu) (net 38) (tstamp 5CC213D4))
   (segment (start 278.1 115.1) (end 278.1 116.6) (width 0.25) (layer F.Cu) (net 39) (tstamp 5CC213D1))
@@ -9753,38 +9801,39 @@
   (segment (start 307.25 133.3) (end 307.25 133.85) (width 0.25) (layer F.Cu) (net 67))
   (segment (start 304.742767 133.867283) (end 307.232717 133.867283) (width 0.25) (layer F.Cu) (net 67))
   (segment (start 307.25 133.85) (end 307.25 134.5) (width 0.25) (layer F.Cu) (net 67))
-  (segment (start 211.3 117) (end 211.3 125.9) (width 1) (layer F.Cu) (net 69))
-  (segment (start 205 121.3) (end 214.3 121.3) (width 1) (layer F.Cu) (net 69))
-  (segment (start 214.4 121.4) (end 214.4 124.9) (width 1) (layer F.Cu) (net 69))
-  (segment (start 214.3 121.3) (end 214.4 121.4) (width 1) (layer F.Cu) (net 69))
-  (segment (start 205 118.72) (end 205 121.3) (width 1) (layer F.Cu) (net 69))
-  (segment (start 214.4 118) (end 214.4 121.4) (width 1) (layer F.Cu) (net 69))
-  (segment (start 205 121.3) (end 205 124.049999) (width 1) (layer F.Cu) (net 69))
-  (segment (start 214.4 114) (end 211.3 114) (width 1) (layer F.Cu) (net 134))
-  (segment (start 206.78 114) (end 205 112.22) (width 1) (layer F.Cu) (net 134))
-  (segment (start 211.3 114) (end 206.78 114) (width 1) (layer F.Cu) (net 134))
-  (segment (start 199.755 112.22) (end 197.975 114) (width 1) (layer F.Cu) (net 134))
-  (segment (start 205 112.22) (end 201.82 112.22) (width 1) (layer F.Cu) (net 134))
-  (segment (start 201.82 112.22) (end 199.755 112.22) (width 1) (layer F.Cu) (net 134))
-  (segment (start 197.975 121) (end 199.9 121) (width 1) (layer F.Cu) (net 134))
-  (segment (start 201.82 119.08) (end 201.82 112.22) (width 1) (layer F.Cu) (net 134))
-  (segment (start 199.9 121) (end 201.82 119.08) (width 1) (layer F.Cu) (net 134))
-  (segment (start 214.74 113.66) (end 214.4 114) (width 1) (layer F.Cu) (net 134))
-  (segment (start 219.8 113.66) (end 214.74 113.66) (width 1) (layer F.Cu) (net 134))
-  (segment (start 214.4 128.9) (end 211.3 128.9) (width 1) (layer F.Cu) (net 136))
-  (segment (start 206.649999 128.9) (end 205 130.549999) (width 1) (layer F.Cu) (net 136))
-  (segment (start 211.3 128.9) (end 206.649999 128.9) (width 1) (layer F.Cu) (net 136))
-  (segment (start 195.5 123.8) (end 196.7 125) (width 1) (layer F.Cu) (net 136))
-  (segment (start 196.7 125) (end 197.975 125) (width 1) (layer F.Cu) (net 136))
-  (segment (start 195.5 118.975) (end 195.5 123.8) (width 1) (layer F.Cu) (net 136))
-  (segment (start 197.975 118) (end 196.475 118) (width 1) (layer F.Cu) (net 136))
-  (segment (start 196.475 118) (end 195.5 118.975) (width 1) (layer F.Cu) (net 136))
-  (segment (start 197.975 128.175) (end 197.975 125) (width 1) (layer F.Cu) (net 136))
-  (segment (start 205 130.549999) (end 200.349999 130.549999) (width 1) (layer F.Cu) (net 136))
-  (segment (start 200.349999 130.549999) (end 197.975 128.175) (width 1) (layer F.Cu) (net 136))
-  (segment (start 219.8 128.9) (end 214.4 128.9) (width 1) (layer F.Cu) (net 136))
-  (segment (start 219.805 128.905) (end 219.8 128.9) (width 1) (layer F.Cu) (net 136))
-  (segment (start 226.25 128.905) (end 219.805 128.905) (width 1) (layer F.Cu) (net 136))
+  (segment (start 186.8 122) (end 186.8 130.9) (width 1) (layer F.Cu) (net 69))
+  (segment (start 180.5 126.3) (end 189.8 126.3) (width 1) (layer F.Cu) (net 69))
+  (segment (start 189.9 126.4) (end 189.9 129.9) (width 1) (layer F.Cu) (net 69))
+  (segment (start 189.8 126.3) (end 189.9 126.4) (width 1) (layer F.Cu) (net 69))
+  (segment (start 180.5 123.72) (end 180.5 126.3) (width 1) (layer F.Cu) (net 69))
+  (segment (start 189.9 123) (end 189.9 126.4) (width 1) (layer F.Cu) (net 69))
+  (segment (start 180.5 126.3) (end 180.5 129.049999) (width 1) (layer F.Cu) (net 69))
+  (segment (start 189.9 119) (end 186.8 119) (width 1) (layer F.Cu) (net 134))
+  (segment (start 182.28 119) (end 180.5 117.22) (width 1) (layer F.Cu) (net 134))
+  (segment (start 186.8 119) (end 182.28 119) (width 1) (layer F.Cu) (net 134))
+  (segment (start 180.5 117.22) (end 177.32 117.22) (width 1) (layer F.Cu) (net 134))
+  (segment (start 173.475 126) (end 175.4 126) (width 1) (layer F.Cu) (net 134))
+  (segment (start 177.32 124.08) (end 177.32 117.22) (width 1) (layer F.Cu) (net 134))
+  (segment (start 175.4 126) (end 177.32 124.08) (width 1) (layer F.Cu) (net 134))
+  (segment (start 190.24 118.66) (end 189.9 119) (width 1) (layer F.Cu) (net 134))
+  (segment (start 195.3 118.66) (end 190.24 118.66) (width 1) (layer F.Cu) (net 134))
+  (segment (start 175.5 119) (end 173.475 119) (width 1) (layer F.Cu) (net 134))
+  (segment (start 177.32 117.22) (end 177.28 117.22) (width 1) (layer F.Cu) (net 134))
+  (segment (start 177.28 117.22) (end 175.5 119) (width 1) (layer F.Cu) (net 134))
+  (segment (start 189.9 133.9) (end 186.8 133.9) (width 1) (layer F.Cu) (net 136))
+  (segment (start 182.149999 133.9) (end 180.5 135.549999) (width 1) (layer F.Cu) (net 136))
+  (segment (start 186.8 133.9) (end 182.149999 133.9) (width 1) (layer F.Cu) (net 136))
+  (segment (start 171 128.8) (end 172.2 130) (width 1) (layer F.Cu) (net 136))
+  (segment (start 172.2 130) (end 173.475 130) (width 1) (layer F.Cu) (net 136))
+  (segment (start 171 123.975) (end 171 128.8) (width 1) (layer F.Cu) (net 136))
+  (segment (start 173.475 123) (end 171.975 123) (width 1) (layer F.Cu) (net 136))
+  (segment (start 171.975 123) (end 171 123.975) (width 1) (layer F.Cu) (net 136))
+  (segment (start 173.475 133.175) (end 173.475 130) (width 1) (layer F.Cu) (net 136))
+  (segment (start 180.5 135.549999) (end 175.849999 135.549999) (width 1) (layer F.Cu) (net 136))
+  (segment (start 175.849999 135.549999) (end 173.475 133.175) (width 1) (layer F.Cu) (net 136))
+  (segment (start 195.3 133.9) (end 189.9 133.9) (width 1) (layer F.Cu) (net 136))
+  (segment (start 195.305 133.905) (end 195.3 133.9) (width 1) (layer F.Cu) (net 136))
+  (segment (start 201.75 133.905) (end 195.305 133.905) (width 1) (layer F.Cu) (net 136))
   (segment (start 306.982717 132.367283) (end 307.25 132.1) (width 0.25) (layer F.Cu) (net 156))
   (segment (start 305.967283 132.367283) (end 305.95 132.384566) (width 0.25) (layer F.Cu) (net 156))
   (segment (start 305.95 132.384566) (end 305.95 133.1) (width 0.25) (layer F.Cu) (net 156))
