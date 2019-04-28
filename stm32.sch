@@ -1,4 +1,5 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
+LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
@@ -1053,55 +1054,8 @@ Wire Wire Line
 Wire Wire Line
 	8300 1800 8300 2400
 Wire Wire Line
-	12850 950  13100 950 
+	12850 1250 14850 1250
 Wire Wire Line
-	12850 1250 13100 1250
-Connection ~ 14600 950 
-Wire Wire Line
-	14600 950  14850 950 
-Connection ~ 14350 950 
-Wire Wire Line
-	14350 950  14600 950 
-Connection ~ 14100 950 
-Wire Wire Line
-	14100 950  14350 950 
-Connection ~ 14000 950 
-Wire Wire Line
-	14000 950  14100 950 
-Connection ~ 13850 950 
-Wire Wire Line
-	13850 950  14000 950 
-Connection ~ 13600 950 
-Wire Wire Line
-	13600 950  13850 950 
-Connection ~ 13350 950 
-Wire Wire Line
-	13350 950  13600 950 
-Connection ~ 13100 950 
-Wire Wire Line
-	13100 950  13350 950 
-Connection ~ 13100 1250
-Wire Wire Line
-	13100 1250 13350 1250
-Connection ~ 13350 1250
-Wire Wire Line
-	13350 1250 13600 1250
-Connection ~ 13600 1250
-Wire Wire Line
-	13600 1250 13850 1250
-Connection ~ 13850 1250
-Wire Wire Line
-	13850 1250 14000 1250
-Connection ~ 14000 1250
-Wire Wire Line
-	14000 1250 14100 1250
-Connection ~ 14100 1250
-Wire Wire Line
-	14100 1250 14350 1250
-Connection ~ 14350 1250
-Wire Wire Line
-	14350 1250 14600 1250
-Connection ~ 14600 1250
-Wire Wire Line
-	14600 1250 14850 1250
+	12850 950  14850 950 
+Connection ~ 12800 6250
 $EndSCHEMATC

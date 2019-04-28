@@ -1,4 +1,5 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
+LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -516,4 +517,5 @@ F 3 "https://www.bourns.com/docs/Product-Datasheets/PT61017PEL.pdf" H 7200 4550 
 	1    7900 4200
 	1    0    0    -1  
 $EndComp
+Connection ~ 4450 4100
 $EndSCHEMATC

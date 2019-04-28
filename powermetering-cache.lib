@@ -812,7 +812,7 @@ ENDDEF
 #
 # stmbl_Jumper_NO_Small
 #
-DEF ~stmbl_Jumper_NO_Small JP 0 30 N N 1 F N
+DEF stmbl_Jumper_NO_Small JP 0 30 N N 1 F N
 F0 "JP" 0 80 50 H V C CNN
 F1 "stmbl_Jumper_NO_Small" 10 -60 50 H I C CNN
 F2 "" 0 0 50 H V C CNN

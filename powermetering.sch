@@ -1,4 +1,5 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
+LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
@@ -30,7 +31,7 @@ U 1 1 5C2E6576
 P 3700 6950
 F 0 "J1" H 3780 6942 50  0000 L CNN
 F 1 "Conn_01x04" H 3780 6851 50  0000 L CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_4pol" H 3700 6950 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal" H 3700 6950 50  0001 C CNN
 F 3 "~" H 3700 6950 50  0001 C CNN
 	1    3700 6950
 	1    0    0    -1  
@@ -41,7 +42,7 @@ U 1 1 5C2E6640
 P 3300 6850
 F 0 "F1" V 3103 6850 50  0000 C CNN
 F 1 "Fuse" V 3194 6850 50  0000 C CNN
-F 2 "Fuse:Fuse_2920_7451Metric" V 3230 6850 50  0001 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 6850 50  0001 C CNN
 F 3 "" H 3300 6850 50  0001 C CNN
 	1    3300 6850
 	0    1    1    0   
@@ -628,7 +629,7 @@ U 1 1 5C32EDE5
 P 15050 6150
 F 0 "J2" H 15130 6142 50  0000 L CNN
 F 1 "Conn_01x02" H 15130 6051 50  0000 L CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol" H 15050 6150 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" H 15050 6150 50  0001 C CNN
 F 3 "~" H 15050 6150 50  0001 C CNN
 	1    15050 6150
 	1    0    0    -1  
@@ -656,11 +657,7 @@ F 3 "" H 14300 6400 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	14300 6550 14850 6550
-Wire Wire Line
 	14850 6550 14850 6250
-Wire Wire Line
-	14300 5850 14850 5850
 Wire Wire Line
 	14850 5850 14850 6150
 $Comp
@@ -731,10 +728,8 @@ F 3 "" H 12800 6550 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	13300 6550 13350 6550
-Connection ~ 14300 6550
 Wire Wire Line
 	13300 5850 13350 5850
-Connection ~ 14300 5850
 Wire Wire Line
 	13400 6400 13350 6400
 Wire Wire Line
@@ -748,8 +743,6 @@ Wire Wire Line
 	14150 6400 14150 6550
 Connection ~ 14150 6550
 Wire Wire Line
-	14150 6550 14300 6550
-Wire Wire Line
 	13700 6400 13750 6400
 Wire Wire Line
 	13700 6000 13750 6000
@@ -758,8 +751,6 @@ Wire Wire Line
 Wire Wire Line
 	14150 6000 14150 5850
 Connection ~ 14150 5850
-Wire Wire Line
-	14150 5850 14300 5850
 Wire Wire Line
 	13400 6000 13350 6000
 Wire Wire Line
@@ -854,7 +845,7 @@ U 1 1 5C38E66F
 P 15050 7150
 F 0 "J3" H 15130 7142 50  0000 L CNN
 F 1 "Conn_01x02" H 15130 7051 50  0000 L CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol" H 15050 7150 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" H 15050 7150 50  0001 C CNN
 F 3 "~" H 15050 7150 50  0001 C CNN
 	1    15050 7150
 	1    0    0    -1  
@@ -882,11 +873,7 @@ F 3 "" H 14300 7400 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	14300 7550 14850 7550
-Wire Wire Line
 	14850 7550 14850 7250
-Wire Wire Line
-	14300 6850 14850 6850
 Wire Wire Line
 	14850 6850 14850 7150
 $Comp
@@ -957,10 +944,8 @@ F 3 "" H 12800 7550 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	13300 7550 13350 7550
-Connection ~ 14300 7550
 Wire Wire Line
 	13300 6850 13350 6850
-Connection ~ 14300 6850
 Wire Wire Line
 	13400 7400 13350 7400
 Wire Wire Line
@@ -974,8 +959,6 @@ Wire Wire Line
 	14150 7400 14150 7550
 Connection ~ 14150 7550
 Wire Wire Line
-	14150 7550 14300 7550
-Wire Wire Line
 	13700 7400 13750 7400
 Wire Wire Line
 	13700 7000 13750 7000
@@ -984,8 +967,6 @@ Wire Wire Line
 Wire Wire Line
 	14150 7000 14150 6850
 Connection ~ 14150 6850
-Wire Wire Line
-	14150 6850 14300 6850
 Wire Wire Line
 	13400 7000 13350 7000
 Wire Wire Line
@@ -1080,7 +1061,7 @@ U 1 1 5C3C94C6
 P 15050 8150
 F 0 "J4" H 15130 8142 50  0000 L CNN
 F 1 "Conn_01x02" H 15130 8051 50  0000 L CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol" H 15050 8150 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" H 15050 8150 50  0001 C CNN
 F 3 "~" H 15050 8150 50  0001 C CNN
 	1    15050 8150
 	1    0    0    -1  
@@ -1108,11 +1089,7 @@ F 3 "" H 14300 8400 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	14300 8550 14850 8550
-Wire Wire Line
 	14850 8550 14850 8250
-Wire Wire Line
-	14300 7850 14850 7850
 Wire Wire Line
 	14850 7850 14850 8150
 $Comp
@@ -1183,10 +1160,8 @@ F 3 "" H 12800 8550 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	13300 8550 13350 8550
-Connection ~ 14300 8550
 Wire Wire Line
 	13300 7850 13350 7850
-Connection ~ 14300 7850
 Wire Wire Line
 	13400 8400 13350 8400
 Wire Wire Line
@@ -1200,8 +1175,6 @@ Wire Wire Line
 	14150 8400 14150 8550
 Connection ~ 14150 8550
 Wire Wire Line
-	14150 8550 14300 8550
-Wire Wire Line
 	13700 8400 13750 8400
 Wire Wire Line
 	13700 8000 13750 8000
@@ -1210,8 +1183,6 @@ Wire Wire Line
 Wire Wire Line
 	14150 8000 14150 7850
 Connection ~ 14150 7850
-Wire Wire Line
-	14150 7850 14300 7850
 Wire Wire Line
 	13400 8000 13350 8000
 Wire Wire Line
@@ -1306,7 +1277,7 @@ U 1 1 5C3C9549
 P 15050 9150
 F 0 "J5" H 15130 9142 50  0000 L CNN
 F 1 "Conn_01x02" H 15130 9051 50  0000 L CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO-236_2Stift_RM5mm_2pol" H 15050 9150 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" H 15050 9150 50  0001 C CNN
 F 3 "~" H 15050 9150 50  0001 C CNN
 	1    15050 9150
 	1    0    0    -1  
@@ -1334,11 +1305,7 @@ F 3 "" H 14300 9400 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	14300 9550 14850 9550
-Wire Wire Line
 	14850 9550 14850 9250
-Wire Wire Line
-	14300 8850 14850 8850
 Wire Wire Line
 	14850 8850 14850 9150
 $Comp
@@ -1409,10 +1376,8 @@ F 3 "" H 12800 9550 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	13300 9550 13350 9550
-Connection ~ 14300 9550
 Wire Wire Line
 	13300 8850 13350 8850
-Connection ~ 14300 8850
 Wire Wire Line
 	13400 9400 13350 9400
 Wire Wire Line
@@ -1426,8 +1391,6 @@ Wire Wire Line
 	14150 9400 14150 9550
 Connection ~ 14150 9550
 Wire Wire Line
-	14150 9550 14300 9550
-Wire Wire Line
 	13700 9400 13750 9400
 Wire Wire Line
 	13700 9000 13750 9000
@@ -1436,8 +1399,6 @@ Wire Wire Line
 Wire Wire Line
 	14150 9000 14150 8850
 Connection ~ 14150 8850
-Wire Wire Line
-	14150 8850 14300 8850
 Wire Wire Line
 	13400 9000 13350 9000
 Wire Wire Line
@@ -2032,7 +1993,7 @@ U 1 1 5D51B7A5
 P 3300 6950
 F 0 "F2" V 3103 6950 50  0000 C CNN
 F 1 "Fuse" V 3194 6950 50  0000 C CNN
-F 2 "Fuse:Fuse_2920_7451Metric" V 3230 6950 50  0001 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 6950 50  0001 C CNN
 F 3 "" H 3300 6950 50  0001 C CNN
 	1    3300 6950
 	0    1    1    0   
@@ -2043,7 +2004,7 @@ U 1 1 5D51B87D
 P 3300 7050
 F 0 "F3" V 3103 7050 50  0000 C CNN
 F 1 "Fuse" V 3194 7050 50  0000 C CNN
-F 2 "Fuse:Fuse_2920_7451Metric" V 3230 7050 50  0001 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 7050 50  0001 C CNN
 F 3 "" H 3300 7050 50  0001 C CNN
 	1    3300 7050
 	0    1    1    0   
@@ -2054,7 +2015,7 @@ U 1 1 5D51B957
 P 3300 7150
 F 0 "F4" V 3103 7150 50  0000 C CNN
 F 1 "Fuse" V 3194 7150 50  0000 C CNN
-F 2 "Fuse:Fuse_2920_7451Metric" V 3230 7150 50  0001 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 7150 50  0001 C CNN
 F 3 "" H 3300 7150 50  0001 C CNN
 	1    3300 7150
 	0    1    1    0   
@@ -2215,32 +2176,6 @@ Wire Wire Line
 	12950 6200 12550 6200
 Wire Wire Line
 	12950 6200 12950 6250
-Wire Wire Line
-	11750 5850 12550 5850
-Wire Wire Line
-	11550 6850 12550 6850
-Wire Wire Line
-	11450 7550 12550 7550
-Wire Wire Line
-	11350 7850 12550 7850
-Wire Wire Line
-	11250 8550 12550 8550
-Wire Wire Line
-	11150 8850 12550 8850
-Wire Wire Line
-	11050 9550 12550 9550
-Wire Wire Line
-	8000 6550 8050 6550
-Wire Wire Line
-	8000 6250 8050 6250
-Wire Wire Line
-	11650 6550 12550 6550
-Connection ~ 8050 6250
-Wire Wire Line
-	8050 6250 8200 6250
-Connection ~ 8050 6550
-Wire Wire Line
-	8050 6550 8200 6550
 $Comp
 L powermetering:Transformer_1P_1S T1
 U 1 1 5CCEFDA6
@@ -2264,29 +2199,6 @@ Text Label 12550 3450 0    50   ~ 0
 UL2N
 Text Label 12550 4350 0    50   ~ 0
 UL1N
-Connection ~ 12550 5850
-Wire Wire Line
-	12550 5850 12650 5850
-Connection ~ 12550 6850
-Wire Wire Line
-	12550 6850 12650 6850
-Connection ~ 12550 7850
-Wire Wire Line
-	12550 7850 12650 7850
-Connection ~ 12550 7550
-Wire Wire Line
-	12550 7550 12650 7550
-Connection ~ 12950 7550
-Connection ~ 12550 6550
-Wire Wire Line
-	12550 6550 12650 6550
-Connection ~ 12950 6550
-Connection ~ 12950 5850
-Connection ~ 12950 7850
-Connection ~ 12550 8550
-Wire Wire Line
-	12550 8550 12650 8550
-Connection ~ 12950 8550
 Text Label 11950 5850 0    50   ~ 0
 IL1N
 Text Label 11950 6850 0    50   ~ 0
@@ -2303,13 +2215,6 @@ Text Label 11950 9550 0    50   ~ 0
 INP
 Text Label 11950 8850 0    50   ~ 0
 INN
-Connection ~ 12550 8850
-Wire Wire Line
-	12550 8850 12650 8850
-Connection ~ 12550 9550
-Wire Wire Line
-	12550 9550 12650 9550
-Connection ~ 8400 6800
 Text Label 9500 4200 1    50   ~ 0
 AVDDOUT
 Text Label 9400 3750 1    50   ~ 0
@@ -2592,8 +2497,6 @@ Wire Wire Line
 	5050 1800 5050 1950
 Wire Wire Line
 	5050 1500 5050 1250
-Wire Wire Line
-	4000 3300 4100 3300
 $Comp
 L stmbl:R R46
 U 1 1 5D434AA2
@@ -2617,9 +2520,6 @@ F 3 "" H 4750 3450 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4400 3300 4750 3300
-Connection ~ 4400 3300
-Wire Wire Line
 	4400 3600 4400 3650
 Wire Wire Line
 	4750 3600 4750 3650
@@ -2631,8 +2531,6 @@ Wire Wire Line
 Connection ~ 4750 3650
 Wire Wire Line
 	4750 3650 4750 3700
-Wire Wire Line
-	4000 4000 4100 4000
 $Comp
 L stmbl:CP C36
 U 1 1 5D547FF1
@@ -2645,9 +2543,6 @@ F 4 "ULR2W3R9MNL1GS" H 4400 3850 50  0001 C CNN "Model"
 	1    4400 3850
 	1    0    0    -1  
 $EndComp
-Connection ~ 4400 4000
-Wire Wire Line
-	4400 4000 4750 4000
 $Comp
 L Diode:1.5KExxA D22
 U 1 1 5D56470F
@@ -2660,15 +2555,9 @@ F 3 "https://www.vishay.com/docs/88301/15ke.pdf" H 5050 3650 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	4750 3300 5000 3300
-Wire Wire Line
 	5100 3300 5100 3500
-Connection ~ 4750 3300
-Wire Wire Line
-	4750 4000 5000 4000
 Wire Wire Line
 	5100 4000 5100 3800
-Connection ~ 4750 4000
 $Comp
 L Device:Varistor RV1
 U 1 1 5D5D7306
@@ -2778,9 +2667,6 @@ F 3 "" H 5000 3300 50  0001 C CNN
 	1    5000 3300
 	1    0    0    -1  
 $EndComp
-Connection ~ 5000 3300
-Wire Wire Line
-	5000 3300 5100 3300
 $Comp
 L stmbl:GNDPWR #PWR0173
 U 1 1 5DA633FA
@@ -2792,9 +2678,6 @@ F 3 "" H 5000 3950 50  0001 C CNN
 	1    5000 4000
 	1    0    0    -1  
 $EndComp
-Connection ~ 5000 4000
-Wire Wire Line
-	5000 4000 5100 4000
 $Comp
 L stmbl:C C63
 U 1 1 5DA79E78
@@ -2806,9 +2689,6 @@ F 3 "" H 4100 3450 50  0000 C CNN
 	1    4100 3450
 	1    0    0    -1  
 $EndComp
-Connection ~ 4100 3300
-Wire Wire Line
-	4100 3300 4400 3300
 $Comp
 L stmbl:C C73
 U 1 1 5DA7A654
@@ -2820,9 +2700,6 @@ F 3 "" H 4100 3850 50  0000 C CNN
 	1    4100 3850
 	1    0    0    -1  
 $EndComp
-Connection ~ 4100 4000
-Wire Wire Line
-	4100 4000 4400 4000
 Wire Wire Line
 	4100 3600 4100 3650
 Wire Wire Line
@@ -2957,4 +2834,55 @@ F 3 "" H 3900 6150 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3900 6100 3900 6200
+Wire Wire Line
+	14150 6550 14850 6550
+Wire Wire Line
+	14150 5850 14850 5850
+Wire Wire Line
+	14150 7550 14850 7550
+Wire Wire Line
+	14150 6850 14850 6850
+Wire Wire Line
+	14150 8550 14850 8550
+Wire Wire Line
+	14150 7850 14850 7850
+Wire Wire Line
+	14150 9550 14850 9550
+Wire Wire Line
+	14150 8850 14850 8850
+Wire Wire Line
+	11750 5850 12650 5850
+Wire Wire Line
+	11550 6850 12650 6850
+Wire Wire Line
+	11450 7550 12650 7550
+Wire Wire Line
+	11350 7850 12650 7850
+Wire Wire Line
+	11250 8550 12650 8550
+Wire Wire Line
+	11150 8850 12650 8850
+Wire Wire Line
+	11050 9550 12650 9550
+Wire Wire Line
+	8000 6550 8200 6550
+Wire Wire Line
+	8000 6250 8200 6250
+Wire Wire Line
+	11650 6550 12650 6550
+Wire Wire Line
+	4000 3300 5100 3300
+Wire Wire Line
+	4000 4000 5100 4000
+Connection ~ 12950 5850
+Connection ~ 12950 6550
+Connection ~ 12950 6850
+Connection ~ 12950 7550
+Connection ~ 12950 7850
+Connection ~ 12950 8550
+Connection ~ 12950 8850
+Connection ~ 12950 9550
+Connection ~ 8400 6800
+Connection ~ 10550 3800
+Connection ~ 10550 3400
 $EndSCHEMATC
