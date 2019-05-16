@@ -1,10 +1,10 @@
-EESchema Schematic File Version 5
+EESchema Schematic File Version 4
 LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 4
+Sheet 2 3
 Title ""
 Date ""
 Rev ""

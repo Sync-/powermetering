@@ -1,10 +1,10 @@
-EESchema Schematic File Version 5
+EESchema Schematic File Version 4
 LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 3 4
+Sheet 3 3
 Title "STM32 Ethernet BOB"
 Date ""
 Rev ""
@@ -642,9 +642,6 @@ Wire Wire Line
 	10500 800  10500 900 
 Wire Wire Line
 	10400 900  10400 800 
-Connection ~ 10400 800 
-Wire Wire Line
-	10400 800  10500 800 
 Wire Wire Line
 	10300 900  10300 800 
 Connection ~ 10300 800 
@@ -1050,12 +1047,96 @@ STM_MCO0
 Wire Wire Line
 	8400 5300 8950 5300
 Wire Wire Line
-	7850 3400 8950 3400
+	7850 3400 8000 3400
 Wire Wire Line
 	8300 1800 8300 2400
 Wire Wire Line
-	12850 1250 14850 1250
+	12850 1250 13100 1250
 Wire Wire Line
-	12850 950  14850 950 
+	12850 950  13100 950 
 Connection ~ 12800 6250
+$Comp
+L stmbl:Crystal Y3
+U 1 1 5D421BBB
+P 8950 6750
+F 0 "Y3" V 8996 6619 50  0000 R CNN
+F 1 "RTC" V 8905 6619 50  0000 R CNN
+F 2 "stmbl:Crystal_SMD_0603_4Pads" H 8950 6750 50  0001 C CNN
+F 3 "" H 8950 6750 50  0000 C CNN
+F 4 "LFXTAL061642Reel" H 300 4650 50  0001 C CNN "Manufacturer No"
+F 5 "Mouser 449-LFXTAL061642REEL" H 300 4650 50  0001 C CNN "Source"
+F 6 "" H 300 4650 50  0001 C CNN "Tolerance"
+F 7 "" H 300 4650 50  0001 C CNN "Voltage"
+	1    8950 6750
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8950 6500 8950 6600
+$Comp
+L stmbl:GND #PWR0161
+U 1 1 5D42CB08
+P 8950 7000
+F 0 "#PWR0161" H 8950 6750 50  0001 C CNN
+F 1 "GND" H 8955 6827 50  0000 C CNN
+F 2 "" H 8950 7000 50  0000 C CNN
+F 3 "" H 8950 7000 50  0000 C CNN
+	1    8950 7000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 7000 8950 6900
+Wire Wire Line
+	10500 800  10400 800 
+Connection ~ 10400 800 
+Connection ~ 14600 950 
+Wire Wire Line
+	14600 950  14850 950 
+Connection ~ 14350 950 
+Wire Wire Line
+	14350 950  14600 950 
+Connection ~ 14100 950 
+Wire Wire Line
+	14100 950  14350 950 
+Connection ~ 14000 950 
+Wire Wire Line
+	14000 950  14100 950 
+Connection ~ 13850 950 
+Wire Wire Line
+	13850 950  14000 950 
+Connection ~ 13600 950 
+Wire Wire Line
+	13600 950  13850 950 
+Connection ~ 13350 950 
+Wire Wire Line
+	13350 950  13600 950 
+Connection ~ 13100 950 
+Wire Wire Line
+	13100 950  13350 950 
+Connection ~ 13100 1250
+Wire Wire Line
+	13100 1250 13350 1250
+Connection ~ 13350 1250
+Wire Wire Line
+	13350 1250 13600 1250
+Connection ~ 13600 1250
+Wire Wire Line
+	13600 1250 13850 1250
+Connection ~ 13850 1250
+Wire Wire Line
+	13850 1250 14000 1250
+Connection ~ 14000 1250
+Wire Wire Line
+	14000 1250 14100 1250
+Connection ~ 14100 1250
+Wire Wire Line
+	14100 1250 14350 1250
+Connection ~ 14350 1250
+Wire Wire Line
+	14350 1250 14600 1250
+Connection ~ 14600 1250
+Wire Wire Line
+	14600 1250 14850 1250
+Connection ~ 8000 3400
+Wire Wire Line
+	8000 3400 8950 3400
 $EndSCHEMATC
