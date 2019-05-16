@@ -770,31 +770,31 @@ Wire Wire Line
 $Comp
 L stmbl:Led_Small D31
 U 1 1 5B4CB472
-P 15400 9150
-F 0 "D31" V 15446 9082 50  0000 R CNN
-F 1 "green" V 15355 9082 50  0000 R CNN
-F 2 "stmbl:LED-0805" V 15400 9150 50  0001 C CNN
-F 3 "" V 15400 9150 50  0000 C CNN
-F 4 "LG R971" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 720-LGR971-KN-1" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    15400 9150
+P 15400 8750
+F 0 "D31" V 15446 8682 50  0000 R CNN
+F 1 "green" V 15355 8682 50  0000 R CNN
+F 2 "stmbl:LED-0805" V 15400 8750 50  0001 C CNN
+F 3 "" V 15400 8750 50  0000 C CNN
+F 4 "LG R971" H 0   -400 50  0001 C CNN "Manufacturer No"
+F 5 "Mouser 720-LGR971-KN-1" H 0   -400 50  0001 C CNN "Source"
+F 6 "" H 0   -400 50  0001 C CNN "Tolerance"
+F 7 "" H 0   -400 50  0001 C CNN "Voltage"
+	1    15400 8750
 	0    -1   -1   0   
 $EndComp
 $Comp
 L stmbl:R R67
 U 1 1 5B4CB478
-P 15400 8800
-F 0 "R67" H 15470 8846 50  0000 L CNN
-F 1 "470" H 15470 8755 50  0000 L CNN
-F 2 "stmbl:R_0603" V 15330 8800 50  0001 C CNN
-F 3 "" H 15400 8800 50  0000 C CNN
-F 4 "" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "" H 0   0   50  0001 C CNN "Source"
-F 6 "1%" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    15400 8800
+P 15400 9100
+F 0 "R67" H 15470 9146 50  0000 L CNN
+F 1 "470" H 15470 9055 50  0000 L CNN
+F 2 "stmbl:R_0603" V 15330 9100 50  0001 C CNN
+F 3 "" H 15400 9100 50  0000 C CNN
+F 4 "" H 0   300 50  0001 C CNN "Manufacturer No"
+F 5 "" H 0   300 50  0001 C CNN "Source"
+F 6 "1%" H 0   300 50  0001 C CNN "Tolerance"
+F 7 "" H 0   300 50  0001 C CNN "Voltage"
+	1    15400 9100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -865,8 +865,6 @@ Wire Wire Line
 	11250 3800 11400 3800
 Wire Wire Line
 	11250 3600 11400 3600
-Wire Wire Line
-	15400 8950 15400 9050
 Text GLabel 14200 4450 1    60   Input ~ 0
 DC_LINK
 $Comp
@@ -1139,4 +1137,6 @@ Wire Wire Line
 Connection ~ 8000 3400
 Wire Wire Line
 	8000 3400 8950 3400
+Wire Wire Line
+	15400 8850 15400 8950
 $EndSCHEMATC

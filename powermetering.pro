@@ -1,4 +1,4 @@
-update=Thu 16 May 2019 05:41:11 PM CEST
+update=Thu 16 May 2019 09:58:22 PM CEST
 version=1
 last_client=kicad
 [general]
@@ -22,7 +22,7 @@ AllowMicroVias=0
 AllowBlindVias=0
 RequireCourtyardDefinitions=0
 ProhibitOverlappingCourtyards=1
-MinTrackWidth=0.2
+MinTrackWidth=0.15
 MinViaDiameter=0.4
 MinViaDrill=0.3
 MinMicroViaDiameter=0.2
@@ -61,6 +61,17 @@ SolderPasteClearance=0
 SolderPasteRatio=-0
 [pcbnew/Netclasses]
 [pcbnew/Netclasses/1]
+Name=phy_stuff
+Clearance=0.2
+TrackWidth=0.15
+ViaDiameter=0.6
+ViaDrill=0.35
+uViaDiameter=0.3
+uViaDrill=0.1
+dPairWidth=0.2
+dPairGap=0.25
+dPairViaGap=0.25
+[pcbnew/Netclasses/2]
 Name=three_phase
 Clearance=2.5
 TrackWidth=1
