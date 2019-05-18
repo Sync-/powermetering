@@ -28,47 +28,47 @@ $EndComp
 $Comp
 L Connector:Conn_01x04_Female J1
 U 1 1 5C2E6576
-P 3700 6950
-F 0 "J1" H 3780 6942 50  0000 L CNN
-F 1 "Conn_01x04" H 3780 6851 50  0000 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal" H 3700 6950 50  0001 C CNN
-F 3 "~" H 3700 6950 50  0001 C CNN
-	1    3700 6950
+P 2300 850
+F 0 "J1" H 2380 842 50  0000 L CNN
+F 1 "Conn_01x04" H 2380 751 50  0000 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal" H 2300 850 50  0001 C CNN
+F 3 "~" H 2300 850 50  0001 C CNN
+	1    2300 850 
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:Fuse F1
 U 1 1 5C2E6640
-P 3300 6850
-F 0 "F1" V 3103 6850 50  0000 C CNN
-F 1 "Fuse" V 3194 6850 50  0000 C CNN
-F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 6850 50  0001 C CNN
-F 3 "" H 3300 6850 50  0001 C CNN
-	1    3300 6850
+P 1900 750
+F 0 "F1" V 1703 750 50  0000 C CNN
+F 1 "Fuse" V 1794 750 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 1830 750 50  0001 C CNN
+F 3 "" H 1900 750 50  0001 C CNN
+	1    1900 750 
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	3450 6850 3500 6850
+	2050 750  2100 750 
 Wire Wire Line
-	3450 6950 3500 6950
+	2050 850  2100 850 
 Wire Wire Line
-	3450 7050 3500 7050
+	2050 950  2100 950 
 Wire Wire Line
-	3450 7150 3500 7150
-Text GLabel 3050 6850 0    50   Input ~ 0
+	2050 1050 2100 1050
+Text GLabel 1650 750  0    50   Input ~ 0
 L1
-Text GLabel 3050 6950 0    50   Input ~ 0
+Text GLabel 1650 850  0    50   Input ~ 0
 L2
-Text GLabel 3050 7050 0    50   Input ~ 0
+Text GLabel 1650 950  0    50   Input ~ 0
 L3
-Text GLabel 2450 7150 0    50   Input ~ 0
+Text GLabel 1050 1050 0    50   Input ~ 0
 N
 Wire Wire Line
-	3050 6850 3150 6850
+	1650 750  1750 750 
 Wire Wire Line
-	3050 6950 3150 6950
+	1650 850  1750 850 
 Wire Wire Line
-	3050 7050 3150 7050
+	1650 950  1750 950 
 Text GLabel 15100 4400 2    50   Input ~ 0
 L1
 $Comp
@@ -611,12 +611,12 @@ Wire Wire Line
 $Comp
 L power:GNDA #PWR0104
 U 1 1 5C308858
-P 2500 7200
-F 0 "#PWR0104" H 2500 6950 50  0001 C CNN
-F 1 "GNDA" H 2505 7027 50  0000 C CNN
-F 2 "" H 2500 7200 50  0001 C CNN
-F 3 "" H 2500 7200 50  0001 C CNN
-	1    2500 7200
+P 1100 1100
+F 0 "#PWR0104" H 1100 850 50  0001 C CNN
+F 1 "GNDA" H 1105 927 50  0000 C CNN
+F 2 "" H 1100 1100 50  0001 C CNN
+F 3 "" H 1100 1100 50  0001 C CNN
+	1    1100 1100
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1957,56 +1957,56 @@ Wire Wire Line
 $Comp
 L Device:Fuse F2
 U 1 1 5D51B7A5
-P 3300 6950
-F 0 "F2" V 3103 6950 50  0000 C CNN
-F 1 "Fuse" V 3194 6950 50  0000 C CNN
-F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 6950 50  0001 C CNN
-F 3 "" H 3300 6950 50  0001 C CNN
-	1    3300 6950
+P 1900 850
+F 0 "F2" V 1703 850 50  0000 C CNN
+F 1 "Fuse" V 1794 850 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 1830 850 50  0001 C CNN
+F 3 "" H 1900 850 50  0001 C CNN
+	1    1900 850 
 	0    1    1    0   
 $EndComp
 $Comp
 L Device:Fuse F3
 U 1 1 5D51B87D
-P 3300 7050
-F 0 "F3" V 3103 7050 50  0000 C CNN
-F 1 "Fuse" V 3194 7050 50  0000 C CNN
-F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 7050 50  0001 C CNN
-F 3 "" H 3300 7050 50  0001 C CNN
-	1    3300 7050
+P 1900 950
+F 0 "F3" V 1703 950 50  0000 C CNN
+F 1 "Fuse" V 1794 950 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 1830 950 50  0001 C CNN
+F 3 "" H 1900 950 50  0001 C CNN
+	1    1900 950 
 	0    1    1    0   
 $EndComp
 $Comp
 L Device:Fuse F4
 U 1 1 5D51B957
-P 3300 7150
-F 0 "F4" V 3103 7150 50  0000 C CNN
-F 1 "Fuse" V 3194 7150 50  0000 C CNN
-F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 3230 7150 50  0001 C CNN
-F 3 "" H 3300 7150 50  0001 C CNN
-	1    3300 7150
+P 1900 1050
+F 0 "F4" V 1703 1050 50  0000 C CNN
+F 1 "Fuse" V 1794 1050 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Cylinder-6.3x32mm_Schurter_0031-8002_Horizontal_Open" V 1830 1050 50  0001 C CNN
+F 3 "" H 1900 1050 50  0001 C CNN
+	1    1900 1050
 	0    1    1    0   
 $EndComp
 $Comp
 L Device:Ferrite_Bead L4
 U 1 1 5D51C433
-P 2700 7150
-F 0 "L4" V 2426 7150 50  0000 C CNN
-F 1 "Ferrite_Bead" V 2517 7150 50  0000 C CNN
-F 2 "stmbl-kicad-lib:C_0805" V 2630 7150 50  0001 C CNN
-F 3 "" H 2700 7150 50  0001 C CNN
-	1    2700 7150
+P 1300 1050
+F 0 "L4" V 1026 1050 50  0000 C CNN
+F 1 "Ferrite_Bead" V 1117 1050 50  0000 C CNN
+F 2 "stmbl-kicad-lib:C_0805" V 1230 1050 50  0001 C CNN
+F 3 "" H 1300 1050 50  0001 C CNN
+	1    1300 1050
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	2450 7150 2500 7150
+	1050 1050 1100 1050
 Wire Wire Line
-	2500 7150 2500 7200
-Connection ~ 2500 7150
+	1100 1050 1100 1100
+Connection ~ 1100 1050
 Wire Wire Line
-	2500 7150 2550 7150
+	1100 1050 1150 1050
 Wire Wire Line
-	2850 7150 3150 7150
+	1450 1050 1750 1050
 Connection ~ 13750 8200
 Wire Wire Line
 	13750 8200 13750 8400
@@ -2180,154 +2180,154 @@ REF
 $Comp
 L stmbl:CP C35
 U 1 1 5D3C6D53
-P 3300 1550
-F 0 "C35" H 3418 1596 50  0000 L CNN
-F 1 "3.9µ" H 3418 1505 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_8x10" H 3338 1400 50  0001 C CNN
-F 3 "https://www.mouser.de/datasheet/2/293/e-ulr-1513143.pdf" H 3418 1459 50  0001 L CNN
-F 4 "ULR2W3R9MNL1GS" H 3300 1550 50  0001 C CNN "Model"
-	1    3300 1550
+P 3300 1850
+F 0 "C35" H 3418 1896 50  0000 L CNN
+F 1 "3.9µ" H 3418 1805 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_8x10" H 3338 1700 50  0001 C CNN
+F 3 "https://www.mouser.de/datasheet/2/293/e-ulr-1513143.pdf" H 3418 1759 50  0001 L CNN
+F 4 "ULR2W3R9MNL1GS" H 3300 1850 50  0001 C CNN "Model"
+	1    3300 1850
 	1    0    0    -1  
 $EndComp
 $Comp
 L stmbl:R R46
 U 1 1 5D434AA2
-P 3650 1950
-F 0 "R46" H 3720 1996 50  0000 L CNN
-F 1 "450k" H 3720 1905 50  0000 L CNN
-F 2 "stmbl:R_1206" V 3580 1950 50  0001 C CNN
-F 3 "" H 3650 1950 50  0000 C CNN
-	1    3650 1950
+P 3650 2250
+F 0 "R46" H 3720 2296 50  0000 L CNN
+F 1 "450k" H 3720 2205 50  0000 L CNN
+F 2 "stmbl:R_1206" V 3580 2250 50  0001 C CNN
+F 3 "" H 3650 2250 50  0000 C CNN
+	1    3650 2250
 	1    0    0    -1  
 $EndComp
 $Comp
 L stmbl:R R45
 U 1 1 5D434F66
-P 3650 1550
-F 0 "R45" H 3720 1596 50  0000 L CNN
-F 1 "450k" H 3720 1505 50  0000 L CNN
-F 2 "stmbl:R_1206" V 3580 1550 50  0001 C CNN
-F 3 "" H 3650 1550 50  0000 C CNN
-	1    3650 1550
+P 3650 1850
+F 0 "R45" H 3720 1896 50  0000 L CNN
+F 1 "450k" H 3720 1805 50  0000 L CNN
+F 2 "stmbl:R_1206" V 3580 1850 50  0001 C CNN
+F 3 "" H 3650 1850 50  0000 C CNN
+	1    3650 1850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3300 1700 3300 1750
+	3300 2000 3300 2050
 Wire Wire Line
-	3650 1700 3650 1750
+	3650 2000 3650 2050
 Wire Wire Line
-	3300 1750 3650 1750
-Connection ~ 3300 1750
+	3300 2050 3650 2050
+Connection ~ 3300 2050
 Wire Wire Line
-	3300 1750 3300 1800
-Connection ~ 3650 1750
+	3300 2050 3300 2100
+Connection ~ 3650 2050
 Wire Wire Line
-	3650 1750 3650 1800
+	3650 2050 3650 2100
 $Comp
 L stmbl:CP C36
 U 1 1 5D547FF1
-P 3300 1950
-F 0 "C36" H 3418 1996 50  0000 L CNN
-F 1 "3.9µ" H 3418 1905 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_8x10" H 3338 1800 50  0001 C CNN
-F 3 "https://www.mouser.de/datasheet/2/293/e-ulr-1513143.pdf" H 3418 1859 50  0001 L CNN
-F 4 "ULR2W3R9MNL1GS" H 3300 1950 50  0001 C CNN "Model"
-	1    3300 1950
+P 3300 2250
+F 0 "C36" H 3418 2296 50  0000 L CNN
+F 1 "3.9µ" H 3418 2205 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_8x10" H 3338 2100 50  0001 C CNN
+F 3 "https://www.mouser.de/datasheet/2/293/e-ulr-1513143.pdf" H 3418 2159 50  0001 L CNN
+F 4 "ULR2W3R9MNL1GS" H 3300 2250 50  0001 C CNN "Model"
+	1    3300 2250
 	1    0    0    -1  
 $EndComp
 $Comp
 L Diode:1.5KExxA D22
 U 1 1 5D56470F
-P 4000 1750
-F 0 "D22" H 3800 1800 50  0000 L CNN
-F 1 "1.5KExxA" H 4050 1800 50  0000 L CNN
-F 2 "stmbl:SMA_Standard" H 4000 1550 50  0001 C CNN
-F 3 "https://www.vishay.com/docs/88301/15ke.pdf" H 3950 1750 50  0001 C CNN
-	1    4000 1750
+P 4000 2050
+F 0 "D22" H 3800 2100 50  0000 L CNN
+F 1 "1.5KExxA" H 4050 2100 50  0000 L CNN
+F 2 "stmbl:SMA_Standard" H 4000 1850 50  0001 C CNN
+F 3 "https://www.vishay.com/docs/88301/15ke.pdf" H 3950 2050 50  0001 C CNN
+	1    4000 2050
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	4000 1400 4000 1600
+	4000 1700 4000 1900
 Wire Wire Line
-	4000 2100 4000 1900
+	4000 2400 4000 2200
 $Comp
 L Device:Varistor RV1
 U 1 1 5D5D7306
-P 4200 1750
-F 0 "RV1" V 4300 1850 50  0000 L CNN
-F 1 "Varistor" V 4300 1400 50  0000 L CNN
-F 2 "" V 4130 1750 50  0001 C CNN
-F 3 "~" H 4200 1750 50  0001 C CNN
-	1    4200 1750
+P 4200 2050
+F 0 "RV1" V 4300 2150 50  0000 L CNN
+F 1 "Varistor" V 4300 1700 50  0000 L CNN
+F 2 "" V 4130 2050 50  0001 C CNN
+F 3 "~" H 4200 2050 50  0001 C CNN
+	1    4200 2050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4000 1400 4200 1400
+	4000 1700 4200 1700
 Wire Wire Line
-	4200 1400 4200 1600
-Connection ~ 4000 1400
+	4200 1700 4200 1900
+Connection ~ 4000 1700
 Wire Wire Line
-	4000 2100 4200 2100
+	4000 2400 4200 2400
 Wire Wire Line
-	4200 2100 4200 1900
-Connection ~ 4000 2100
-Text GLabel 1050 1100 0    50   Input ~ 0
+	4200 2400 4200 2200
+Connection ~ 4000 2400
+Text GLabel 1050 1400 0    50   Input ~ 0
 L1
-Text GLabel 1050 1750 0    50   Input ~ 0
+Text GLabel 1050 2050 0    50   Input ~ 0
 L2
-Text GLabel 1050 2400 0    50   Input ~ 0
+Text GLabel 1050 2700 0    50   Input ~ 0
 L3
 $Comp
 L Diode_Bridge:ABS10 D20
 U 1 1 5D6C9594
-P 1950 1400
-F 0 "D20" H 2294 1446 50  0000 L CNN
-F 1 "ABS10" H 2294 1355 50  0000 L CNN
-F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 1525 50  0001 L CNN
-F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 1400 50  0001 C CNN
-	1    1950 1400
+P 1950 1700
+F 0 "D20" H 2294 1746 50  0000 L CNN
+F 1 "ABS10" H 2294 1655 50  0000 L CNN
+F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 1825 50  0001 L CNN
+F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 1700 50  0001 C CNN
+	1    1950 1700
 	1    0    0    -1  
 $EndComp
 $Comp
 L Diode_Bridge:ABS10 D21
 U 1 1 5D6C9DAC
-P 1950 2100
-F 0 "D21" H 2294 2146 50  0000 L CNN
-F 1 "ABS10" H 2294 2055 50  0000 L CNN
-F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 2225 50  0001 L CNN
-F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 2100 50  0001 C CNN
-	1    1950 2100
+P 1950 2400
+F 0 "D21" H 2294 2446 50  0000 L CNN
+F 1 "ABS10" H 2294 2355 50  0000 L CNN
+F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 2525 50  0001 L CNN
+F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 2400 50  0001 C CNN
+	1    1950 2400
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1050 1100 1950 1100
+	1050 1400 1950 1400
 Wire Wire Line
-	1050 1750 1950 1750
+	1050 2050 1950 2050
 Wire Wire Line
-	1950 1750 1950 1700
+	1950 2050 1950 2000
 Wire Wire Line
-	1950 1750 1950 1800
-Connection ~ 1950 1750
+	1950 2050 1950 2100
+Connection ~ 1950 2050
 Wire Wire Line
-	1050 2400 1950 2400
+	1050 2700 1950 2700
 Wire Wire Line
-	1650 1400 1650 1850
+	1650 1700 1650 2150
 Wire Wire Line
-	2250 1400 2250 1600
+	2250 1700 2250 1900
 Wire Wire Line
-	2900 1400 2900 1600
+	2900 1700 2900 1900
 Wire Wire Line
-	2900 1600 2250 1600
-Connection ~ 2250 1600
+	2900 1900 2250 1900
+Connection ~ 2250 1900
 Wire Wire Line
-	2250 1600 2250 2100
+	2250 1900 2250 2400
 Wire Wire Line
-	1650 1850 2900 1850
+	1650 2150 2900 2150
 Wire Wire Line
-	2900 1850 2900 2100
-Connection ~ 1650 1850
+	2900 2150 2900 2400
+Connection ~ 1650 2150
 Wire Wire Line
-	1650 1850 1650 2100
+	1650 2150 1650 2400
 $Sheet
 S 8550 900  1250 1450
 U 5D9E2522
@@ -2372,54 +2372,54 @@ $EndSheet
 $Comp
 L stmbl:VPP #PWR0172
 U 1 1 5DA613C5
-P 3900 1400
-F 0 "#PWR0172" H 3900 1250 50  0001 C CNN
-F 1 "VPP" H 3915 1573 50  0000 C CNN
-F 2 "" H 3900 1400 50  0001 C CNN
-F 3 "" H 3900 1400 50  0001 C CNN
-	1    3900 1400
+P 3900 1700
+F 0 "#PWR0172" H 3900 1550 50  0001 C CNN
+F 1 "VPP" H 3915 1873 50  0000 C CNN
+F 2 "" H 3900 1700 50  0001 C CNN
+F 3 "" H 3900 1700 50  0001 C CNN
+	1    3900 1700
 	1    0    0    -1  
 $EndComp
 $Comp
 L stmbl:GNDPWR #PWR0173
 U 1 1 5DA633FA
-P 3900 2100
-F 0 "#PWR0173" H 3900 1900 50  0001 C CNN
-F 1 "GNDPWR" H 3904 1946 50  0000 C CNN
-F 2 "" H 3900 2050 50  0001 C CNN
-F 3 "" H 3900 2050 50  0001 C CNN
-	1    3900 2100
+P 3900 2400
+F 0 "#PWR0173" H 3900 2200 50  0001 C CNN
+F 1 "GNDPWR" H 3904 2246 50  0000 C CNN
+F 2 "" H 3900 2350 50  0001 C CNN
+F 3 "" H 3900 2350 50  0001 C CNN
+	1    3900 2400
 	1    0    0    -1  
 $EndComp
 $Comp
 L stmbl:C C63
 U 1 1 5DA79E78
-P 3000 1550
-F 0 "C63" H 3050 1650 50  0000 L CNN
-F 1 "150n" H 3050 1450 50  0000 L CNN
-F 2 "stmbl:C_1808" H 3038 1400 50  0001 C CNN
-F 3 "" H 3000 1550 50  0000 C CNN
-	1    3000 1550
+P 3000 1850
+F 0 "C63" H 3050 1950 50  0000 L CNN
+F 1 "150n" H 3050 1750 50  0000 L CNN
+F 2 "stmbl:C_1808" H 3038 1700 50  0001 C CNN
+F 3 "" H 3000 1850 50  0000 C CNN
+	1    3000 1850
 	1    0    0    -1  
 $EndComp
 $Comp
 L stmbl:C C73
 U 1 1 5DA7A654
-P 3000 1950
-F 0 "C73" H 3050 2050 50  0000 L CNN
-F 1 "150n" H 3050 1850 50  0000 L CNN
-F 2 "stmbl:C_1808" H 3038 1800 50  0001 C CNN
-F 3 "" H 3000 1950 50  0000 C CNN
-	1    3000 1950
+P 3000 2250
+F 0 "C73" H 3050 2350 50  0000 L CNN
+F 1 "150n" H 3050 2150 50  0000 L CNN
+F 2 "stmbl:C_1808" H 3038 2100 50  0001 C CNN
+F 3 "" H 3000 2250 50  0000 C CNN
+	1    3000 2250
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3000 1700 3000 1750
+	3000 2000 3000 2050
 Wire Wire Line
-	3000 1750 3300 1750
-Connection ~ 3000 1750
+	3000 2050 3300 2050
+Connection ~ 3000 2050
 Wire Wire Line
-	3000 1750 3000 1800
+	3000 2050 3000 2100
 Text Label 8650 6800 0    50   ~ 0
 RESET
 $Comp
@@ -2547,9 +2547,9 @@ Wire Wire Line
 Wire Wire Line
 	11650 6550 12550 6550
 Wire Wire Line
-	2900 1400 3000 1400
+	2900 1700 3000 1700
 Wire Wire Line
-	2900 2100 3000 2100
+	2900 2400 3000 2400
 Connection ~ 12950 5850
 Connection ~ 12950 6550
 Connection ~ 12950 6850
@@ -2559,30 +2559,30 @@ Connection ~ 12950 8550
 Connection ~ 12950 8850
 Connection ~ 12950 9550
 Connection ~ 8650 6800
-Connection ~ 3000 1400
+Connection ~ 3000 1700
 Wire Wire Line
-	3000 1400 3300 1400
-Connection ~ 3300 1400
+	3000 1700 3300 1700
+Connection ~ 3300 1700
 Wire Wire Line
-	3300 1400 3650 1400
-Connection ~ 3650 1400
+	3300 1700 3650 1700
+Connection ~ 3650 1700
 Wire Wire Line
-	3650 1400 3900 1400
-Connection ~ 3000 2100
+	3650 1700 3900 1700
+Connection ~ 3000 2400
 Wire Wire Line
-	3000 2100 3300 2100
-Connection ~ 3300 2100
+	3000 2400 3300 2400
+Connection ~ 3300 2400
 Wire Wire Line
-	3300 2100 3650 2100
-Connection ~ 3650 2100
+	3300 2400 3650 2400
+Connection ~ 3650 2400
 Wire Wire Line
-	3650 2100 3900 2100
-Connection ~ 3900 2100
+	3650 2400 3900 2400
+Connection ~ 3900 2400
 Wire Wire Line
-	3900 2100 4000 2100
-Connection ~ 3900 1400
+	3900 2400 4000 2400
+Connection ~ 3900 1700
 Wire Wire Line
-	3900 1400 4000 1400
+	3900 1700 4000 1700
 $Comp
 L stmbl:R R63
 U 1 1 5CF1BE18
@@ -3551,4 +3551,48 @@ $EndComp
 Wire Wire Line
 	5200 4650 5200 4700
 Connection ~ 5200 4700
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5E5C01D8
+P 3050 9350
+F 0 "H1" H 3150 9396 50  0000 L CNN
+F 1 "MountingHole" H 3150 9305 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 9350 50  0001 C CNN
+F 3 "~" H 3050 9350 50  0001 C CNN
+	1    3050 9350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5E5C01E2
+P 3050 9600
+F 0 "H2" H 3150 9646 50  0000 L CNN
+F 1 "MountingHole" H 3150 9555 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 9600 50  0001 C CNN
+F 3 "~" H 3050 9600 50  0001 C CNN
+	1    3050 9600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5E5C01EC
+P 3050 9850
+F 0 "H3" H 3150 9896 50  0000 L CNN
+F 1 "MountingHole" H 3150 9805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 9850 50  0001 C CNN
+F 3 "~" H 3050 9850 50  0001 C CNN
+	1    3050 9850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 5E5C01F6
+P 3050 10100
+F 0 "H4" H 3150 10146 50  0000 L CNN
+F 1 "MountingHole" H 3150 10055 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 10100 50  0001 C CNN
+F 3 "~" H 3050 10100 50  0001 C CNN
+	1    3050 10100
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
