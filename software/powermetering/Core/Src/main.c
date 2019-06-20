@@ -30,7 +30,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "httpd.h"
+#include "SEGGER_RTT.h"
+#include "ADE9000.h"
+#include "fs.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,16 +74,69 @@ void LEDBlink(void) {
   }
 }
 
-volatile uint8_t spi_rec_buffer[10];
+uint8_t spi_rec_buffer[10];
+uint32_t reg2, reg3;
+uint32_t link = 0;
+
+extern struct netif gnetif;
+
+void write_ADE9000_data(uint16_t reg_num, uint16_t data) {
+  uint8_t access_reg[4] = {0,0,0xFF,0xFF};
+  access_reg[0] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
+  access_reg[1] = (uint8_t) (((reg_num << 4)+ (0 << 4)) & 0x00FF);
+  access_reg[2] = (uint8_t) ((data & 0xFF00) >> 8);
+  access_reg[3] = (uint8_t) ((data) & 0x00FF);
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+//  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
+//  HAL_SPI_TransmitReceive(&hspi1, access_reg, spi_rec_buffer, 4, 10);
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+}
+
+void get_ADE9000_data(uint16_t reg_num) {
+  uint8_t rx_reg[6] = {0,0,0,0,0,0};
+  rx_reg[0] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
+  rx_reg[1] = (uint8_t) (((reg_num << 4)+ (1 << 4)) & 0x00FF);
+  
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
+//  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+//  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
+HAL_SPI_TransmitReceive(&hspi1, rx_reg, spi_rec_buffer, 3, 10);
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+}
 
 void SPI_get_data(void) {
-  uint8_t reg[2] = {0b00000101, 0b00000110};
   while (1) {
-    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi1, reg, 2, 10);
-    HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
-    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+    get_ADE9000_data(ADDR_CONFIG5);
+    HAL_ETH_ReadPHYRegister(&heth, PHY_SR, &reg2);
+    if ((reg2 & 256))
+    {
+      if (link == 0)
+      {
+        link = 1;
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+        netif_set_up(&gnetif);
+        netif_set_link_up(&gnetif);
+      }
+    }
+    else
+    {
+      link = 0;
+      HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
+      netif_set_link_down(&gnetif);
+    }
   }
+}
+char const* TAGCHAR="YOLO";
+char const** TAGS=&TAGCHAR;
+
+uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
+  if(index == 0) {
+    static int count = 0;
+    SEGGER_RTT_printf(0, "ssi %d\n", count);
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "Sie sind besucher nummer %i",count++);
+  }
+  return 0;
 }
 /* USER CODE END 0 */
 
@@ -115,9 +172,18 @@ int main(void)
   MX_SPI1_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  MX_LWIP_Init();
 
-  xTaskCreate(LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
-  xTaskCreate(SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
+  httpd_init();
+
+  SEGGER_RTT_Init();
+  SEGGER_RTT_printf(0, "yolo\n");
+
+  write_ADE9000_data(ADDR_RUN, 1);
+
+  xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+  xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
 
   /* USER CODE END 2 */
 
