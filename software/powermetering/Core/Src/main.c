@@ -27,6 +27,7 @@
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
+#include "math.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -118,7 +119,7 @@ void write_ADE9000_32(uint16_t reg_num, uint32_t data) {
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
-uint8_t arms[10], brms[10], crms[10];
+uint8_t arms[10], brms[10], crms[10], uthd[10], ithd[10], hz[10];
 
 void get_ADE9000_data_reg(uint16_t reg_num, uint8_t* arr) {
   uint8_t rx_reg[6] = {0,0,0,0,0,0};
@@ -146,9 +147,12 @@ void get_ADE9000_data(uint16_t reg_num) {
 
 void SPI_get_data(void) {
   while (1) {
-    get_ADE9000_data_reg(ADDR_AV_SINC_DAT, arms);
-    get_ADE9000_data_reg(ADDR_BV_SINC_DAT, brms);
-    get_ADE9000_data_reg(ADDR_CV_SINC_DAT, crms);
+    get_ADE9000_data_reg(ADDR_CWATT, arms);
+    get_ADE9000_data_reg(ADDR_CIRMS, brms);
+    get_ADE9000_data_reg(ADDR_CPF, crms);
+    get_ADE9000_data_reg(ADDR_CVAR, uthd);
+    get_ADE9000_data_reg(ADDR_CVA, ithd);
+    get_ADE9000_data_reg(ADDR_CPERIOD, hz);
 
     get_ADE9000_data_reg(ADDR_CVRMS, spi_rec_buffer);
 
@@ -178,22 +182,45 @@ void SPI_get_data(void) {
 char const* TAGCHAR="YOLO";
 char const** TAGS=&TAGCHAR;
 
+#define V_PER_BIT (0.707 / 52702092.0)
+
+#define R_SHUNT (18.0 * 2.0) //double the pcb value
+#define CUR_PRI 20.0 //primary current
+#define CUR_SEC 0.02 //secondary current
+#define CUR_TF ((R_SHUNT * CUR_SEC)/CUR_PRI) //volts per amp
+#define CUR_CONST (CUR_TF / V_PER_BIT) //amps per bit
+
+#define R_HIGH 800000.0
+#define R_LOW 1000.0
+#define VOLT_TF ((1 / (R_HIGH + R_LOW)) * R_LOW) //volts per volt
+#define VOLT_CONST (VOLT_TF / V_PER_BIT)
+
+#define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0/20694066.0))*2.0)
+
 uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
   if(index == 0) {
     static int count = 0;
-    SEGGER_RTT_printf(0, "ssi %d\n", count);
+    SEGGER_RTT_printf(0, "ssi %d CUR_CONST: %lf\n", count, CUR_CONST);
     int32_t a_rms = (arms[3] << 24) + (arms[2] << 16) + (arms[5] << 8) + arms[4];
     int32_t b_rms = (brms[3] << 24) + (brms[2] << 16) + (brms[5] << 8) + brms[4];
     int32_t c_rms = (crms[3] << 24) + (crms[2] << 16) + (crms[5] << 8) + crms[4];
 
     int32_t ac_rms = (spi_rec_buffer[3] << 24) + (spi_rec_buffer[2] << 16) + (spi_rec_buffer[5] << 8) + spi_rec_buffer[4];
 
+    int32_t ithd_i = (ithd[3] << 24) + (ithd[2] << 16) + (ithd[5] << 8) + ithd[4];
+    int32_t uthd_i = (uthd[3] << 24) + (uthd[2] << 16) + (uthd[5] << 8) + uthd[4];
+    int32_t hz_i = (hz[3] << 24) + (hz[2] << 16) + (hz[5] << 8) + hz[4];
 
     double a_rms_f = a_rms / 118648.6953f;
     double b_rms_f = b_rms / 118648.6953f;
-    double c_rms_f = c_rms / 118648.6953f;
-    double ac_rms_f = ac_rms / 93178.9712f;
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "A: %lf B: %lf C: %lf acrms: %lf cnt: %i", a_rms_f, b_rms_f, c_rms_f, ac_rms_f, count++);
+    double c_rms_f = c_rms  * powf(2.0,-27.0);
+    double ac_rms_f = ac_rms / VOLT_CONST;
+    double cc_rms_f = b_rms / CUR_CONST;
+    double wc_rms_f = a_rms / PWR_CONST;
+    double ithd_f = ithd_i / PWR_CONST;
+    double uthd_f = uthd_i / PWR_CONST;
+    double hz_f = (8000.0*powf(2,16))/(hz_i + 1);
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "U: %.2lfV I: %.2lfA P: %.3lfW S: %.3lfVA  Q: %.3lfvar pf: %.2lf Freq: %.2lfHz cnt: %i", ac_rms_f, cc_rms_f, wc_rms_f, ithd_f, uthd_f, c_rms_f, hz_f, count++);
   }
   return 0;
 }
@@ -241,6 +268,7 @@ int main(void)
 
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_RUN, 1);
+  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
