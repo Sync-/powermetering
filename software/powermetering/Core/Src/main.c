@@ -80,34 +80,82 @@ uint32_t link = 0;
 
 extern struct netif gnetif;
 
-void write_ADE9000_data(uint16_t reg_num, uint16_t data) {
+void write_ADE9000_16(uint16_t reg_num, uint16_t data) {
+  uint16_t tx_reg;
   uint8_t access_reg[4] = {0,0,0xFF,0xFF};
-  access_reg[0] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
-  access_reg[1] = (uint8_t) (((reg_num << 4)+ (0 << 4)) & 0x00FF);
-  access_reg[2] = (uint8_t) ((data & 0xFF00) >> 8);
-  access_reg[3] = (uint8_t) ((data) & 0x00FF);
+
+  tx_reg = reg_num;
+  tx_reg = (tx_reg << 4);
+  tx_reg = (tx_reg & 0xFFF7);
+
+  access_reg[0] = (uint8_t) tx_reg;
+  access_reg[1] = (uint8_t) (tx_reg >> 8);
+  access_reg[2] = (uint8_t) ((data) & 0x00FF);
+  access_reg[3] = (uint8_t) ((data & 0xFF00) >> 8);
+
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
   HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+}
+
+void write_ADE9000_32(uint16_t reg_num, uint32_t data) {
+  uint16_t tx_reg;
+  uint8_t access_reg[6] = {0,0,0,0};
+
+  tx_reg = reg_num;
+  tx_reg = (tx_reg << 4);
+  tx_reg = (tx_reg & 0xFFF7);
+
+  access_reg[0] = (uint8_t) tx_reg;
+  access_reg[1] = (uint8_t) (tx_reg >> 8);
+  access_reg[2] = (uint8_t) ((data & 0xFF000000) >> 24);
+  access_reg[3] = (uint8_t) ((data & 0x00FF0000) >> 16);
+  access_reg[5] = (uint8_t) ((data) & 0x000000FF);
+  access_reg[4] = (uint8_t) ((data & 0x00000FF00) >> 8);
+
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+}
+
+uint8_t arms[10], brms[10], crms[10];
+
+void get_ADE9000_data_reg(uint16_t reg_num, uint8_t* arr) {
+  uint8_t rx_reg[6] = {0,0,0,0,0,0};
+  rx_reg[1] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
+  rx_reg[0] = (uint8_t) (((reg_num << 4)+ (1 << 3)) & 0x00FF);
+  
+  HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
+//  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
 //  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
-//  HAL_SPI_TransmitReceive(&hspi1, access_reg, spi_rec_buffer, 4, 10);
+  HAL_SPI_TransmitReceive(&hspi1, rx_reg, arr, 4, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
 void get_ADE9000_data(uint16_t reg_num) {
   uint8_t rx_reg[6] = {0,0,0,0,0,0};
-  rx_reg[0] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
-  rx_reg[1] = (uint8_t) (((reg_num << 4)+ (1 << 4)) & 0x00FF);
+  rx_reg[1] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
+  rx_reg[0] = (uint8_t) (((reg_num << 4)+ (1 << 3)) & 0x00FF);
   
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
 //  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
 //  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
-HAL_SPI_TransmitReceive(&hspi1, rx_reg, spi_rec_buffer, 3, 10);
+  HAL_SPI_TransmitReceive(&hspi1, rx_reg, spi_rec_buffer, 4, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
 void SPI_get_data(void) {
   while (1) {
-    get_ADE9000_data(ADDR_CONFIG5);
+    get_ADE9000_data_reg(ADDR_AV_SINC_DAT, arms);
+    get_ADE9000_data_reg(ADDR_BV_SINC_DAT, brms);
+    get_ADE9000_data_reg(ADDR_CV_SINC_DAT, crms);
+
+    get_ADE9000_data_reg(ADDR_CVRMS, spi_rec_buffer);
+
+//    get_ADE9000_data(0x801);
+
+    //write_ADE9000_data(ADDR_RUN, 1);
+
     HAL_ETH_ReadPHYRegister(&heth, PHY_SR, &reg2);
     if ((reg2 & 256))
     {
@@ -134,7 +182,18 @@ uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
   if(index == 0) {
     static int count = 0;
     SEGGER_RTT_printf(0, "ssi %d\n", count);
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "Sie sind besucher nummer %i",count++);
+    int32_t a_rms = (arms[3] << 24) + (arms[2] << 16) + (arms[5] << 8) + arms[4];
+    int32_t b_rms = (brms[3] << 24) + (brms[2] << 16) + (brms[5] << 8) + brms[4];
+    int32_t c_rms = (crms[3] << 24) + (crms[2] << 16) + (crms[5] << 8) + crms[4];
+
+    int32_t ac_rms = (spi_rec_buffer[3] << 24) + (spi_rec_buffer[2] << 16) + (spi_rec_buffer[5] << 8) + spi_rec_buffer[4];
+
+
+    double a_rms_f = a_rms / 118648.6953f;
+    double b_rms_f = b_rms / 118648.6953f;
+    double c_rms_f = c_rms / 118648.6953f;
+    double ac_rms_f = ac_rms / 93178.9712f;
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "A: %lf B: %lf C: %lf acrms: %lf cnt: %i", a_rms_f, b_rms_f, c_rms_f, ac_rms_f, count++);
   }
   return 0;
 }
@@ -180,7 +239,8 @@ int main(void)
   SEGGER_RTT_Init();
   SEGGER_RTT_printf(0, "yolo\n");
 
-  write_ADE9000_data(ADDR_RUN, 1);
+  write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
+  write_ADE9000_16(ADDR_RUN, 1);
 
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
