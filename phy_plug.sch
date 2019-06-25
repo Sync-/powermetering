@@ -197,10 +197,6 @@ F 3 "" H 3400 5850 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	3400 5700 3400 5850
-Text HLabel 4500 3800 2    60   Input ~ 0
-LED1K
-Wire Wire Line
-	4400 3800 4500 3800
 Text HLabel 4450 3700 2    60   Input ~ 0
 PHY_RST
 Text HLabel 3500 6100 3    60   Input ~ 0
@@ -548,4 +544,66 @@ F 3 "" H 6650 4300 50  0000 C CNN
 	1    6650 4300
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	7300 4550 7450 4550
+$Comp
+L stmbl:R R?
+U 1 1 5D4500D6
+P 7150 4550
+F 0 "R?" H 7150 4700 50  0000 L CNN
+F 1 "1k" H 7150 4400 50  0000 L CNN
+F 2 "stmbl:R_0603" V 7080 4550 50  0001 C CNN
+F 3 "" H 7150 4550 50  0000 C CNN
+	1    7150 4550
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5D4518CE
+P 6900 4550
+F 0 "#PWR?" H 6900 4300 50  0001 C CNN
+F 1 "GND" H 6905 4377 50  0000 C CNN
+F 2 "" H 6900 4550 50  0000 C CNN
+F 3 "" H 6900 4550 50  0000 C CNN
+	1    6900 4550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6900 4550 7000 4550
+$Comp
+L stmbl:R R?
+U 1 1 5D454373
+P 7150 4800
+F 0 "R?" H 7150 4950 50  0000 L CNN
+F 1 "1k" H 7150 4650 50  0000 L CNN
+F 2 "stmbl:R_0603" V 7080 4800 50  0001 C CNN
+F 3 "" H 7150 4800 50  0000 C CNN
+	1    7150 4800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7300 4800 7450 4800
+$Comp
+L power:GND #PWR?
+U 1 1 5D45437E
+P 6900 4800
+F 0 "#PWR?" H 6900 4550 50  0001 C CNN
+F 1 "GND" H 6905 4627 50  0000 C CNN
+F 2 "" H 6900 4800 50  0000 C CNN
+F 3 "" H 6900 4800 50  0000 C CNN
+	1    6900 4800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6900 4800 7000 4800
+Wire Wire Line
+	5700 4450 5700 3800
+Wire Wire Line
+	4400 3800 5700 3800
+Wire Wire Line
+	5700 4450 7450 4450
+Wire Wire Line
+	7350 4700 7450 4700
+Text GLabel 7350 4700 0    50   Input ~ 0
+ETH_LED
 $EndSCHEMATC
