@@ -1809,21 +1809,21 @@ Text Label 12550 3450 0    50   ~ 0
 UL2N
 Text Label 12550 4350 0    50   ~ 0
 UL1N
-Text Label 11950 5850 0    50   ~ 0
+Text Label 12000 8850 0    50   ~ 0
 IL1N
-Text Label 11950 6850 0    50   ~ 0
-IL2N
 Text Label 11950 7850 0    50   ~ 0
+IL2N
+Text Label 11950 6850 0    50   ~ 0
 IL3N
-Text Label 11950 6550 0    50   ~ 0
+Text Label 12000 9550 0    50   ~ 0
 IL1P
-Text Label 11950 7550 0    50   ~ 0
-IL2P
 Text Label 11950 8550 0    50   ~ 0
+IL2P
+Text Label 11950 7550 0    50   ~ 0
 IL3P
-Text Label 11950 9550 0    50   ~ 0
+Text Label 12000 6550 0    50   ~ 0
 INP
-Text Label 11950 8850 0    50   ~ 0
+Text Label 12000 5850 0    50   ~ 0
 INN
 Text Label 9750 4200 1    50   ~ 0
 AVDDOUT
