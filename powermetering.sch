@@ -1,4 +1,4 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:powermetering-cache
 EELAYER 29 0
 EELAYER END
@@ -26,14 +26,14 @@ F 3 "" H 9550 5750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x04_Female J1
+L Connector:Conn_01x05_Female J1
 U 1 1 5C2E6576
-P 2300 850
-F 0 "J1" H 2380 842 50  0000 L CNN
-F 1 "Conn_01x04" H 2380 751 50  0000 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal" H 2300 850 50  0001 C CNN
-F 3 "~" H 2300 850 50  0001 C CNN
-	1    2300 850 
+P 2300 950
+F 0 "J1" H 2380 942 50  0000 L CNN
+F 1 "Conn_01x04" H 2380 851 50  0000 L CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-5-5.0-H_1x05_P5.00mm_Horizontal" H 2300 950 50  0001 C CNN
+F 3 "~" H 2300 950 50  0001 C CNN
+	1    2300 950 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2694,15 +2694,10 @@ Connection ~ 3300 3050
 Wire Wire Line
 	3300 3050 3500 3050
 Connection ~ 3300 3950
-Connection ~ 2250 4400
-Wire Wire Line
-	2250 4400 2300 4400
 Connection ~ 1600 5100
 Wire Wire Line
 	1600 5100 1950 5100
 Connection ~ 1500 4400
-Wire Wire Line
-	1500 4400 2250 4400
 Wire Wire Line
 	10800 3850 10800 3900
 Connection ~ 8300 6250
@@ -4047,4 +4042,58 @@ F 3 "https://www.silabs.com/documents/public/data-sheets/si864x-datasheet.pdf" H
 $EndComp
 Wire Wire Line
 	1600 7000 1800 7000
+$Comp
+L stmbl:Earth_Protective #PWR0195
+U 1 1 5D1CC365
+P 1950 1250
+F 0 "#PWR0195" H 2200 1000 50  0001 C CNN
+F 1 "Earth_Protective" H 2400 1100 50  0001 C CNN
+F 2 "" H 1950 1150 50  0001 C CNN
+F 3 "" H 1950 1150 50  0001 C CNN
+	1    1950 1250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2100 1150 2100 1250
+Wire Wire Line
+	2100 1250 1950 1250
+$Comp
+L stmbl:Earth_Protective #PWR0196
+U 1 1 5D1CE6B6
+P 7550 4600
+F 0 "#PWR0196" H 7800 4350 50  0001 C CNN
+F 1 "Earth_Protective" H 8000 4450 50  0001 C CNN
+F 2 "" H 7550 4500 50  0001 C CNN
+F 3 "" H 7550 4500 50  0001 C CNN
+	1    7550 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1500 4400 2300 4400
+$Comp
+L Device:C C79
+U 1 1 5D1D12E2
+P 7200 4600
+F 0 "C79" V 7452 4600 50  0000 C CNN
+F 1 "C" V 7361 4600 50  0000 C CNN
+F 2 "Capacitor_SMD:C_1806_4516Metric" H 7238 4450 50  0001 C CNN
+F 3 "~" H 7200 4600 50  0001 C CNN
+	1    7200 4600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L stmbl:GND #PWR0197
+U 1 1 5D1D1BDE
+P 6850 4600
+F 0 "#PWR0197" H 6850 4350 50  0001 C CNN
+F 1 "GND" H 6855 4427 50  0000 C CNN
+F 2 "" H 6850 4600 50  0001 C CNN
+F 3 "" H 6850 4600 50  0001 C CNN
+	1    6850 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 4600 7050 4600
+Wire Wire Line
+	7350 4600 7550 4600
 $EndSCHEMATC
