@@ -28,10 +28,6 @@ Text HLabel 8250 6200 0    60   Input ~ 0
 STM_TXD0
 Text HLabel 11950 5100 2    60   Input ~ 0
 STM_MDC
-Text GLabel 13300 5850 2    60   Input ~ 0
-USB+
-Text GLabel 13300 5750 2    60   Input ~ 0
-USB-
 Text GLabel 8850 4400 0    60   Input ~ 0
 USB+
 $Comp
@@ -238,21 +234,8 @@ Text GLabel 8850 4600 0    60   Input ~ 0
 SWCLK
 Text GLabel 8850 4500 0    60   Input ~ 0
 SWIO
-Text HLabel 11950 5900 2    60   Input ~ 0
-STM_MCO1
 Text HLabel 8850 3900 0    60   Input ~ 0
 STM_CRS
-$Comp
-L stmbl:GND #PWR0138
-U 1 1 57FF4076
-P 12800 6300
-F 0 "#PWR0138" H 12800 6050 50  0001 C CNN
-F 1 "GND" V 12805 6172 50  0000 R CNN
-F 2 "" H 12800 6300 50  0000 C CNN
-F 3 "" H 12800 6300 50  0000 C CNN
-	1    12800 6300
-	1    0    0    -1  
-$EndComp
 Text HLabel 8300 5500 0    60   Input ~ 0
 STM_SPI1MOSI
 Text HLabel 8800 3800 0    60   Input ~ 0
@@ -276,14 +259,8 @@ Wire Wire Line
 Wire Wire Line
 	11250 5100 11950 5100
 Wire Wire Line
-	13200 5750 13300 5750
-Wire Wire Line
-	13200 5850 13300 5850
-Wire Wire Line
 	8400 1600 8700 1600
 Connection ~ 8700 1600
-Wire Wire Line
-	11250 5900 11950 5900
 Wire Wire Line
 	8950 4500 8850 4500
 Wire Wire Line
@@ -292,8 +269,6 @@ Wire Wire Line
 	8950 4300 8850 4300
 Wire Wire Line
 	8950 4400 8850 4400
-Wire Wire Line
-	12800 6250 12800 6300
 Text GLabel 8850 4300 0    60   Input ~ 0
 USB-
 $Comp
@@ -421,10 +396,6 @@ Wire Wire Line
 Wire Wire Line
 	8600 2400 8650 2400
 Wire Wire Line
-	13200 6050 13200 6250
-Wire Wire Line
-	13200 6250 12800 6250
-Wire Wire Line
 	8950 5500 8300 5500
 Wire Wire Line
 	8950 3800 8800 3800
@@ -432,21 +403,6 @@ Wire Wire Line
 	8100 1600 8000 1600
 Text GLabel 11350 4500 2    50   Input ~ 0
 ETH_LED
-$Comp
-L stmbl:USB_OTG P1
-U 1 1 5B9CAF4B
-P 12900 5850
-F 0 "P1" V 12475 5774 50  0000 C CNN
-F 1 "USB_OTG" V 12566 5774 50  0000 C CNN
-F 2 "stmbl:USB_Micro-B" V 12850 5750 50  0001 C CNN
-F 3 "" V 12850 5750 50  0000 C CNN
-F 4 "ZX62D-B-5PA8(30)" H 0   0   50  0001 C CNN "Manufacturer No"
-F 5 "Mouser 798-ZX62D-B-5PA830" H 0   0   50  0001 C CNN "Source"
-F 6 "" H 0   0   50  0001 C CNN "Tolerance"
-F 7 "" H 0   0   50  0001 C CNN "Voltage"
-	1    12900 5850
-	0    -1   1    0   
-$EndComp
 Wire Wire Line
 	8700 1500 8700 1600
 $Comp
@@ -1020,7 +976,6 @@ Wire Wire Line
 	12850 1250 13100 1250
 Wire Wire Line
 	12850 950  13100 950 
-Connection ~ 12800 6250
 Wire Wire Line
 	10500 800  10400 800 
 Connection ~ 10400 800 
@@ -1138,14 +1093,14 @@ $EndComp
 Wire Wire Line
 	12100 6650 12100 6600
 Connection ~ 12100 6600
-Text GLabel 11400 6000 2    50   Input ~ 0
+Text GLabel 11400 3800 2    50   Input ~ 0
 USART3_TX
-Text GLabel 11400 6100 2    50   Input ~ 0
+Text GLabel 11400 3700 2    50   Input ~ 0
 USART3_RX
 Wire Wire Line
-	11250 6000 11400 6000
+	11250 3700 11400 3700
 Wire Wire Line
-	11250 6100 11400 6100
+	11250 3800 11400 3800
 Wire Wire Line
 	11550 6600 11700 6600
 Wire Wire Line
@@ -1274,14 +1229,12 @@ Text GLabel 4550 3850 2    50   Input ~ 0
 USART3_RX
 Wire Wire Line
 	4550 3850 4050 3850
-Text GLabel 11350 6200 2    50   Input ~ 0
+Text GLabel 11400 3200 2    50   Input ~ 0
 MMDVM_BOOT0
 Text GLabel 8850 4700 0    50   Input ~ 0
 MMDVM_NRST
 Wire Wire Line
 	8850 4700 8950 4700
-Wire Wire Line
-	11350 6200 11250 6200
 Text GLabel 4550 5250 2    50   Input ~ 0
 MMDVM_BOOT0
 Text GLabel 4550 5350 2    50   Input ~ 0
@@ -1334,4 +1287,71 @@ Wire Wire Line
 	2950 3650 3550 3650
 Wire Wire Line
 	2950 3750 3550 3750
+$Comp
+L Connector:Micro_SD_Card J10
+U 1 1 5D1E742C
+P 13550 5500
+F 0 "J10" H 13500 6217 50  0000 C CNN
+F 1 "Micro_SD_Card" H 13500 6126 50  0000 C CNN
+F 2 "Connector_Card:microSD_HC_Hirose_DM3D-SF" H 14700 5800 50  0001 C CNN
+F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 13550 5500 50  0001 C CNN
+	1    13550 5500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11250 5900 12650 5900
+Wire Wire Line
+	11250 5800 12650 5800
+Wire Wire Line
+	12100 6300 12100 5700
+Wire Wire Line
+	12100 5700 12650 5700
+Connection ~ 12100 6300
+Wire Wire Line
+	12650 5300 12550 5300
+Wire Wire Line
+	12550 5300 12550 6100
+Wire Wire Line
+	12550 6100 11250 6100
+Wire Wire Line
+	11250 6000 12500 6000
+Wire Wire Line
+	12500 6000 12500 5200
+Wire Wire Line
+	12500 5200 12650 5200
+Wire Wire Line
+	11250 6300 11250 6250
+Wire Wire Line
+	11250 3200 11400 3200
+Wire Wire Line
+	11250 6200 12600 6200
+Wire Wire Line
+	12600 6200 12600 5600
+Wire Wire Line
+	12600 5600 12650 5600
+Wire Wire Line
+	11250 3400 12450 3400
+Wire Wire Line
+	12450 3400 12450 5400
+Wire Wire Line
+	12450 5400 12650 5400
+Wire Wire Line
+	12650 5500 12600 5500
+Wire Wire Line
+	12600 5500 12600 4700
+$Comp
+L stmbl:+3.3V #PWR?
+U 1 1 5D1EBB18
+P 12600 4700
+AR Path="/5D1EBB18" Ref="#PWR?"  Part="1" 
+AR Path="/57A8F795/5D1EBB18" Ref="#PWR?"  Part="1" 
+AR Path="/5B42E6A4/5D1EBB18" Ref="#PWR?"  Part="1" 
+AR Path="/5D9E315F/5D1EBB18" Ref="#PWR0138"  Part="1" 
+F 0 "#PWR0138" H 12600 4550 50  0001 C CNN
+F 1 "+3.3V" H 12615 4873 50  0000 C CNN
+F 2 "" H 12600 4700 50  0000 C CNN
+F 3 "" H 12600 4700 50  0000 C CNN
+	1    12600 4700
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
