@@ -4099,4 +4099,24 @@ Wire Wire Line
 Connection ~ 2250 4400
 Wire Wire Line
 	2250 4400 2300 4400
+$Comp
+L stmbl:CONN_01X02 J11
+U 1 1 5D1FE2E5
+P 9050 6900
+F 0 "J11" H 9130 6892 50  0000 L CNN
+F 1 "CONN_01X02" H 9130 6801 50  0000 L CNN
+F 2 "stmbl:Pin_Header_Straight_1x02" H 9050 6900 50  0001 C CNN
+F 3 "" H 9050 6900 50  0001 C CNN
+	1    9050 6900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8650 6800 8850 6800
+Wire Wire Line
+	8850 6800 8850 6900
+Wire Wire Line
+	8650 7100 8850 7100
+Wire Wire Line
+	8850 7100 8850 7000
+Connection ~ 8650 7100
 $EndSCHEMATC
