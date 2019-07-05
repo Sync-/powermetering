@@ -4069,7 +4069,7 @@ F 3 "" H 7550 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1500 4400 2300 4400
+	1500 4400 2250 4400
 $Comp
 L Device:C C79
 U 1 1 5D1D12E2
@@ -4096,4 +4096,7 @@ Wire Wire Line
 	6850 4600 7050 4600
 Wire Wire Line
 	7350 4600 7550 4600
+Connection ~ 2250 4400
+Wire Wire Line
+	2250 4400 2300 4400
 $EndSCHEMATC
