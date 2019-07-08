@@ -1945,12 +1945,12 @@ $EndComp
 $Comp
 L Diode_Bridge:ABS10 D21
 U 1 1 5D6C9DAC
-P 1950 2400
-F 0 "D21" H 2294 2446 50  0000 L CNN
-F 1 "ABS10" H 2294 2355 50  0000 L CNN
-F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 2525 50  0001 L CNN
-F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 2400 50  0001 C CNN
-	1    1950 2400
+P 1950 3000
+F 0 "D21" H 2294 3046 50  0000 L CNN
+F 1 "ABS10" H 2294 2955 50  0000 L CNN
+F 2 "Diode_SMD:Diode_Bridge_Diotec_ABS" H 2100 3125 50  0001 L CNN
+F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/abs2.pdf" H 1950 3000 50  0001 C CNN
+	1    1950 3000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1959,9 +1959,6 @@ Wire Wire Line
 	1050 2050 1300 2050
 Wire Wire Line
 	1950 2050 1950 2000
-Wire Wire Line
-	1950 2050 1950 2100
-Connection ~ 1950 2050
 Wire Wire Line
 	1050 2700 1300 2700
 Wire Wire Line
@@ -1974,14 +1971,10 @@ Wire Wire Line
 	2900 1900 2250 1900
 Connection ~ 2250 1900
 Wire Wire Line
-	2250 1900 2250 2400
-Wire Wire Line
 	1650 2150 2900 2150
 Wire Wire Line
 	2900 2150 2900 2400
 Connection ~ 1650 2150
-Wire Wire Line
-	1650 2150 1650 2400
 $Sheet
 S 8550 900  1250 1450
 U 5D9E2522
@@ -4119,4 +4112,21 @@ Wire Wire Line
 Wire Wire Line
 	8850 7100 8850 7000
 Connection ~ 8650 7100
+Wire Wire Line
+	1050 3300 1950 3300
+Wire Wire Line
+	1650 2150 1650 3000
+Wire Wire Line
+	2250 1900 2250 3000
+$Comp
+L power:GNDS #PWR?
+U 1 1 5D22A16B
+P 1050 3300
+F 0 "#PWR?" H 1050 3050 50  0001 C CNN
+F 1 "GNDS" H 1055 3127 50  0000 C CNN
+F 2 "" H 1050 3300 50  0001 C CNN
+F 3 "" H 1050 3300 50  0001 C CNN
+	1    1050 3300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
