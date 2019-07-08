@@ -36,6 +36,7 @@
 #include "ADE9000.h"
 #include "fs.h"
 #include "string.h"
+#include "mqtt.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -124,7 +125,7 @@ uint8_t arms[10], brms[10], crms[10], uthd[10], ithd[10], hz[10];
 void get_ADE9000_data_reg(uint16_t reg_num, uint8_t* arr) {
   uint8_t rx_reg[6] = {0,0,0,0,0,0};
   rx_reg[1] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
-  rx_reg[0] = (uint8_t) (((reg_num << 4)+ (1 << 3)) & 0x00FF);
+  rx_reg[0] = (uint8_t) (((reg_num << 4) | (1 << 3)) & 0x00FF);
   
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
 //  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
@@ -136,7 +137,7 @@ void get_ADE9000_data_reg(uint16_t reg_num, uint8_t* arr) {
 void get_ADE9000_data(uint16_t reg_num) {
   uint8_t rx_reg[6] = {0,0,0,0,0,0};
   rx_reg[1] = (uint8_t) (((reg_num << 4) & 0xFF00) >> 8);
-  rx_reg[0] = (uint8_t) (((reg_num << 4)+ (1 << 3)) & 0x00FF);
+  rx_reg[0] = (uint8_t) (((reg_num << 4) | (1 << 3)) & 0x00FF);
   
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
 //  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
@@ -145,8 +146,74 @@ void get_ADE9000_data(uint16_t reg_num) {
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
+uint8_t burst_tx[750];
+typedef union ade_burst_rx_t {
+  uint8_t bytes[750];
+  struct {
+    uint8_t padding[0x7*4];
+    int32_t airms;
+    int32_t birms;
+    int32_t cirms;
+    int32_t avrms;
+    int32_t bvrms;
+    int32_t cvrms;
+    int32_t nirms;
+    int32_t awatt;
+    int32_t bwatt;
+    int32_t cwatt;
+    int32_t ava;
+    int32_t bva;
+    int32_t cva;
+    int32_t avar;
+    int32_t bvar;
+    int32_t cvar;
+    int32_t afvar;
+    int32_t bfvar;
+    int32_t cfvar;
+    int32_t apf;
+    int32_t bpf;
+    int32_t cpf;
+    int32_t avthd;
+    int32_t bvthd;
+    int32_t cvthd;
+    int32_t aithd;
+    int32_t bithd;
+    int32_t cithd;
+    int32_t afwatt;
+    int32_t bfwatt;
+    int32_t cfwatt;
+    int32_t afva;
+    int32_t bfva;
+    int32_t cfva;
+    int32_t afirms;
+    int32_t bfirms;
+    int32_t cfirms;
+    int32_t afvrms;
+    int32_t bfvrms;
+    int32_t cfvrms;
+    int32_t airmsone;
+    int32_t birmsone;
+    int32_t cirmsone;
+    int32_t avrmsone;
+    int32_t bvrmsone;
+    int32_t cvrmsone;
+    int32_t nirmsone;
+    int32_t airms1012;
+    int32_t birms1012;
+    int32_t cirms1012;
+    int32_t avrms1012;
+    int32_t bvrms1012;
+    int32_t cvrms1012;
+    int32_t nirms1012;
+  };
+};
+union ade_burst_rx_t foobar;
+
+uint8_t ahz[10], bhz[10], chz[10];
+
 void SPI_get_data(void) {
   while (1) {
+    /*
     get_ADE9000_data_reg(ADDR_CWATT, arms);
     get_ADE9000_data_reg(ADDR_CIRMS, brms);
     get_ADE9000_data_reg(ADDR_CPF, crms);
@@ -155,6 +222,17 @@ void SPI_get_data(void) {
     get_ADE9000_data_reg(ADDR_CPERIOD, hz);
 
     get_ADE9000_data_reg(ADDR_CVRMS, spi_rec_buffer);
+*/
+
+    get_ADE9000_data_reg(ADDR_APERIOD, ahz);
+    get_ADE9000_data_reg(ADDR_APERIOD, bhz);
+    get_ADE9000_data_reg(ADDR_APERIOD, chz);
+
+    burst_tx[1] = (uint8_t) (((0x600 << 4) & 0xFF00) >> 8);
+    burst_tx[0] = (uint8_t) (((0x600 << 4) | (1 << 3)) & 0x00FF);
+    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
+    HAL_SPI_TransmitReceive(&hspi1, burst_tx, foobar.bytes, 0x3D*2, 10);
+    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 
 //    get_ADE9000_data(0x801);
 
@@ -167,6 +245,7 @@ void SPI_get_data(void) {
       {
         link = 1;
         HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+        SEGGER_RTT_printf(0, "Link is up\n");
         netif_set_up(&gnetif);
         netif_set_link_up(&gnetif);
       }
@@ -175,8 +254,10 @@ void SPI_get_data(void) {
     {
       link = 0;
       HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
+      SEGGER_RTT_printf(0, "Link is down\n");
       netif_set_link_down(&gnetif);
     }
+   //     vTaskDelay(1);
   }
 }
 char const* TAGCHAR="YOLO";
@@ -184,9 +265,9 @@ char const** TAGS=&TAGCHAR;
 
 #define V_PER_BIT (0.707 / 52702092.0)
 
-#define R_SHUNT (18.0 * 2.0) //double the pcb value
-#define CUR_PRI 20.0 //primary current
-#define CUR_SEC 0.02 //secondary current
+#define R_SHUNT (0.05 * 2.0) //double the pcb value
+#define CUR_PRI 400.0 //primary current
+#define CUR_SEC 5.00 //secondary current
 #define CUR_TF ((R_SHUNT * CUR_SEC)/CUR_PRI) //volts per amp
 #define CUR_CONST (CUR_TF / V_PER_BIT) //amps per bit
 
@@ -205,25 +286,138 @@ uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
     int32_t b_rms = (brms[3] << 24) + (brms[2] << 16) + (brms[5] << 8) + brms[4];
     int32_t c_rms = (crms[3] << 24) + (crms[2] << 16) + (crms[5] << 8) + crms[4];
 
-    int32_t ac_rms = (spi_rec_buffer[3] << 24) + (spi_rec_buffer[2] << 16) + (spi_rec_buffer[5] << 8) + spi_rec_buffer[4];
+//    int32_t ac_rms = (spi_rec_buffer[3] << 24) + (spi_rec_buffer[2] << 16) + (spi_rec_buffer[5] << 8) + spi_rec_buffer[4];
 
     int32_t ithd_i = (ithd[3] << 24) + (ithd[2] << 16) + (ithd[5] << 8) + ithd[4];
     int32_t uthd_i = (uthd[3] << 24) + (uthd[2] << 16) + (uthd[5] << 8) + uthd[4];
     int32_t hz_i = (hz[3] << 24) + (hz[2] << 16) + (hz[5] << 8) + hz[4];
 
-    double a_rms_f = a_rms / 118648.6953f;
+//    int32_t ac_rms = (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 3] << 24) + (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 2] << 16) + (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 5] << 8) + burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 4];
+
+/*    double a_rms_f = a_rms / 118648.6953f;
     double b_rms_f = b_rms / 118648.6953f;
     double c_rms_f = c_rms  * powf(2.0,-27.0);
-    double ac_rms_f = ac_rms / VOLT_CONST;
+    double ac_rms_f = foobar.cvrms / VOLT_CONST;
     double cc_rms_f = b_rms / CUR_CONST;
     double wc_rms_f = a_rms / PWR_CONST;
     double ithd_f = ithd_i / PWR_CONST;
     double uthd_f = uthd_i / PWR_CONST;
     double hz_f = (8000.0*powf(2,16))/(hz_i + 1);
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "U: %.2lfV I: %.2lfA P: %.3lfW S: %.3lfVA  Q: %.3lfvar pf: %.2lf Freq: %.2lfHz cnt: %i", ac_rms_f, cc_rms_f, wc_rms_f, ithd_f, uthd_f, c_rms_f, hz_f, count++);
+*/
+//    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "U: %.2lfV I: %.2lfA P: %.3lfW S: %.3lfVA  Q: %.3lfvar pf: %.2lf Freq: %.2lfHz cnt: %i", ac_rms_f, cc_rms_f, wc_rms_f, ithd_f, uthd_f, c_rms_f, hz_f, count++);
+    double airms = foobar.airms1012 / CUR_CONST;
+    double birms = foobar.birms1012 / CUR_CONST;
+    double cirms = foobar.cirms1012 / CUR_CONST;
+    double nirms = foobar.nirms1012 / CUR_CONST;
+
+    double avrms = foobar.avrms1012 / VOLT_CONST;
+    double bvrms = foobar.bvrms1012 / VOLT_CONST;
+    double cvrms = foobar.cvrms1012 / VOLT_CONST;
+
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "L1: %.2lfV L2: %.2lfV L3: %.2lfV L1: %.2lfA L2: %.2lfA L3: %.2lfA N: %.2lfA cnt: %d", avrms, bvrms, cvrms, airms, birms, cirms, nirms, count++);
   }
   return 0;
 }
+
+static void mqtt_sub_request_cb(void *arg, err_t result)
+{
+  /* Just print the result code here for simplicity, 
+     normal behaviour would be to take some action if subscribe fails like 
+     notifying user, retry subscribe or disconnect from server */
+  SEGGER_RTT_printf(0, "Subscribe result: %d\n", result);
+}
+
+ip4_addr_t mqtt_server_addr;
+
+void example_do_connect(mqtt_client_t *client);
+
+static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
+{
+  err_t err;
+  SEGGER_RTT_printf(0, "Entered conn_cb...\n");
+  if(status == MQTT_CONNECT_ACCEPTED) {
+    SEGGER_RTT_printf(0, "mqtt_connection_cb: Successfully connected\n");
+  }  
+}
+
+mqtt_client_t static_client;
+
+/* Called when publish is complete either with sucess or failure */
+static void mqtt_pub_request_cb(void *arg, err_t result)
+{
+  if(result != ERR_OK) {
+    SEGGER_RTT_printf(0, "Publish result: %d\n", result);
+  }
+}
+
+void example_publish(mqtt_client_t *client, void *arg)
+{
+
+
+    double airms = foobar.airms1012 / CUR_CONST;
+    double birms = foobar.birms1012 / CUR_CONST;
+    double cirms = foobar.cirms1012 / CUR_CONST;
+    double nirms = foobar.nirms1012 / CUR_CONST;
+
+    double avrms = foobar.avrms1012 / VOLT_CONST;
+    double bvrms = foobar.bvrms1012 / VOLT_CONST;
+    double cvrms = foobar.cvrms1012 / VOLT_CONST;
+
+    int32_t ahz_i = (ahz[3] << 24) + (ahz[2] << 16) + (ahz[5] << 8) + ahz[4];
+    int32_t bhz_i = (bhz[3] << 24) + (bhz[2] << 16) + (bhz[5] << 8) + bhz[4];
+    int32_t chz_i = (chz[3] << 24) + (chz[2] << 16) + (chz[5] << 8) + chz[4];
+    double ahz_f = (8000.0*powf(2,16))/(ahz_i + 1);
+    double bhz_f = (8000.0*powf(2,16))/(bhz_i + 1);
+    double chz_f = (8000.0*powf(2,16))/(chz_i + 1);
+
+  char insert[200];
+  //int len = snprintf(insert, 200 - 2, "L1: %.2lfV L2: %.2lfV L3: %.2lfV L1: %.2lfA L2: %.2lfA L3: %.2lfA N: %.2lfA", avrms, bvrms, cvrms, airms, birms, cirms, nirms);
+  int len = snprintf(insert, 200 - 2, "%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;", avrms, bvrms, cvrms, airms, birms, cirms, nirms, ahz_f, bhz_f, chz_f);
+  err_t err;
+  u8_t qos = 2; /* 0 1 or 2, see MQTT specification */
+  u8_t retain = 0; /* No don't retain such crappy payload... */
+  err = mqtt_publish(client, "trifasipower", insert, len, qos, retain, mqtt_pub_request_cb, arg);
+  if(err != ERR_OK) {
+    SEGGER_RTT_printf(0, "Publish err: %d\n", err);
+  }
+}
+
+void example_do_connect(mqtt_client_t *client)
+{
+  struct mqtt_connect_client_info_t ci;
+  err_t err;
+  
+  /* Setup an empty client info structure */
+  memset(&ci, 0, sizeof(ci));
+  
+  /* Minimal amount of information required is client identifier, so set it here */ 
+  ci.client_id = "lwip_test";
+  
+  /* Initiate client and connect to server, if this fails immediately an error code is returned
+     otherwise mqtt_connection_cb will be called with connection result after attempting 
+     to establish a connection with the server. 
+     For now MQTT version 3.1.1 is always used */
+  SEGGER_RTT_printf(0, "Trying to connect...\n");
+  err = mqtt_client_connect(client, &mqtt_server_addr, MQTT_PORT, mqtt_connection_cb, 0, &ci);
+  
+  /* For now just print the result code if something goes wrong */
+  if(err != ERR_OK) {
+    SEGGER_RTT_printf(0, "mqtt_connect return %d\n", err);
+  }
+}
+
+
+void mqtt_stuff(void) {
+  vTaskDelay(2000);
+  IP4_ADDR(&mqtt_server_addr, 192, 168, 178, 202);
+  SEGGER_RTT_printf(0, "Entered mqtt...\n");
+  example_do_connect(&static_client);
+  while(1){
+    example_publish(&static_client, 0);
+    vTaskDelay(1000);
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -267,11 +461,15 @@ int main(void)
   SEGGER_RTT_printf(0, "yolo\n");
 
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
-  xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+  xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
+  xTaskCreate((TaskFunction_t)mqtt_stuff, "Do MQTT stuff", 1024, NULL, configMAX_PRIORITIES - 1, NULL);
+
+  SEGGER_RTT_printf(0, "Tasks running\n");
 
   /* USER CODE END 2 */
 
