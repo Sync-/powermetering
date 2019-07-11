@@ -12,10 +12,10 @@ from typing import NamedTuple
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
 
-INFLUXDB_ADDRESS = '192.168.178.202'
+INFLUXDB_ADDRESS = 'syno2'
 INFLUXDB_USER = 'root'
 INFLUXDB_PASSWORD = 'root'
-INFLUXDB_DATABASE = 'home_db'
+INFLUXDB_DATABASE = 'trifasi_db'
 
 MQTT_ADDRESS = '192.168.178.202'
 MQTT_USER = ''
@@ -37,6 +37,15 @@ class SensorData(NamedTuple):
     birms: float
     cirms: float
     nirms: float
+    avthd: float
+    bvthd: float
+    cvthd: float
+    aithd: float
+    bithd: float
+    cithd: float
+    apf: float
+    bpf: float
+    cpf: float
     ahz: float
     bhz: float
     chz: float
@@ -57,11 +66,11 @@ def on_message(client, userdata, msg):
 
 
 def _parse_mqtt_message(topic, payload):
-#    print(topic, payload.split(";"))
+    print(topic, payload.split(";"))
     match = payload.split(";")
     location = "Kuchl"
     measurement = "Trifasi"
-    return SensorData(location, measurement, float(match[0]), float(match[1]), float(match[2]), float(match[3]), float(match[4]), float(match[5]), float(match[6]), float(match[7]), float(match[8]), float(match[9]))
+    return SensorData(location, measurement, float(match[0]), float(match[1]), float(match[2]), float(match[3]), float(match[4]), float(match[5]), float(match[6]), float(match[7]), float(match[8]), float(match[9]), float(match[10]), float(match[11]), float(match[12]), float(match[13]), float(match[14]), float(match[15]), float(match[16]), float(match[17]), float(match[18]))
 
 
 def _send_sensor_data_to_influxdb(sensor_data):
@@ -79,6 +88,15 @@ def _send_sensor_data_to_influxdb(sensor_data):
                 'birms': sensor_data.birms,
                 'cirms': sensor_data.cirms,
                 'nirms': sensor_data.nirms,
+                'avthd': sensor_data.avthd,
+                'bvthd': sensor_data.bvthd,
+                'cvthd': sensor_data.cvthd,
+                'aithd': sensor_data.aithd,
+                'bithd': sensor_data.bithd,
+                'cithd': sensor_data.cithd,
+                'apf': sensor_data.apf,
+                'bpf': sensor_data.bpf,
+                'cpf': sensor_data.cpf,
                 'ahz': sensor_data.ahz,
                 'bhz': sensor_data.bhz,
                 'chz': sensor_data.chz

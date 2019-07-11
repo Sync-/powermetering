@@ -146,70 +146,118 @@ void get_ADE9000_data(uint16_t reg_num) {
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
-uint8_t burst_tx[750];
-typedef union ade_burst_rx_t {
+uint8_t burst_tx[10];
+uint8_t burst_tx_empty[750];
+//#pragma pack(push, 1)
+typedef   union ade_burst_rx_t {
   uint8_t bytes[750];
-  struct {
-    uint8_t padding[0x7*4];
+ struct {
+//    uint8_t padding[2];
+
+    int32_t av_pcf;
+    int32_t bv_pcf;
+    int32_t cv_pcf;
+    int32_t ni_pcf;
+    int32_t ai_pcf;
+    int32_t bi_pcf;
+    int32_t ci_pcf;
+
     int32_t airms;
     int32_t birms;
     int32_t cirms;
+
     int32_t avrms;
     int32_t bvrms;
     int32_t cvrms;
+
     int32_t nirms;
+
     int32_t awatt;
     int32_t bwatt;
     int32_t cwatt;
+
     int32_t ava;
     int32_t bva;
     int32_t cva;
+
     int32_t avar;
     int32_t bvar;
     int32_t cvar;
+
     int32_t afvar;
     int32_t bfvar;
     int32_t cfvar;
-    int32_t apf;
-    int32_t bpf;
-    int32_t cpf;
-    int32_t avthd;
-    int32_t bvthd;
-    int32_t cvthd;
-    int32_t aithd;
-    int32_t bithd;
-    int32_t cithd;
+
+    int16_t apf_h;
+    int16_t apf_l;
+    int16_t bpf_h;
+    int16_t bpf_l;
+    int16_t cpf_h;
+    int16_t cpf_l;
+
+    int16_t avthd_h;
+    int16_t avthd_l;
+    int16_t bvthd_h;
+    int16_t bvthd_l;
+    int16_t cvthd_h;
+    int16_t cvthd_l;
+
+    int16_t aithd_h;
+    int16_t aithd_l;
+    int16_t bithd_h;
+    int16_t bithd_l;
+    int16_t cithd_h;
+    int16_t cithd_l;
+
     int32_t afwatt;
     int32_t bfwatt;
     int32_t cfwatt;
+
     int32_t afva;
     int32_t bfva;
     int32_t cfva;
+
     int32_t afirms;
     int32_t bfirms;
     int32_t cfirms;
+
     int32_t afvrms;
     int32_t bfvrms;
     int32_t cfvrms;
+
     int32_t airmsone;
     int32_t birmsone;
     int32_t cirmsone;
+
     int32_t avrmsone;
     int32_t bvrmsone;
     int32_t cvrmsone;
+
     int32_t nirmsone;
-    int32_t airms1012;
-    int32_t birms1012;
-    int32_t cirms1012;
-    int32_t avrms1012;
-    int32_t bvrms1012;
-    int32_t cvrms1012;
-    int32_t nirms1012;
+
+    int16_t airms1012_h;
+    int16_t airms1012_l;
+    int16_t birms1012_h;
+    int16_t birms1012_l;
+    int16_t cirms1012_h;
+    int16_t cirms1012_l;
+
+    int16_t avrms1012_h;
+    int16_t avrms1012_l;
+    int16_t bvrms1012_h;
+    int16_t bvrms1012_l;
+    int16_t cvrms1012_h;
+    int16_t cvrms1012_l;
+
+    int16_t nirms1012_h;
+    int16_t nirms1012_l;
   };
 };
-union ade_burst_rx_t foobar;
 
-uint8_t ahz[10], bhz[10], chz[10];
+union ade_burst_rx_t foobar;
+//#pragma pack(pop)
+
+uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 
 void SPI_get_data(void) {
   while (1) {
@@ -228,10 +276,14 @@ void SPI_get_data(void) {
     get_ADE9000_data_reg(ADDR_APERIOD, bhz);
     get_ADE9000_data_reg(ADDR_APERIOD, chz);
 
+    get_ADE9000_data_reg(ADDR_STATUS0, status0);
+    get_ADE9000_data_reg(ADDR_STATUS1, status1);
+
     burst_tx[1] = (uint8_t) (((0x600 << 4) & 0xFF00) >> 8);
     burst_tx[0] = (uint8_t) (((0x600 << 4) | (1 << 3)) & 0x00FF);
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-    HAL_SPI_TransmitReceive(&hspi1, burst_tx, foobar.bytes, 0x3D*2, 10);
+    HAL_SPI_Transmit(&hspi1, burst_tx,1,10);
+    HAL_SPI_TransmitReceive(&hspi1, burst_tx_empty, foobar.bytes, 0x3E*2, 10);
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 
 //    get_ADE9000_data(0x801);
@@ -263,58 +315,30 @@ void SPI_get_data(void) {
 char const* TAGCHAR="YOLO";
 char const** TAGS=&TAGCHAR;
 
-#define V_PER_BIT (0.707 / 52702092.0)
+#define V_PER_BIT (0.707f / 52702092.0f)
 
-#define R_SHUNT (0.05 * 2.0) //double the pcb value
-#define CUR_PRI 400.0 //primary current
-#define CUR_SEC 5.00 //secondary current
+#define R_SHUNT (0.05f * 2.0f) //double the pcb value
+#define CUR_PRI 400.0f //primary current
+#define CUR_SEC 5.00f //secondary current
 #define CUR_TF ((R_SHUNT * CUR_SEC)/CUR_PRI) //volts per amp
-#define CUR_CONST (CUR_TF / V_PER_BIT) //amps per bit
+#define CUR_CONST (CUR_TF / V_PER_BIT * 2.0f) //amps per bit
 
-#define R_HIGH 800000.0
-#define R_LOW 1000.0
-#define VOLT_TF ((1 / (R_HIGH + R_LOW)) * R_LOW) //volts per volt
-#define VOLT_CONST (VOLT_TF / V_PER_BIT)
+#define R_HIGH 800000.0f
+#define R_LOW 1000.0f
+#define VOLT_TF ((1.0f / (R_HIGH + R_LOW)) * R_LOW) //volts per volt
+#define VOLT_CONST (VOLT_TF / V_PER_BIT * 2.0f)
 
-#define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0/20694066.0))*2.0)
+#define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0f/20694066.0f))*2.0f)
 
 uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
   if(index == 0) {
     static int count = 0;
     SEGGER_RTT_printf(0, "ssi %d CUR_CONST: %lf\n", count, CUR_CONST);
-    int32_t a_rms = (arms[3] << 24) + (arms[2] << 16) + (arms[5] << 8) + arms[4];
-    int32_t b_rms = (brms[3] << 24) + (brms[2] << 16) + (brms[5] << 8) + brms[4];
-    int32_t c_rms = (crms[3] << 24) + (crms[2] << 16) + (crms[5] << 8) + crms[4];
 
-//    int32_t ac_rms = (spi_rec_buffer[3] << 24) + (spi_rec_buffer[2] << 16) + (spi_rec_buffer[5] << 8) + spi_rec_buffer[4];
+    int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
+    int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
 
-    int32_t ithd_i = (ithd[3] << 24) + (ithd[2] << 16) + (ithd[5] << 8) + ithd[4];
-    int32_t uthd_i = (uthd[3] << 24) + (uthd[2] << 16) + (uthd[5] << 8) + uthd[4];
-    int32_t hz_i = (hz[3] << 24) + (hz[2] << 16) + (hz[5] << 8) + hz[4];
-
-//    int32_t ac_rms = (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 3] << 24) + (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 2] << 16) + (burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 5] << 8) + burst_rx[(ADDR_CVRMS_1 - 0x600)*4 + 4];
-
-/*    double a_rms_f = a_rms / 118648.6953f;
-    double b_rms_f = b_rms / 118648.6953f;
-    double c_rms_f = c_rms  * powf(2.0,-27.0);
-    double ac_rms_f = foobar.cvrms / VOLT_CONST;
-    double cc_rms_f = b_rms / CUR_CONST;
-    double wc_rms_f = a_rms / PWR_CONST;
-    double ithd_f = ithd_i / PWR_CONST;
-    double uthd_f = uthd_i / PWR_CONST;
-    double hz_f = (8000.0*powf(2,16))/(hz_i + 1);
-*/
-//    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "U: %.2lfV I: %.2lfA P: %.3lfW S: %.3lfVA  Q: %.3lfvar pf: %.2lf Freq: %.2lfHz cnt: %i", ac_rms_f, cc_rms_f, wc_rms_f, ithd_f, uthd_f, c_rms_f, hz_f, count++);
-    double airms = foobar.airms1012 / CUR_CONST;
-    double birms = foobar.birms1012 / CUR_CONST;
-    double cirms = foobar.cirms1012 / CUR_CONST;
-    double nirms = foobar.nirms1012 / CUR_CONST;
-
-    double avrms = foobar.avrms1012 / VOLT_CONST;
-    double bvrms = foobar.bvrms1012 / VOLT_CONST;
-    double cvrms = foobar.cvrms1012 / VOLT_CONST;
-
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "L1: %.2lfV L2: %.2lfV L3: %.2lfV L1: %.2lfA L2: %.2lfA L3: %.2lfA N: %.2lfA cnt: %d", avrms, bvrms, cvrms, airms, birms, cirms, nirms, count++);
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d", status0_i, status1_i, count++);
   }
   return 0;
 }
@@ -352,33 +376,44 @@ static void mqtt_pub_request_cb(void *arg, err_t result)
 
 void example_publish(mqtt_client_t *client, void *arg)
 {
+    float airms = ((foobar.airms1012_h << 16) + foobar.airms1012_l) / CUR_CONST;
+    float birms = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
+    float cirms = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
+    float nirms = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
 
+    float avrms = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
+    float bvrms = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
+    float cvrms = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
 
-    double airms = foobar.airms1012 / CUR_CONST;
-    double birms = foobar.birms1012 / CUR_CONST;
-    double cirms = foobar.cirms1012 / CUR_CONST;
-    double nirms = foobar.nirms1012 / CUR_CONST;
+    float avthd = ((foobar.avthd_h << 16) + foobar.avthd_l) * powf(2,-27);
+    float bvthd = ((foobar.bvthd_h << 16) + foobar.bvthd_l) * powf(2,-27);
+    float cvthd = ((foobar.cvthd_h << 16) + foobar.cvthd_l) * powf(2,-27);
 
-    double avrms = foobar.avrms1012 / VOLT_CONST;
-    double bvrms = foobar.bvrms1012 / VOLT_CONST;
-    double cvrms = foobar.cvrms1012 / VOLT_CONST;
+    float aithd = ((foobar.aithd_h << 16) + foobar.aithd_l) * powf(2,-27);
+    float bithd = ((foobar.bithd_h << 16) + foobar.bithd_l) * powf(2,-27);
+    float cithd = ((foobar.cithd_h << 16) + foobar.cithd_l) * powf(2,-27);
+
+    float apf = ((foobar.apf_h << 16) + foobar.apf_l) * powf(2,-27);
+    float bpf = ((foobar.bpf_h << 16) + foobar.bpf_l) * powf(2,-27);
+    float cpf = ((foobar.cpf_h << 16) + foobar.cpf_l) * powf(2,-27);
 
     int32_t ahz_i = (ahz[3] << 24) + (ahz[2] << 16) + (ahz[5] << 8) + ahz[4];
     int32_t bhz_i = (bhz[3] << 24) + (bhz[2] << 16) + (bhz[5] << 8) + bhz[4];
     int32_t chz_i = (chz[3] << 24) + (chz[2] << 16) + (chz[5] << 8) + chz[4];
-    double ahz_f = (8000.0*powf(2,16))/(ahz_i + 1);
-    double bhz_f = (8000.0*powf(2,16))/(bhz_i + 1);
-    double chz_f = (8000.0*powf(2,16))/(chz_i + 1);
+    float ahz_f = (8000.0f*powf(2.0f,16.0f))/(ahz_i + 1.0f);
+    float bhz_f = (8000.0f*powf(2.0f,16.0f))/(bhz_i + 1.0f);
+    float chz_f = (8000.0f*powf(2.0f,16.0f))/(chz_i + 1.0f);
 
   char insert[200];
   //int len = snprintf(insert, 200 - 2, "L1: %.2lfV L2: %.2lfV L3: %.2lfV L1: %.2lfA L2: %.2lfA L3: %.2lfA N: %.2lfA", avrms, bvrms, cvrms, airms, birms, cirms, nirms);
-  int len = snprintf(insert, 200 - 2, "%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;%.2lf;", avrms, bvrms, cvrms, airms, birms, cirms, nirms, ahz_f, bhz_f, chz_f);
+  int len = snprintf(insert, 200 - 2, "%.2f;%.2f;%.2f;%.2f;%.2f;%.2f;%.2f;%.3f;%3f;%3f;%3f;%3f;%3f;%3f;%3f;%3f;%.4f;%.4f;%.4f;", avrms, bvrms, cvrms, airms, birms, cirms, nirms, avthd, bvthd, cvthd, aithd, bithd, cithd, apf, bpf, cpf, ahz_f, bhz_f, chz_f);
   err_t err;
   u8_t qos = 2; /* 0 1 or 2, see MQTT specification */
   u8_t retain = 0; /* No don't retain such crappy payload... */
   err = mqtt_publish(client, "trifasipower", insert, len, qos, retain, mqtt_pub_request_cb, arg);
   if(err != ERR_OK) {
     SEGGER_RTT_printf(0, "Publish err: %d\n", err);
+    example_do_connect(&static_client);
   }
 }
 
@@ -414,7 +449,7 @@ void mqtt_stuff(void) {
   example_do_connect(&static_client);
   while(1){
     example_publish(&static_client, 0);
-    vTaskDelay(1000);
+    vTaskDelay(200);
   }
 }
 
@@ -462,6 +497,7 @@ int main(void)
 
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
+  write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
