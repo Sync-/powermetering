@@ -21,13 +21,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "i2c.h"
 #include "lwip.h"
 #include "rtc.h"
+#include "sdio.h"
 #include "spi.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
-#include "math.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -329,7 +330,7 @@ char const** TAGS=&TAGCHAR;
 #define VOLT_CONST (VOLT_TF / V_PER_BIT * 2.0f)
 
 #define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0f/20694066.0f))*2.0f)
-
+/*
 uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
   if(index == 0) {
     static int count = 0;
@@ -341,7 +342,7 @@ uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
     return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d", status0_i, status1_i, count++);
   }
   return 0;
-}
+}*/
 
 static void mqtt_sub_request_cb(void *arg, err_t result)
 {
@@ -485,12 +486,14 @@ int main(void)
   MX_GPIO_Init();
   MX_RTC_Init();
   MX_SPI1_Init();
-  MX_USART3_UART_Init();
+  MX_SDIO_SD_Init();
+  MX_I2C1_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
 
-  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
-  httpd_init();
+//  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
+//  httpd_init();
 
   SEGGER_RTT_Init();
   SEGGER_RTT_printf(0, "yolo\n");
@@ -577,7 +580,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
-  HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_HSE, RCC_MCODIV_1);
 }
 
 /* USER CODE BEGIN 4 */
