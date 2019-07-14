@@ -219,7 +219,27 @@ static void low_level_init(struct netif *netif)
   heth.Init.MediaInterface = ETH_MEDIA_INTERFACE_RMII;
 
   /* USER CODE BEGIN MACADDRESS */
-    
+  uint64_t mac = 0;
+
+  #define U_ID ((__IO uint32_t *)0x1FFF7A10)
+
+  //merge 96 U_ID bits into 48 MAC bits
+  mac ^= U_ID[2];
+  mac ^= ((uint64_t)U_ID[1] & 0xFFFF) << 32;
+  mac ^= (uint64_t)U_ID[0] << 16;
+  mac ^= U_ID[1] >> 16;
+
+  //clear broadcast, set locally administered bit
+  mac &= 0xFEFFFFFFFFFF;
+  mac |= 0x020000000000;
+
+  MACAddr[0] = mac >> 40;
+  MACAddr[1] = mac >> 32;
+  MACAddr[2] = mac >> 24;
+  MACAddr[3] = mac >> 16;
+  MACAddr[4] = mac >> 8;
+  MACAddr[5] = mac >> 0;
+  heth.Init.MACAddr = &MACAddr[0];
   /* USER CODE END MACADDRESS */
 
   hal_eth_init_status = HAL_ETH_Init(&heth);
