@@ -37,6 +37,8 @@ BUILD_DIR = build
 # C sources
 C_SOURCES =  \
 Core/Src/main.c \
+Core/Src/fwupdate.c \
+Core/Src/version.c \
 Core/Src/gpio.c \
 Core/Src/freertos.c \
 Core/Src/SEGGER_RTT.c \
@@ -76,6 +78,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c \
 Core/Src/system_stm32f4xx.c \
 Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
 Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
@@ -193,7 +196,7 @@ CP = $(PREFIX)objcopy
 SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
-BIN = $(CP) -O binary -S
+BIN = $(CP) -O binary -S --gap-fill 0xFF
  
 #######################################
 # CFLAGS
@@ -250,7 +253,8 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/LwIP/src/include/posix \
 -IMiddlewares/Third_Party/LwIP/src/include/posix/sys \
 -IMiddlewares/Third_Party/LwIP/system/arch \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include \
+-I../shared/
 
 
 # compile gcc flags
@@ -300,6 +304,7 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	../tools/add_version_info.py $@
 	$(SZ) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)

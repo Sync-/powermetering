@@ -72,7 +72,7 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN 0 */
 void LEDBlink(void) {
   while (1) {
-    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
     vTaskDelay(100);
   }
 }
@@ -507,6 +507,7 @@ int main(void)
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
   xTaskCreate((TaskFunction_t)mqtt_stuff, "Do MQTT stuff", 1024, NULL, configMAX_PRIORITIES - 1, NULL);
+  fwupdate_init();
 
   SEGGER_RTT_printf(0, "Tasks running\n");
 
