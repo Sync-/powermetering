@@ -4,7 +4,7 @@
 #include "cmsis_os.h"
 #include "SEGGER_RTT.h"
 #include "stm32f4xx_hal.h"
-#include "version.h"
+#include "version_stmbl.h"
 #include <lwip/sockets.h> 
 #include <string.h>
 
@@ -58,7 +58,7 @@ void fwupdate_task(void){
         eraseinitstruct.Banks        = FLASH_BANK_1;
         eraseinitstruct.Sector       = FLASH_SECTOR_8;
         eraseinitstruct.NbSectors    = 1;
-        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
 
         status = HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
 
@@ -71,7 +71,7 @@ void fwupdate_task(void){
         eraseinitstruct.Banks        = FLASH_BANK_1;
         eraseinitstruct.Sector       = FLASH_SECTOR_9;
         eraseinitstruct.NbSectors    = 1;
-        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
 
         status = HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
         taskEXIT_CRITICAL();

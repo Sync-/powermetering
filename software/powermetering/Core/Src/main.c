@@ -21,8 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "crc.h"
+#include "fatfs.h"
 #include "i2c.h"
-#include "lwip.h"
+#include "mbedtls.h"
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
@@ -38,6 +40,7 @@
 #include "fs.h"
 #include "string.h"
 #include "mqtt.h"
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,7 +75,7 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN 0 */
 void LEDBlink(void) {
   while (1) {
-    HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
     vTaskDelay(100);
   }
 }
@@ -290,6 +293,7 @@ void SPI_get_data(void) {
 //    get_ADE9000_data(0x801);
 
     //write_ADE9000_data(ADDR_RUN, 1);
+    extern ETH_HandleTypeDef heth;
 
     HAL_ETH_ReadPHYRegister(&heth, PHY_SR, &reg2);
     if ((reg2 & 256))
@@ -330,7 +334,7 @@ char const** TAGS=&TAGCHAR;
 #define VOLT_CONST (VOLT_TF / V_PER_BIT * 2.0f)
 
 #define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0f/20694066.0f))*2.0f)
-/*
+
 uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
   if(index == 0) {
     static int count = 0;
@@ -339,10 +343,21 @@ uint16_t ssi_handler(uint32_t index, char* insert, uint32_t insertlen) {
     int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
     int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
 
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d", status0_i, status1_i, count++);
+    float avrms = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
+    float bvrms = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
+    float cvrms = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
+/*
+    if(status1 && (0b1111 << 28)) {
+      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
+      write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
+    } else {
+      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
+    }
+*/
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d <br> L1: %fV L2: %fV L3: %fV", status0_i, status1_i, count++, avrms, bvrms, cvrms);
   }
   return 0;
-}*/
+}
 
 static void mqtt_sub_request_cb(void *arg, err_t result)
 {
@@ -411,7 +426,7 @@ void example_publish(mqtt_client_t *client, void *arg)
   err_t err;
   u8_t qos = 2; /* 0 1 or 2, see MQTT specification */
   u8_t retain = 0; /* No don't retain such crappy payload... */
-  err = mqtt_publish(client, "trifasipower", insert, len, qos, retain, mqtt_pub_request_cb, arg);
+  err = mqtt_publish(client, "develop", insert, len, qos, retain, mqtt_pub_request_cb, arg);
   if(err != ERR_OK) {
     SEGGER_RTT_printf(0, "Publish err: %d\n", err);
     example_do_connect(&static_client);
@@ -445,7 +460,7 @@ void example_do_connect(mqtt_client_t *client)
 
 void mqtt_stuff(void) {
   vTaskDelay(2000);
-  IP4_ADDR(&mqtt_server_addr, 192, 168, 178, 202);
+  IP4_ADDR(&mqtt_server_addr, 192, 168, 178, 121);
   SEGGER_RTT_printf(0, "Entered mqtt...\n");
   example_do_connect(&static_client);
   while(1){
@@ -465,6 +480,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
+  
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -489,14 +505,17 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
 
-//  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
-//  httpd_init();
+  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
+  httpd_init();
 
   SEGGER_RTT_Init();
   SEGGER_RTT_printf(0, "yolo\n");
+
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
 
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_CONFIG1, 1 << 11);

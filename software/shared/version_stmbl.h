@@ -22,4 +22,4 @@ typedef struct {
   int patch;
 } version_info_t;
 
-extern volatile const version_info_t version_info;
+//extern volatile const version_info_t version_info;

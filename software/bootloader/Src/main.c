@@ -122,13 +122,13 @@ if(tmp_fw_info->image_size < 256*1024){
     eraseinitstruct.Banks        = FLASH_BANK_1;
     eraseinitstruct.Sector       = FLASH_SECTOR_5;
     eraseinitstruct.NbSectors    = 1;
-    eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+    eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
     HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
     eraseinitstruct.TypeErase    = FLASH_TYPEERASE_SECTORS;
     eraseinitstruct.Banks        = FLASH_BANK_1;
     eraseinitstruct.Sector       = FLASH_SECTOR_6;
     eraseinitstruct.NbSectors    = 1;
-    eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+    eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
     HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
 
     //copy image
@@ -154,14 +154,14 @@ if(tmp_fw_info->image_size < 256*1024){
         eraseinitstruct.Banks        = FLASH_BANK_1;
         eraseinitstruct.Sector       = FLASH_SECTOR_8;
         eraseinitstruct.NbSectors    = 1;
-        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
         HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
 
         eraseinitstruct.TypeErase    = FLASH_TYPEERASE_SECTORS;
         eraseinitstruct.Banks        = FLASH_BANK_1;
         eraseinitstruct.Sector       = FLASH_SECTOR_9;
         eraseinitstruct.NbSectors    = 1;
-        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_1;
+        eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
         HAL_FLASHEx_Erase(&eraseinitstruct, &PageError);
     }
     HAL_FLASH_Lock();

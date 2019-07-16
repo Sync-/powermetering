@@ -17,7 +17,7 @@ INFLUXDB_USER = 'root'
 INFLUXDB_PASSWORD = 'root'
 INFLUXDB_DATABASE = 'trifasi_db'
 
-MQTT_ADDRESS = '192.168.178.202'
+MQTT_ADDRESS = '192.168.178.121'
 MQTT_USER = ''
 MQTT_PASSWORD = ''
 MQTT_TOPIC = 'trifasipower'  # [bme280|mijia]/[temperature|humidity|battery|status]
