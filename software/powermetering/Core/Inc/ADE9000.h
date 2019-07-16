@@ -336,6 +336,7 @@ Accomplished date: 06/09/2015
 #define				ADDR_CI_LPF_DAT								0x514
 #define				ADDR_CV_LPF_DAT								0x515
 #define				ADDR_NI_LPF_DAT								0x516
+
 #define				ADDR_AV_PCF_1								0x600
 #define				ADDR_BV_PCF_1								0x601
 #define				ADDR_CV_PCF_1									0x602
@@ -343,60 +344,81 @@ Accomplished date: 06/09/2015
 #define				ADDR_AI_PCF_1									0x604
 #define				ADDR_BI_PCF_1									0x605
 #define				ADDR_CI_PCF_1									0x606
+
 #define				ADDR_AIRMS_1									0x607
 #define				ADDR_BIRMS_1									0x608
 #define				ADDR_CIRMS_1									0x609
+
 #define				ADDR_AVRMS_1									0x60A
 #define				ADDR_BVRMS_1									0x60B
 #define				ADDR_CVRMS_1									0x60C
+
 #define				ADDR_NIRMS_1									0x60D
+
 #define				ADDR_AWATT_1									0x60E
 #define				ADDR_BWATT_1									0x60F
 #define				ADDR_CWATT_1									0x610
+
 #define				ADDR_AVA_1									0x611
 #define				ADDR_BVA_1									0x612
 #define				ADDR_CVA_1									0x613
+
 #define				ADDR_AVAR_1									0x614
 #define				ADDR_BVAR_1									0x615
 #define				ADDR_CVAR_1									0x616
+
 #define				ADDR_AFVAR_1									0x617
 #define				ADDR_BFVAR_1									0x618
 #define				ADDR_CFVAR_1									0x619
+
 #define				ADDR_APF_1									0x61A
 #define				ADDR_BPF_1									0x61B
 #define				ADDR_CPF_1									0x61C
+
 #define				ADDR_AVTHD_1									0x61D
 #define				ADDR_BVTHD_1									0x61E
 #define				ADDR_CVTHD_1									0x61F
+
 #define				ADDR_AITHD_1									0x620
 #define				ADDR_BITHD_1									0x621
 #define				ADDR_CITHD_1									0x622
+
 #define				ADDR_AFWATT_1									0x623
 #define				ADDR_BFWATT_1									0x624
 #define				ADDR_CFWATT_1									0x625
+
 #define				ADDR_AFVA_1									0x626
 #define				ADDR_BFVA_1									0x627
 #define				ADDR_CFVA_1									0x628
+
 #define				ADDR_AFIRMS_1									0x629
 #define				ADDR_BFIRMS_1									0x62A
 #define				ADDR_CFIRMS_1									0x62B
+
 #define				ADDR_AFVRMS_1									0x62C
 #define				ADDR_BFVRMS_1									0x62D
 #define				ADDR_CFVRMS_1									0x62E
+
 #define				ADDR_AIRMSONE_1									0x62F
 #define				ADDR_BIRMSONE_1									0x630
 #define				ADDR_CIRMSONE_1									0x631
+
 #define				ADDR_AVRMSONE_1									0x632
 #define				ADDR_BVRMSONE_1									0x633
 #define				ADDR_CVRMSONE_1									0x634
+
 #define				ADDR_NIRMSONE_1									0x635
+
 #define				ADDR_AIRMS1012_1								0x636
 #define				ADDR_BIRMS1012_1								0x637
 #define				ADDR_CIRMS1012_1								0x638
+
 #define				ADDR_AVRMS1012_1								0x639
 #define				ADDR_BVRMS1012_1								0x63A
 #define				ADDR_CVRMS1012_1								0x63B
+
 #define				ADDR_NIRMS1012_1								0x63C
+
 #define				ADDR_AV_PCF_2									0x680
 #define				ADDR_AI_PCF_2									0x681
 #define				ADDR_AIRMS_2									0x682
