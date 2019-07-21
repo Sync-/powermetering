@@ -120,13 +120,13 @@ void write_ADE9000_32(uint16_t reg_num, uint32_t data)
 
   access_reg[0] = (uint8_t)tx_reg;
   access_reg[1] = (uint8_t)(tx_reg >> 8);
-  access_reg[2] = (uint8_t)((data & 0xFF000000) >> 24);
-  access_reg[3] = (uint8_t)((data & 0x00FF0000) >> 16);
-  access_reg[5] = (uint8_t)((data)&0x000000FF);
-  access_reg[4] = (uint8_t)((data & 0x00000FF00) >> 8);
+  access_reg[3] = (uint8_t)((data & 0xFF000000) >> 24);
+  access_reg[2] = (uint8_t)((data & 0x00FF0000) >> 16);
+  access_reg[5] = (uint8_t)((data & 0x00000FF00) >> 8);
+  access_reg[4] = (uint8_t)((data & 0x000000FF));
 
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+  HAL_SPI_Transmit(&hspi1, access_reg, 3, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
