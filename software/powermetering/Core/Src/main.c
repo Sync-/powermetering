@@ -120,13 +120,13 @@ void write_ADE9000_32(uint16_t reg_num, uint32_t data)
 
   access_reg[0] = (uint8_t)tx_reg;
   access_reg[1] = (uint8_t)(tx_reg >> 8);
-  access_reg[2] = (uint8_t)((data & 0xFF000000) >> 24);
-  access_reg[3] = (uint8_t)((data & 0x00FF0000) >> 16);
-  access_reg[5] = (uint8_t)((data)&0x000000FF);
-  access_reg[4] = (uint8_t)((data & 0x00000FF00) >> 8);
+  access_reg[3] = (uint8_t)((data & 0xFF000000) >> 24);
+  access_reg[2] = (uint8_t)((data & 0x00FF0000) >> 16);
+  access_reg[5] = (uint8_t)((data & 0x00000FF00) >> 8);
+  access_reg[4] = (uint8_t)((data & 0x000000FF));
 
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
+  HAL_SPI_Transmit(&hspi1, access_reg, 3, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
@@ -233,8 +233,7 @@ char const **TAGS = &TAGCHAR;
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
-  if (index == 0)
-  {
+  if (index == 0){
     static int count = 0;
     SEGGER_RTT_printf(0, "ssi %d CUR_CONST: %lf\n", count, CUR_CONST);
 
@@ -244,6 +243,11 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     float avrms = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
     float bvrms = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
     float cvrms = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
+
+    float airms = ((foobar.airms1012_h << 16) + foobar.airms1012_l) / CUR_CONST;
+    float birms = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
+    float cirms = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
+    float nirms = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
     /*
     if(status1 && (0b1111 << 28)) {
       HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
@@ -252,7 +256,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
       HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
     }
 */
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d <br> L1: %fV L2: %fV L3: %fV", status0_i, status1_i, count++, avrms, bvrms, cvrms);
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d <br> L1: %fV L2: %fV L3: %fV <br> L1: %fA L2: %fA L3: %fA N: %fA", status0_i, status1_i, count++, avrms, bvrms, cvrms, airms, birms, cirms, nirms);
   }
   return 0;
 }
@@ -415,19 +419,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
 
-  //  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
-  //  httpd_init();
+  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
+  httpd_init();
 
   SEGGER_RTT_Init();
   SEGGER_RTT_printf(0, "yolo\n");
 
   write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
-
-  write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
-  write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
-  write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
-  write_ADE9000_16(ADDR_RUN, 1);
-  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
@@ -451,6 +449,7 @@ int main(void)
 
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
+
   SEGGER_RTT_printf(0, "Tasks running\n");
 
   /* USER CODE END 2 */

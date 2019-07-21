@@ -17,12 +17,12 @@ char influx_request[1000];
 char influx_data[1000];
 struct sockaddr_in influx_addr;
 
-char influx_ip[] = "192.168.178.121";
-int influx_port = 8086;
-char influx_db[] = "trifasi_db";
+char influx_ip[] = "192.168.178.24";
+int  influx_port = 8086;
+char influx_db[] = "powermetering";
 char influx_tag[] = "location";
-char influx_tag_value[] = "Kuchl";
-char influx_measurement[] = "mymeas";
+char influx_tag_value[] = "develop";
+char influx_measurement[] = "Threephase";
 
 extern union ade_burst_rx_t foobar;
 extern uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
