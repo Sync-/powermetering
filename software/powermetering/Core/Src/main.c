@@ -120,13 +120,13 @@ void write_ADE9000_32(uint16_t reg_num, uint32_t data)
 
   access_reg[0] = (uint8_t)tx_reg;
   access_reg[1] = (uint8_t)(tx_reg >> 8);
-  access_reg[3] = (uint8_t)((data & 0xFF000000) >> 24);
-  access_reg[2] = (uint8_t)((data & 0x00FF0000) >> 16);
-  access_reg[5] = (uint8_t)((data & 0x00000FF00) >> 8);
-  access_reg[4] = (uint8_t)((data & 0x000000FF));
+  access_reg[2] = (uint8_t)((data & 0xFF000000) >> 24);
+  access_reg[3] = (uint8_t)((data & 0x00FF0000) >> 16);
+  access_reg[5] = (uint8_t)((data)&0x000000FF);
+  access_reg[4] = (uint8_t)((data & 0x00000FF00) >> 8);
 
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi1, access_reg, 3, 10);
+  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
@@ -436,6 +436,21 @@ int main(void)
   influx_init();
   fwupdate_init();
 
+  write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
+  write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
+
+  write_ADE9000_32(ADDR_AVGAIN, 0xd5afd);
+  write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
+  write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
+
+  write_ADE9000_32(ADDR_AIGAIN, 0xff97dd4a);
+  write_ADE9000_32(ADDR_BIGAIN, 0xff94bcdc);
+  write_ADE9000_32(ADDR_CIGAIN, 0xff78404e);
+  write_ADE9000_32(ADDR_NIGAIN, 0xff8c79e6);
+
+  write_ADE9000_16(ADDR_RUN, 1);
+  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
   SEGGER_RTT_printf(0, "Tasks running\n");
 
   /* USER CODE END 2 */
