@@ -103,22 +103,22 @@ typedef union ade_burst_rx_t {
 
     int32_t nirmsone;
 
-    int16_t airms1012_h;
-    int16_t airms1012_l;
-    int16_t birms1012_h;
-    int16_t birms1012_l;
-    int16_t cirms1012_h;
-    int16_t cirms1012_l;
+    uint16_t airms1012_h;
+    uint16_t airms1012_l;
+    uint16_t birms1012_h;
+    uint16_t birms1012_l;
+    uint16_t cirms1012_h;
+    uint16_t cirms1012_l;
 
-    int16_t avrms1012_h;
-    int16_t avrms1012_l;
-    int16_t bvrms1012_h;
-    int16_t bvrms1012_l;
-    int16_t cvrms1012_h;
-    int16_t cvrms1012_l;
+    uint16_t avrms1012_h;
+    uint16_t avrms1012_l;
+    uint16_t bvrms1012_h;
+    uint16_t bvrms1012_l;
+    uint16_t cvrms1012_h;
+    uint16_t cvrms1012_l;
 
-    int16_t nirms1012_h;
-    int16_t nirms1012_l;
+    uint16_t nirms1012_h;
+    uint16_t nirms1012_l;
   };
 };
 //#pragma pack(pop)
