@@ -167,6 +167,24 @@ uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 
 void SPI_get_data(void)
 {
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
+
+  write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
+  write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
+
+  write_ADE9000_32(ADDR_AVGAIN, 0xd5afd);
+  write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
+  write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
+
+  write_ADE9000_32(ADDR_AIGAIN, 0xff97dd4a);
+  write_ADE9000_32(ADDR_BIGAIN, 0xff94bcdc);
+  write_ADE9000_32(ADDR_CIGAIN, 0xff78404e);
+  write_ADE9000_32(ADDR_NIGAIN, 0xff8c79e6);
+
+  write_ADE9000_16(ADDR_RUN, 1);
+  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
+
   while (1)
   {
     /*
@@ -425,30 +443,12 @@ int main(void)
   SEGGER_RTT_Init();
   SEGGER_RTT_printf(0, "yolo\n");
 
-  write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
-
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
   xTaskCreate((TaskFunction_t)linktask, "Handle the Ethernet link status", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
   //xTaskCreate((TaskFunction_t)mqtt_stuff, "Do MQTT stuff", 1024, NULL, configMAX_PRIORITIES - 3, NULL);
   influx_init();
   fwupdate_init();
-
-  write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
-  write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
-  write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
-
-  write_ADE9000_32(ADDR_AVGAIN, 0xd5afd);
-  write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
-  write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
-
-  write_ADE9000_32(ADDR_AIGAIN, 0xff97dd4a);
-  write_ADE9000_32(ADDR_BIGAIN, 0xff94bcdc);
-  write_ADE9000_32(ADDR_CIGAIN, 0xff78404e);
-  write_ADE9000_32(ADDR_NIGAIN, 0xff8c79e6);
-
-  write_ADE9000_16(ADDR_RUN, 1);
-  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   SEGGER_RTT_printf(0, "Tasks running\n");
 
