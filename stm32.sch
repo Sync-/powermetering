@@ -1,6 +1,6 @@
 EESchema Schematic File Version 5
 LIBS:powermetering-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -13,6 +13,11 @@ Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
+Comment5 ""
+Comment6 ""
+Comment7 ""
+Comment8 ""
+Comment9 ""
 $EndDescr
 Text HLabel 7850 3400 0    60   Input ~ 0
 STM_MDIO
@@ -1278,7 +1283,7 @@ U 1 1 5D1E742C
 P 13550 5500
 F 0 "J10" H 13500 6217 50  0000 C CNN
 F 1 "Micro_SD_Card" H 13500 6126 50  0000 C CNN
-F 2 "Connector_Card:microSD_HC_Hirose_DM3D-SF" H 14700 5800 50  0001 C CNN
+F 2 "Connector_Card:microSD_HC_Hirose_DM3BT-DSF-PEJS" H 14700 5800 50  0001 C CNN
 F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 13550 5500 50  0001 C CNN
 	1    13550 5500
 	1    0    0    -1  

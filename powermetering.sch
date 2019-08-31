@@ -1,6 +1,6 @@
 EESchema Schematic File Version 5
 LIBS:powermetering-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -13,6 +13,11 @@ Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
+Comment5 ""
+Comment6 ""
+Comment7 ""
+Comment8 ""
+Comment9 ""
 $EndDescr
 $Comp
 L ADE9000:ADE9000 U2
@@ -2124,7 +2129,7 @@ F 3 "" H 3300 3800 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L altair04:TRANSFO TR2
+L powermetering-rescue:TRANSFO-altair04 TR2
 U 1 1 5CF1BE92
 P 3850 4050
 F 0 "TR2" H 3778 4357 50  0000 L CNN
@@ -2161,7 +2166,7 @@ Connection ~ 3300 4600
 Wire Wire Line
 	3300 4600 3300 4700
 $Comp
-L altair04:ALTAIR04-900 U5
+L powermetering-rescue:ALTAIR04-900-altair04 U5
 U 1 1 5CF1BEA7
 P 2550 5000
 F 0 "U5" H 2100 4600 50  0000 C CNN
