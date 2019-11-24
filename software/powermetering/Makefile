@@ -174,6 +174,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.c \
 Middlewares/Third_Party/LwIP/src/apps/httpd/httpd.c \
 Middlewares/Third_Party/LwIP/src/apps/httpd/fs.c \
 Core/Src/crc.c \
+Core/Src/ustime.c \
 FATFS/App/fatfs.c \
 FATFS/Target/bsp_driver_sd.c \
 FATFS/Target/sd_diskio.c \
