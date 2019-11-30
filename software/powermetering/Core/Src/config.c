@@ -97,3 +97,9 @@ void config_get_string(const char* key2, char* value2){
         //printf("next parsed char: '%c'\n",*(string+pos));
     }while(keys_left);
 }
+
+void config_get_int(const char* name, int32_t* value){
+    char* string[CONFIG_STRINGLENGTH];
+    config_get_string(name, string);
+    *value = atoi(string);
+}

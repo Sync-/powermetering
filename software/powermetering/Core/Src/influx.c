@@ -6,6 +6,7 @@
 #include "stm32f4xx_hal.h"
 #include "version_stmbl.h"
 #include "ade.h"
+#include "config.h"
 #include <lwip/sockets.h> 
 #include <string.h>
 #include <math.h>
@@ -17,12 +18,12 @@ char influx_request[1000];
 char influx_data[1000];
 struct sockaddr_in influx_addr;
 
-char influx_ip[] = "192.168.178.240";
-int  influx_port = 8086;
-char influx_db[] = "powermetering";
-char influx_tag[] = "location";
-char influx_tag_value[] = "VT_Vorn";
-char influx_measurement[] = "Threephase";
+char influx_ip[CONFIG_STRINGLENGTH];
+int  influx_port;
+char influx_db[CONFIG_STRINGLENGTH];
+char influx_tag[CONFIG_STRINGLENGTH];
+char influx_tag_value[CONFIG_STRINGLENGTH];
+char influx_measurement[CONFIG_STRINGLENGTH];
 
 extern union ade_burst_rx_t foobar;
 extern uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
@@ -80,10 +81,17 @@ void influx_task(void){
 }
 
 void influx_init(){
+    config_get_string("influx_ip", &influx_ip);
+    config_get_int("influx_port", &influx_port);
+    config_get_string("influx_db", &influx_db);
+    config_get_string("influx_tag", &influx_tag);
+    config_get_string("influx_tag_value", &influx_tag_value);
+    config_get_string("influx_measurement", &influx_measurement);
+
     memset(&influx_addr, 0, sizeof(influx_addr));
     influx_addr.sin_len = sizeof(influx_addr);
     influx_addr.sin_family = AF_INET;
     influx_addr.sin_port = PP_HTONS(influx_port);
     influx_addr.sin_addr.s_addr = inet_addr(influx_ip);
-    //xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE*4, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE*4, NULL, configMAX_PRIORITIES - 1, NULL);
 }

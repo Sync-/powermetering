@@ -30,6 +30,75 @@ var ui = [
             type: "text_value",
             name: "ip"
           },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_ip"
+          },
+          {
+            type: "text_value",
+            name: "influx_ip"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_port"
+          },
+          {
+            type: "text_value",
+            name: "influx_port"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_db"
+          },
+          {
+            type: "text_value",
+            name: "influx_db"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_tag"
+          },
+          {
+            type: "text_value",
+            name: "influx_tag"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_tag_value"
+          },
+          {
+            type: "text_value",
+            name: "influx_tag_value"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "influx_measurement"
+          },
+          {
+            type: "text_value",
+            name: "influx_measurement"
+          },
+          {
+            type: "br"
+          },
         ]
       },
       {
