@@ -70,7 +70,7 @@ void config_get_string(const char* key2, char* value2){
     int keys_left = 1;
 
     do{
-        ret = sscanf(flash_config+pos,"%32[a-zA-Z]=%32[a-zA-Z0-9._-\%]",key,value);
+        ret = sscanf(flash_config+pos,"%32[a-zA-Z_]=%32[a-zA-Z0-9._-\%]",key,value);
         if(ret == 2){
             pos += strlen(key) + strlen(value) + 1;
             //printf("next char: %c\n",*(string + pos));
