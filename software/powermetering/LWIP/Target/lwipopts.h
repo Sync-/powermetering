@@ -118,6 +118,7 @@
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
 #define LWIP_HTTPD_MAX_TAG_INSERT_LEN 1024
+#define LWIP_HTTPD_SUPPORT_POST 1
 /* USER CODE END 1 */
 
 #ifdef __cplusplus

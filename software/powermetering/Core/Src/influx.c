@@ -17,11 +17,11 @@ char influx_request[1000];
 char influx_data[1000];
 struct sockaddr_in influx_addr;
 
-char influx_ip[] = "192.168.178.24";
+char influx_ip[] = "192.168.178.240";
 int  influx_port = 8086;
 char influx_db[] = "powermetering";
 char influx_tag[] = "location";
-char influx_tag_value[] = "develop";
+char influx_tag_value[] = "VT_Vorn";
 char influx_measurement[] = "Threephase";
 
 extern union ade_burst_rx_t foobar;
@@ -85,5 +85,5 @@ void influx_init(){
     influx_addr.sin_family = AF_INET;
     influx_addr.sin_port = PP_HTONS(influx_port);
     influx_addr.sin_addr.s_addr = inet_addr(influx_ip);
-    xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE*4, NULL, configMAX_PRIORITIES - 1, NULL);
+    //xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE*4, NULL, configMAX_PRIORITIES - 1, NULL);
 }

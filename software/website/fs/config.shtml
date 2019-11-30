@@ -1,0 +1,192 @@
+<html>
+<meta charset="utf-8">
+<head><title>webgui</title>
+<script type="text/javascript">
+
+var ui = [
+  {
+    type: "form",
+    value: [
+      {
+        type: "fieldset",
+        style: "width: 200px;",
+        value: [
+          {
+            type: "text",
+            value: "name "
+          },
+          {
+            type: "text_value",
+            name: "name"
+          },
+          {
+            type: "br"
+          },
+          {
+            type: "text",
+            value: "ip "
+          },
+          {
+            type: "text_value",
+            name: "ip"
+          },
+        ]
+      },
+      {
+        type: "submit",
+        value: "save",
+      }
+    ]
+  }
+];
+
+function update_values(defaults,ui){
+  for(var i in ui){
+    if(ui[i].type == "text_value"){//TODO: list of input fields
+      ui[i].value = defaults[ui[i].name]//TODO: validate stuff
+    }
+    update_values(defaults,ui[i].value)
+  }
+}
+
+function parseQuery(queryString) {
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+}
+
+function prop(obj, prop){
+  if(typeof obj[prop] === "undefined"){
+    return("");
+  }
+  return(" " + prop + " = \"" + obj[prop] + "\"");
+}
+
+function init_ui(ui){
+  var html = "";
+  var pre = "";
+  var mid = "";
+  var post = "";
+  for(var i in ui){
+    switch(ui[i].type){
+      case "br":
+        pre = "<br"
+        break;
+
+      case "div":
+        pre = "<div";
+        mid = init_ui(ui[i].value);
+        post = "</div>\n";
+        break;
+      
+      case "fieldset":
+        pre = "<fieldset";
+        mid = init_ui(ui[i].value);
+        post = "</fieldset>\n";
+        break;
+      
+      case "form":
+        pre = "<form method='post' ";
+        mid = init_ui(ui[i].value);
+        post = "</form>\n";
+        break;
+      
+      case "text":
+        pre = "<a";
+        mid = ui[i].value;
+        post = "</a>";
+        break;
+      
+      case "submit":
+        pre = u(ui[i].text);
+        pre += "<input type='submit' ";
+        pre += prop(ui[i], "value");
+        break;
+
+      case "text_value":
+        pre = u(ui[i].text);
+        pre += "<input type='text' ";
+        pre += prop(ui[i], "value");
+        post = "</input>";
+        break;
+
+      case "bool_value":
+        pre = u(ui[i].text);
+        pre += "<input type='checkbox' ";
+        pre += prop(ui[i], "checked");
+        post = "</input>";
+        break;
+      
+      case "select":
+        pre = u(ui[i].text);
+        pre += "<select ";
+
+        mid = "";
+        ui[i].value.forEach(function(v){
+          mid += "<option ";
+          mid += prop(v, "value");
+          if(("selected" in v)){
+            mid += "selected='selected'";
+          }
+          
+          mid += ">" + v.name + "</option>";
+        });
+
+        post = "</select> "
+        break;
+
+      default:
+        pre = "<div";
+        mid = ui[i].type + "\n";
+        post = "</div>\n";
+    }
+
+    pre += prop(ui[i], "id");
+    pre += prop(ui[i], "style");
+    pre += prop(ui[i], "class");
+    pre += prop(ui[i], "name");
+    pre += ">";
+
+    html += pre + mid + post;
+    pre = "";
+    mid = "";
+    post = "";
+  }
+  return(html);
+}
+
+function $(id){
+  return(document.getElementById(id));
+}
+
+function u(v){
+  if(typeof v === "undefined"){
+    return("");
+  }
+  return(v);
+}
+
+function init(){
+  div = $("ui");
+  var defaults = parseQuery($("config").innerText)
+  update_values(defaults,ui);
+  div.innerHTML = init_ui(ui);
+}
+
+</script>
+</head>
+<style type="text/css">
+/* input {width : 500px} */
+.block {border-style: solid; display: inline-block;}
+textarea {width: 500px; height: 500px;}
+</style>
+
+<body onload="init();">
+  <div id="config"><!--#CONFIG--></div>
+  <div id="ui"></div>
+</body>
+</html>

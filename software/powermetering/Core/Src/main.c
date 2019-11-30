@@ -35,6 +35,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "httpd.h"
+#include "def.h"
+#include "config.h"
 #include "SEGGER_RTT.h"
 #include "ADE9000.h"
 #include "fs.h"
@@ -245,12 +247,60 @@ void linktask(void)
     vTaskDelay(100);
   }
 }
-char const *TAGCHAR = "YOLO";
-char const **TAGS = &TAGCHAR;
+
+
+#define USER_PASS_BUFSIZE 16
+
+static void *current_connection;
+static void *valid_connection;
+static char last_user[USER_PASS_BUFSIZE];
+
+err_t httpd_post_begin(void *connection, const char *uri, const char *http_request,
+                 u16_t http_request_len, int content_len, char *response_uri,
+                 u16_t response_uri_len, u8_t *post_auto_wnd)
+{
+  LWIP_UNUSED_ARG(connection);
+  LWIP_UNUSED_ARG(http_request);
+  LWIP_UNUSED_ARG(http_request_len);
+  LWIP_UNUSED_ARG(content_len);
+  LWIP_UNUSED_ARG(post_auto_wnd);
+  SEGGER_RTT_printf(0, "httpd_post_begin: %s %i\n", uri, content_len);
+  // if (!memcmp(uri, "/login.cgi", 11)) {
+  //   if (current_connection != connection) {
+  //     current_connection = connection;
+  //     valid_connection = NULL;
+  //     /* default page is "login failed" */
+  //     snprintf(response_uri, response_uri_len, "/loginfail.html");
+  //     /* e.g. for large uploads to slow flash over a fast connection, you should
+  //        manually update the rx window. That way, a sender can only send a full
+  //        tcp window at a time. If this is required, set 'post_aut_wnd' to 0.
+  //        We do not need to throttle upload speed here, so: */
+  //     *post_auto_wnd = 1;
+  //     return ERR_OK;
+  //   }
+  // }
+  return ERR_OK;
+}
+
+err_t httpd_post_receive_data(void *connection, struct pbuf *p)
+{
+  SEGGER_RTT_printf(0, "httpd_post_receive_data: %u %s\n", p->tot_len,p->payload);
+  config_write(p->payload,p->tot_len);
+  return ERR_OK;
+}
+
+void httpd_post_finished(void *connection, char *response_uri, u16_t response_uri_len)
+{
+  SEGGER_RTT_printf(0, "httpd_post_finished\n");
+}
+
+
+
+char* tags[] = {"YOLO","STAT","CONFIG"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
-  if (index == 0){
+  if (index == 0){//YOLO
     static int count = 0;
     SEGGER_RTT_printf(0, "ssi %d CUR_CONST: %lf\n", count, CUR_CONST);
 
@@ -274,6 +324,13 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     }
 */
     return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d <br> L1: %fV L2: %fV L3: %fV <br> L1: %fA L2: %fA L3: %fA N: %fA", status0_i, status1_i, count++, avrms, bvrms, cvrms, airms, birms, cirms, nirms);
+  }else if(index == 1){//STAT
+    vTaskGetRunTimeStats(insert);
+    //vTaskList(insert);
+    return strnlen(insert,LWIP_HTTPD_MAX_TAG_INSERT_LEN);
+    //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
+  }else if(index == 2){//CONFIG
+    return config_read(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   }
   return 0;
 }
@@ -317,7 +374,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
 
-  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **) TAGS, 1);
+  http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **)tags, LWIP_ARRAYSIZE(tags));
   httpd_init();
 
   SEGGER_RTT_Init();
