@@ -376,6 +376,8 @@ int main(void)
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
+  ETH->MMCRIMR |= ETH_MMCRIMR_RGUFM | ETH_MMCRIMR_RFAEM   | ETH_MMCRIMR_RFCEM;
+  ETH->MMCTIMR |= ETH_MMCTIMR_TGFM  | ETH_MMCTIMR_TGFMSCM | ETH_MMCTIMR_TGFSCM;
 
   http_set_ssi_handler((tSSIHandler) ssi_handler, (char const **)tags, LWIP_ARRAYSIZE(tags));
   httpd_init();
