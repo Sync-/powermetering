@@ -296,7 +296,7 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 
 
-char* tags[] = {"YOLO","STAT","CONFIG","NAME"};
+char* tags[] = {"YOLO","STAT","CONFIG","NAME", "PKTCNT"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
@@ -334,6 +334,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
   }else if(index == 3){//NAME
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
+  } else if(index == 4) {//PACKETCOUNTER
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR);
   }
   return 0;
 }
