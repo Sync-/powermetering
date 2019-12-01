@@ -21,3 +21,5 @@ void config_write(uint8_t*, uint32_t);
 uint32_t config_read(uint8_t*, uint32_t);
 uint32_t config_read(uint8_t*, uint32_t);
 void config_get_string(const char*, char*);
+void config_get_int(const char*, int32_t*);
+void config_get_float(const char*, float*);

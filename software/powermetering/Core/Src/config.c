@@ -103,3 +103,9 @@ void config_get_int(const char* name, int32_t* value){
     config_get_string(name, string);
     *value = atoi(string);
 }
+
+void config_get_float(const char* name, float* value){
+    char* string[CONFIG_STRINGLENGTH];
+    config_get_string(name, string);
+    *value = strtof(string,NULL);
+}
