@@ -6,14 +6,16 @@
 var ui = [
   {
     type: "form",
+    enctype: "application/x-www-form-urlencoded",
+    method: "post",
     value: [
       {
         type: "fieldset",
-        style: "width: 200px;",
+        style: "width: 400px;",
         value: [
           {
             type: "text",
-            value: "name "
+            value: "name"
           },
           {
             type: "text_value",
@@ -24,7 +26,7 @@ var ui = [
           },
           {
             type: "text",
-            value: "ip "
+            value: "ip"
           },
           {
             type: "text_value",
@@ -35,70 +37,89 @@ var ui = [
           },
           {
             type: "text",
-            value: "influx_ip"
+            value: "influx_en "
           },
           {
-            type: "text_value",
-            name: "influx_ip"
-          },
-          {
-            type: "br"
-          },
-          {
-            type: "text",
-            value: "influx_port"
-          },
-          {
-            type: "text_value",
-            name: "influx_port"
+            type: "bool_value",
+            name: "influx_en",
+            id: "influx_en",
+            onchange: "if($('influx_en').checked == true){$('influx_div').removeAttribute('hidden');} else{$('influx_div').hidden = 'true';};",
           },
           {
             type: "br"
           },
           {
-            type: "text",
-            value: "influx_db"
-          },
-          {
-            type: "text_value",
-            name: "influx_db"
-          },
-          {
-            type: "br"
-          },
-          {
-            type: "text",
-            value: "influx_tag"
-          },
-          {
-            type: "text_value",
-            name: "influx_tag"
-          },
-          {
-            type: "br"
-          },
-          {
-            type: "text",
-            value: "influx_tag_value"
-          },
-          {
-            type: "text_value",
-            name: "influx_tag_value"
-          },
-          {
-            type: "br"
-          },
-          {
-            type: "text",
-            value: "influx_measurement"
-          },
-          {
-            type: "text_value",
-            name: "influx_measurement"
-          },
-          {
-            type: "br"
-          },
+            type: "div",
+            id: "influx_div",
+            value: [
+              {
+                type: "text",
+                value: "influx_ip"
+              },
+              {
+                type: "text_value",
+                name: "influx_ip"
+              },
+              {
+                type: "br"
+              },
+              {
+                type: "text",
+                value: "influx_port"
+              },
+              {
+                type: "text_value",
+                name: "influx_port"
+              },
+              {
+                type: "br"
+              },
+              {
+                type: "text",
+                value: "influx_db"
+              },
+              {
+                type: "text_value",
+                name: "influx_db"
+              },
+              {
+                type: "br"
+              },
+              {
+                type: "text",
+                value: "influx_tag"
+              },
+              {
+                type: "text_value",
+                name: "influx_tag"
+              },
+              {
+                type: "br"
+              },
+              {
+                type: "text",
+                value: "influx_tag_value"
+              },
+              {
+                type: "text_value",
+                name: "influx_tag_value"
+              },
+              {
+                type: "br"
+              },
+              {
+                type: "text",
+                value: "influx_measurement"
+              },
+              {
+                type: "text_value",
+                name: "influx_measurement"
+              },
+              {
+                type: "br"
+              },
+            ]
+          }
         ]
       },
       {
@@ -113,6 +134,9 @@ function update_values(defaults,ui){
   for(var i in ui){
     if(ui[i].type == "text_value"){//TODO: list of input fields
       ui[i].value = defaults[ui[i].name]//TODO: validate stuff
+    }
+    if(ui[i].type == "bool_value"){//TODO: list of input fields
+      ui[i].checked = defaults[ui[i].name]//TODO: validate stuff
     }
     update_values(defaults,ui[i].value)
   }
@@ -159,7 +183,9 @@ function init_ui(ui){
         break;
       
       case "form":
-        pre = "<form method='post' ";
+        pre = "<form ";
+        pre += prop(ui[i], "enctype");
+        pre += prop(ui[i], "method");
         mid = init_ui(ui[i].value);
         post = "</form>\n";
         break;
@@ -218,6 +244,9 @@ function init_ui(ui){
     pre += prop(ui[i], "style");
     pre += prop(ui[i], "class");
     pre += prop(ui[i], "name");
+    pre += prop(ui[i], "onclick");
+    pre += prop(ui[i], "onchange");
+    pre += prop(ui[i], "onload");
     pre += ">";
 
     html += pre + mid + post;
@@ -240,22 +269,77 @@ function u(v){
 }
 
 function init(){
+  $("config_input_text").value = $("config").innerText;
   div = $("ui");
-  var defaults = parseQuery($("config").innerText)
+  var defaults = parseQuery($("config_input_text").value);
   update_values(defaults,ui);
   div.innerHTML = init_ui(ui);
+  if($('influx_en').checked == true){
+    $('influx_div').removeAttribute('hidden');
+  } 
+  else{
+    $('influx_div').hidden = 'true';
+  }
+
 }
 
 </script>
 </head>
 <style type="text/css">
-/* input {width : 500px} */
 .block {border-style: solid; display: inline-block;}
-textarea {width: 500px; height: 500px;}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+input[type=text]:focus{
+	border: 1px solid green;
+}
+
+fieldset{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit],input[type=button] {
+	background: #64B5F6;
+	margin: 0 auto;
+	outline: 0;
+	color: white;
+	border: 0;
+	padding: 12px 24px;
+	border-radius: 4px;
+	transition: all ease-in-out 0.1s;
+	position: relative;
+	display: inline-block;
+	text-align: center;
+}
+
+input[type=submit]:focus,input[type=button]:focus {
+	background: #A5D6A7;
+	color: whitesmoke;
+}
+
+input[type=submit]:hover,input[type=button]:hover {
+	background: #2196F3;
+}
 </style>
 
 <body onload="init();">
-  <div id="config"><!--#CONFIG--></div>
+  <div id="config" hidden><!--#CONFIG--></div>
+  <input type="text" id="config_input_text" style="width: 300px;"></input>
+  <input type="button" onclick="update_values(parseQuery($('config_input_text').value), ui); $('ui').innerHTML = init_ui(ui); if($('influx_en').checked == true){$('influx_div').removeAttribute('hidden');} else{$('influx_div').hidden = 'true';};" value="load config"></input>
   <div id="ui"></div>
 </body>
 </html>
