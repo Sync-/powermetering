@@ -1,6 +1,8 @@
 <html>
 <meta charset="utf-8">
-<head><title>webgui</title>
+<head>
+<title><!--#NAME--></title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <script type="text/javascript">
 
 var ui = [
@@ -337,6 +339,7 @@ input[type=submit]:hover,input[type=button]:hover {
 </style>
 
 <body onload="init();">
+  <h1><!--#NAME--></h1>
   <div id="config" hidden><!--#CONFIG--></div>
   <input type="text" id="config_input_text" style="width: 300px;"></input>
   <input type="button" onclick="update_values(parseQuery($('config_input_text').value), ui); $('ui').innerHTML = init_ui(ui); if($('influx_en').checked == true){$('influx_div').removeAttribute('hidden');} else{$('influx_div').hidden = 'true';};" value="load config"></input>
