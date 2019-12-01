@@ -140,8 +140,6 @@ void get_ADE9000_data_reg(uint16_t reg_num, uint8_t *arr)
   rx_reg[0] = (uint8_t)(((reg_num << 4) | (1 << 3)) & 0x00FF);
 
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-  //  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
-  //  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
   HAL_SPI_TransmitReceive(&hspi1, rx_reg, arr, 4, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
@@ -153,8 +151,6 @@ void get_ADE9000_data(uint16_t reg_num)
   rx_reg[0] = (uint8_t)(((reg_num << 4) | (1 << 3)) & 0x00FF);
 
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
-  //  HAL_SPI_Transmit(&hspi1, access_reg, 2, 10);
-  //  HAL_SPI_Receive(&hspi1, spi_rec_buffer, 2, 10);
   HAL_SPI_TransmitReceive(&hspi1, rx_reg, spi_rec_buffer, 4, 10);
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
@@ -188,16 +184,6 @@ void SPI_get_data(void)
 
   while (1)
   {
-    /*
-    get_ADE9000_data_reg(ADDR_CWATT, arms);
-    get_ADE9000_data_reg(ADDR_CIRMS, brms);
-    get_ADE9000_data_reg(ADDR_CPF, crms);
-    get_ADE9000_data_reg(ADDR_CVAR, uthd);
-    get_ADE9000_data_reg(ADDR_CVA, ithd);
-    get_ADE9000_data_reg(ADDR_CPERIOD, hz);
-
-    get_ADE9000_data_reg(ADDR_CVRMS, spi_rec_buffer);
-*/
 
     get_ADE9000_data_reg(ADDR_APERIOD, ahz);
     get_ADE9000_data_reg(ADDR_APERIOD, bhz);
@@ -213,11 +199,7 @@ void SPI_get_data(void)
     HAL_SPI_TransmitReceive(&hspi1, burst_tx_empty, foobar.bytes, 0x3E * 2, 10);
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 
-    //    get_ADE9000_data(0x801);
-
-    //write_ADE9000_data(ADDR_RUN, 1);
-
-         vTaskDelay(1);
+    vTaskDelay(1);
   }
 }
 
@@ -265,20 +247,7 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
   LWIP_UNUSED_ARG(content_len);
   LWIP_UNUSED_ARG(post_auto_wnd);
   SEGGER_RTT_printf(0, "httpd_post_begin: %s %i\n", uri, content_len);
-  // if (!memcmp(uri, "/login.cgi", 11)) {
-  //   if (current_connection != connection) {
-  //     current_connection = connection;
-  //     valid_connection = NULL;
-  //     /* default page is "login failed" */
-  //     snprintf(response_uri, response_uri_len, "/loginfail.html");
-  //     /* e.g. for large uploads to slow flash over a fast connection, you should
-  //        manually update the rx window. That way, a sender can only send a full
-  //        tcp window at a time. If this is required, set 'post_aut_wnd' to 0.
-  //        We do not need to throttle upload speed here, so: */
-  //     *post_auto_wnd = 1;
-  //     return ERR_OK;
-  //   }
-  // }
+  
   return ERR_OK;
 }
 
