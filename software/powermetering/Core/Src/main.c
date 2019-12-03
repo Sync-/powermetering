@@ -164,8 +164,9 @@ uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 
 void SPI_get_data(void)
 {
-  write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
+  write_ADE9000_16(ADDR_CONFIG1, 1 << 0); //SWRST
 
+  vTaskDelay(10);
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
@@ -186,8 +187,8 @@ void SPI_get_data(void)
   {
 
     get_ADE9000_data_reg(ADDR_APERIOD, ahz);
-    get_ADE9000_data_reg(ADDR_APERIOD, bhz);
-    get_ADE9000_data_reg(ADDR_APERIOD, chz);
+    get_ADE9000_data_reg(ADDR_BPERIOD, bhz);
+    get_ADE9000_data_reg(ADDR_CPERIOD, chz);
 
     get_ADE9000_data_reg(ADDR_STATUS0, status0);
     get_ADE9000_data_reg(ADDR_STATUS1, status1);
