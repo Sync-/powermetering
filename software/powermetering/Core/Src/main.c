@@ -161,17 +161,19 @@ uint8_t burst_tx_empty[750];
 union ade_burst_rx_t foobar;
 
 uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
+uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
 
 void SPI_get_data(void)
 {
   write_ADE9000_16(ADDR_CONFIG1, 1 << 0); //SWRST
 
   vTaskDelay(10);
+
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
 
-  write_ADE9000_32(ADDR_AVGAIN, 0xd5afd);
+  write_ADE9000_32(ADDR_AVGAIN, 0x115afd);
   write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
   write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
 
@@ -184,11 +186,19 @@ void SPI_get_data(void)
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   while (1)
-  {
+  { 
 
     get_ADE9000_data_reg(ADDR_APERIOD, ahz);
     get_ADE9000_data_reg(ADDR_BPERIOD, bhz);
     get_ADE9000_data_reg(ADDR_CPERIOD, chz);
+
+    get_ADE9000_data_reg(ADDR_ANGL_VA_VB, angl_va_vb);
+    get_ADE9000_data_reg(ADDR_ANGL_VA_VC, angl_va_vc);
+    get_ADE9000_data_reg(ADDR_ANGL_VA_IA, angl_va_ia);
+    get_ADE9000_data_reg(ADDR_ANGL_VB_IB, angl_vb_ib);
+    get_ADE9000_data_reg(ADDR_ANGL_VC_IC, angl_vc_ic);
+
+
 
     get_ADE9000_data_reg(ADDR_STATUS0, status0);
     get_ADE9000_data_reg(ADDR_STATUS1, status1);
@@ -248,7 +258,7 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
   LWIP_UNUSED_ARG(content_len);
   LWIP_UNUSED_ARG(post_auto_wnd);
   SEGGER_RTT_printf(0, "httpd_post_begin: %s %i\n", uri, content_len);
-  
+
   return ERR_OK;
 }
 
@@ -266,46 +276,95 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 
 
-char* tags[] = {"YOLO","STAT","CONFIG","NAME", "PKTCNT"};
+char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
-  if (index == 0){//YOLO
-    static int count = 0;
-    SEGGER_RTT_printf(0, "ssi %d CUR_CONST: %lf\n", count, CUR_CONST);
-
-    int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
-    int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
-
-    float avrms = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
-    float bvrms = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
-    float cvrms = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
-
-    float airms = ((foobar.airms1012_h << 16) + foobar.airms1012_l) / CUR_CONST;
-    float birms = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
-    float cirms = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
-    float nirms = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
-    /*
-    if(status1 && (0b1111 << 28)) {
-      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
-      write_ADE9000_16(ADDR_CONFIG1, 1 << 0);
-    } else {
-      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
-    }
-*/
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "STATUS0: %lx STATUS1: %lx cnt: %d <br> L1: %fV L2: %fV L3: %fV <br> L1: %fA L2: %fA L3: %fA N: %fA", status0_i, status1_i, count++, avrms, bvrms, cvrms, airms, birms, cirms, nirms);
-  }else if(index == 1){//STAT
+ if(index == 0){//STAT
     vTaskGetRunTimeStats(insert);
     //vTaskList(insert);
     return strnlen(insert,LWIP_HTTPD_MAX_TAG_INSERT_LEN);
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
-  }else if(index == 2){//CONFIG
+  }else if(index == 1){//CONFIG
     return config_read(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
-  }else if(index == 3){//NAME
+  }else if(index == 2){//NAME
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
-  } else if(index == 4) {//PACKETCOUNTER
+  } else if(index == 3) {//PACKETCOUNTER
     return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR);
+  } else if(index == 4) {//PHASOR
+
+    int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
+    int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
+
+    float avrms = ((foobar.avrms_h << 16) + foobar.avrms_l) / VOLT_CONST;
+    float bvrms = ((foobar.bvrms_h << 16) + foobar.bvrms_l) / VOLT_CONST;
+    float cvrms = ((foobar.cvrms_h << 16) + foobar.cvrms_l) / VOLT_CONST;
+    float avrmsone = ((foobar.avrmsone_h << 16) + foobar.avrmsone_l) / VOLT_CONST;
+    float bvrmsone = ((foobar.bvrmsone_h << 16) + foobar.bvrmsone_l) / VOLT_CONST;
+    float cvrmsone = ((foobar.cvrmsone_h << 16) + foobar.cvrmsone_l) / VOLT_CONST;
+    float avrms1012 = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
+    float bvrms1012 = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
+    float cvrms1012 = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
+
+    float airms = ((foobar.airms_h << 16) + foobar.airms_l) / CUR_CONST;
+    float birms = ((foobar.birms_h << 16) + foobar.birms_l) / CUR_CONST;
+    float cirms = ((foobar.cirms_h << 16) + foobar.cirms_l) / CUR_CONST;
+    float nirms = ((foobar.nirms_h << 16) + foobar.nirms_l) / CUR_CONST;
+    float airmsone = ((foobar.airmsone_h << 16) + foobar.airmsone_l) / CUR_CONST;
+    float birmsone = ((foobar.birmsone_h << 16) + foobar.birmsone_l) / CUR_CONST;
+    float cirmsone = ((foobar.cirmsone_h << 16) + foobar.cirmsone_l) / CUR_CONST;
+    float nirmsone = ((foobar.nirmsone_h << 16) + foobar.nirmsone_l) / CUR_CONST;
+    float airms1012 = ((foobar.airms1012_h << 16) + foobar.airms1012_l) / CUR_CONST;
+    float birms1012 = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
+    float cirms1012 = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
+    float nirms1012 = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
+
+    float awatt = ((foobar.awatt_h << 16) + foobar.awatt_l) * 0.004667801635019326;
+    float bwatt = ((foobar.bwatt_h << 16) + foobar.bwatt_l) * 0.004667801635019326;
+    float cwatt = ((foobar.cwatt_h << 16) + foobar.cwatt_l) * 0.004667801635019326;
+    float afwatt = ((foobar.afwatt_h << 16) + foobar.afwatt_l) * 0.004667801635019326;
+    float bfwatt = ((foobar.bfwatt_h << 16) + foobar.bfwatt_l) * 0.004667801635019326;
+    float cfwatt = ((foobar.cfwatt_h << 16) + foobar.cfwatt_l) * 0.004667801635019326;
+
+    float ava = ((foobar.ava_h << 16) + foobar.ava_l) * 0.004667801635019326;
+    float bva = ((foobar.bva_h << 16) + foobar.bva_l) * 0.004667801635019326;
+    float cva = ((foobar.cva_h << 16) + foobar.cva_l) * 0.004667801635019326;
+    float afva = ((foobar.afva_h << 16) + foobar.afva_l) * 0.004667801635019326;
+    float bfva = ((foobar.bfva_h << 16) + foobar.bfva_l) * 0.004667801635019326;
+    float cfva = ((foobar.cfva_h << 16) + foobar.cfva_l) * 0.004667801635019326;
+
+    float avar = ((foobar.avar_h << 16) + foobar.avar_l) * 0.004667801635019326;
+    float bvar = ((foobar.bvar_h << 16) + foobar.bvar_l) * 0.004667801635019326;
+    float cvar = ((foobar.cvar_h << 16) + foobar.cvar_l) * 0.004667801635019326;
+    float afvar = ((foobar.afvar_h << 16) + foobar.afvar_l) * 0.004667801635019326;
+    float bfvar = ((foobar.bfvar_h << 16) + foobar.bfvar_l) * 0.004667801635019326;
+    float cfvar = ((foobar.cfvar_h << 16) + foobar.cfvar_l) * 0.004667801635019326;
+
+    float angl_va_vb_f = ((angl_va_vb[3] << 8) + angl_va_vb[2]) * 0.017578125f;
+    float angl_va_vc_f = ((angl_va_vc[3] << 8) + angl_va_vc[2]) * 0.017578125f;
+    float angl_va_ia_f = ((angl_va_ia[3] << 8) + angl_va_ia[2]) * 0.017578125f;
+    float angl_vb_ib_f = ((angl_vb_ib[3] << 8) + angl_vb_ib[2]) * 0.017578125f;
+    float angl_vc_ic_f = ((angl_vc_ic[3] << 8) + angl_vc_ic[2]) * 0.017578125f;
+
+    //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,"UL1 = %f; UL2 = %f; UL3=%f; ang_UL2=%f; ang_UL3=%f; ang_IL1=%f; ang_IL2=%f; ang_IL3=%f; IL1=%f; IL2=%f; IL3=%f;",
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN -2, 
+      "{\"status\": [%d,%d], "
+        "\"U\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1(one)\": %f, \"L2(one)\": %f, \"L3(one)\": %f, \"L1(1012)\": %f, \"L2(1012)\": %f, \"L3(1012)\": %f}, "
+        "\"ang_U\":{ \"L2\":%f, \"L3\": %f}, "
+        "\"ang_I\":{ \"L1\":%f, \"L2\": %f, \"L3\": %f}, "
+        "\"I\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"N\": %f, \"L1(one)\": %f, \"L2(one)\": %f, \"L3(one)\": %f, \"N(one)\": %f, \"L1(1012)\": %f, \"L2(1012)\": %f, \"L3(1012)\": %f, \"N(1012)\": %f}," 
+        "\"P\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f},"
+        "\"Q\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f},"
+        "\"S\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f}}",
+    status0_i, status1_i, 
+    avrms, bvrms, cvrms, avrmsone, bvrmsone, cvrmsone, avrms1012, bvrms1012, cvrms1012, 
+    angl_va_vb_f, angl_va_vc_f, 
+    angl_va_ia_f, angl_vb_ib_f, angl_vc_ic_f, 
+    airms, birms, cirms, nirms, airmsone, birmsone, cirmsone, nirmsone, airms1012, birms1012, cirms1012, nirms1012, 
+    awatt, bwatt, cwatt, afwatt, bfwatt, cfwatt,
+    ava, bva, cva, afva, bfva, cfva,
+    avar, bvar, cvar, afvar, bfvar, cfvar);
   }
   return 0;
 }

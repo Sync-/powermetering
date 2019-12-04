@@ -30,31 +30,50 @@ typedef union ade_burst_rx_t {
     int32_t bi_pcf;
     int32_t ci_pcf;
 
-    int32_t airms;
-    int32_t birms;
-    int32_t cirms;
+    uint16_t airms_h;
+    uint16_t airms_l;
+    uint16_t birms_h;
+    uint16_t birms_l;
+    uint16_t cirms_h;
+    uint16_t cirms_l;
 
-    int32_t avrms;
-    int32_t bvrms;
-    int32_t cvrms;
+    uint16_t avrms_h;
+    uint16_t avrms_l;
+    uint16_t bvrms_h;
+    uint16_t bvrms_l;
+    uint16_t cvrms_h;
+    uint16_t cvrms_l;
 
-    int32_t nirms;
+    uint16_t nirms_h;
+    uint16_t nirms_l;
 
-    int32_t awatt;
-    int32_t bwatt;
-    int32_t cwatt;
+    uint16_t awatt_h;
+    uint16_t awatt_l;
+    uint16_t bwatt_h;
+    uint16_t bwatt_l;
+    uint16_t cwatt_h;
+    uint16_t cwatt_l;
 
-    int32_t ava;
-    int32_t bva;
-    int32_t cva;
+    uint16_t ava_h;
+    uint16_t ava_l;
+    uint16_t bva_h;
+    uint16_t bva_l;
+    uint16_t cva_h;
+    uint16_t cva_l;
 
-    int32_t avar;
-    int32_t bvar;
-    int32_t cvar;
+    uint16_t avar_h;
+    uint16_t avar_l;
+    uint16_t bvar_h;
+    uint16_t bvar_l;
+    uint16_t cvar_h;
+    uint16_t cvar_l;
 
-    int32_t afvar;
-    int32_t bfvar;
-    int32_t cfvar;
+    uint16_t afvar_h;
+    uint16_t afvar_l;
+    uint16_t bfvar_h;
+    uint16_t bfvar_l;
+    uint16_t cfvar_h;
+    uint16_t cfvar_l;
 
     int16_t apf_h;
     int16_t apf_l;
@@ -77,31 +96,50 @@ typedef union ade_burst_rx_t {
     int16_t cithd_h;
     int16_t cithd_l;
 
-    int32_t afwatt;
-    int32_t bfwatt;
-    int32_t cfwatt;
+    uint16_t afwatt_h;
+    uint16_t afwatt_l;
+    uint16_t bfwatt_h;
+    uint16_t bfwatt_l;
+    uint16_t cfwatt_h;
+    uint16_t cfwatt_l;
 
-    int32_t afva;
-    int32_t bfva;
-    int32_t cfva;
+    uint16_t afva_h;
+    uint16_t afva_l;
+    uint16_t bfva_h;
+    uint16_t bfva_l;
+    uint16_t cfva_h;
+    uint16_t cfva_l;
 
-    int32_t afirms;
-    int32_t bfirms;
-    int32_t cfirms;
+    uint16_t afirms_h;
+    uint16_t afirms_l;
+    uint16_t bfirms_h;
+    uint16_t bfirms_l;
+    uint16_t cfirms_h;
+    uint16_t cfirms_l;
 
-    int32_t afvrms;
-    int32_t bfvrms;
-    int32_t cfvrms;
+    uint16_t afvrms_h;
+    uint16_t afvrms_l;
+    uint16_t bfvrms_h;
+    uint16_t bfvrms_l;
+    uint16_t cfvrms_h;
+    uint16_t cfvrms_l;
 
-    int32_t airmsone;
-    int32_t birmsone;
-    int32_t cirmsone;
+    uint16_t airmsone_h;
+    uint16_t airmsone_l;
+    uint16_t birmsone_h;
+    uint16_t birmsone_l;
+    uint16_t cirmsone_h;
+    uint16_t cirmsone_l;
 
-    int32_t avrmsone;
-    int32_t bvrmsone;
-    int32_t cvrmsone;
+    uint16_t avrmsone_h;
+    uint16_t avrmsone_l;
+    uint16_t bvrmsone_h;
+    uint16_t bvrmsone_l;
+    uint16_t cvrmsone_h;
+    uint16_t cvrmsone_l;
 
-    int32_t nirmsone;
+    uint16_t nirmsone_h;
+    uint16_t nirmsone_l;
 
     uint16_t airms1012_h;
     uint16_t airms1012_l;

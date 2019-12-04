@@ -106,7 +106,7 @@ static const tHTTPHeader g_psHTTPHeaders[] =
 
 #if LWIP_HTTPD_SSI
 static const char * const g_pcSSIExtensions[] = {
-  ".shtml", ".shtm", ".ssi", ".xml"
+  ".shtml", ".shtm", ".ssi", ".xml", ".json"
 };
 #define NUM_SHTML_EXTENSIONS (sizeof(g_pcSSIExtensions) / sizeof(const char *))
 #endif /* LWIP_HTTPD_SSI */

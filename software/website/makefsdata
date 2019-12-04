@@ -27,6 +27,8 @@ while($file = <FILES>) {
 	print(HEADER "Content-type: image/gif\r\n");
     } elsif($file =~ /\.shtml$/) {
 	print(HEADER "Content-type: text/html\r\n");
+    } elsif($file =~ /\.json$/) {
+	print(HEADER "Content-type: application/json\r\n");
     } elsif($file =~ /\.png$/) {
 	print(HEADER "Content-type: image/png\r\n");
     } elsif($file =~ /\.jpg$/) {

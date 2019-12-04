@@ -5,9 +5,33 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
     <title><!--#NAME--></title>
   </head>
-  <body>
+  <script type="text/javascript">
+  var date = {};
+  var interval = 1000;
+  function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            try {
+                data = JSON.parse(this.responseText);
+                document.getElementById("output").innerText=JSON.stringify(data, null, 2);
+            } catch (e) {
+                console.log(e);
+                console.log(this.responseText)
+            }
+       } 
+       if(this.readyState == 4) {
+            setTimeout(loadDoc, interval);
+       }
+    };
+    xhttp.open("GET", "http://192.168.178.206/test.json", true);
+    xhttp.send();
+}
+  
+</script>
+  <body onload="loadDoc()">
       <h1><!--#NAME--></h1>
-    <br>ADE9000 status registers and three voltages<br>
+    <br>ADE9000 debugging page<br>
+    <pre id="output"></pre>
 </body>
-<td><!--#YOLO--></td>
 </html>
