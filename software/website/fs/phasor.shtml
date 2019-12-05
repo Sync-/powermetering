@@ -156,7 +156,7 @@ function loadDoc() {
             setTimeout(loadDoc, interval);
        }
     };
-    xhttp.open("GET", "http://192.168.178.206/test.json", true);
+    xhttp.open("GET", "test.json", true);
     xhttp.send();
 }
 

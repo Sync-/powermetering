@@ -129,7 +129,7 @@ void fwupdate_task(void){
 }
 
 void fwupdate_init(){
-    xTaskCreate((TaskFunction_t)fwupdate_task, "Firmware update task", configMINIMAL_STACK_SIZE*2, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate((TaskFunction_t)fwupdate_task, "fw update", configMINIMAL_STACK_SIZE*2, NULL, configMAX_PRIORITIES - 1, NULL);
     //RCC->AHB1ENR |= RCC_AHB1ENR_CRCEN;
     __HAL_RCC_CRC_CLK_ENABLE();
     hcrc.Instance = CRC;
