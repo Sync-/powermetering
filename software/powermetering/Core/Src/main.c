@@ -368,6 +368,13 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
   return 0;
 }
 
+void vApplicationStackOverflowHook(TaskHandle_t *pxTask, char *pcTaskName)
+{
+    taskDISABLE_INTERRUPTS();
+    SEGGER_RTT_printf(0, "StackOverflow in %s\n",pcTaskName);
+    for(;;);
+}
+
 /* USER CODE END 0 */
 
 /**
