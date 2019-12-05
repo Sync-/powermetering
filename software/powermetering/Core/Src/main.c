@@ -291,9 +291,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   } else if(index == 3) {//PACKETCOUNTER
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR);
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \n%d\n%d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR,xPortGetFreeHeapSize(),xPortGetMinimumEverFreeHeapSize());
   } else if(index == 4) {//PHASOR
-
     int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
     int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
 
@@ -417,8 +416,8 @@ int main(void)
   SEGGER_RTT_printf(0, "yolo\n");
 
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
-  xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE9000 values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
-  xTaskCreate((TaskFunction_t)linktask, "Handle the Ethernet link status", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+  xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE values", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
+  xTaskCreate((TaskFunction_t)linktask, "linktask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
   influx_init();
   fwupdate_init();
 
