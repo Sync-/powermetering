@@ -276,14 +276,19 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 
 
-char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR"};
+char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR", "VERSION"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
  if(index == 0){//STAT
-    vTaskGetRunTimeStats(insert);
-    //vTaskList(insert);
-    return strnlen(insert,LWIP_HTTPD_MAX_TAG_INSERT_LEN);
+    uint32_t len = 0;
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"vTaskGetRunTimeStats\n");
+    vTaskGetRunTimeStats(insert + len);
+    len += strlen(insert);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"\n\nvTaskList\n");
+    vTaskList(insert + len);
+    len += strlen(insert);
+    return len;
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
   }else if(index == 1){//CONFIG
     return config_read(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
@@ -291,7 +296,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   } else if(index == 3) {//PACKETCOUNTER
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \n%d\n%d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR,xPortGetFreeHeapSize(),xPortGetMinimumEverFreeHeapSize());
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR,xPortGetFreeHeapSize(),xPortGetMinimumEverFreeHeapSize());
   } else if(index == 4) {//PHASOR
     int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
     int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
@@ -364,6 +369,22 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     awatt, bwatt, cwatt, afwatt, bfwatt, cfwatt,
     ava, bva, cva, afva, bfva, cfva,
     avar, bvar, cvar, afvar, bfvar, cfvar);
+  } else if(index == 5) {//VERSION
+    extern volatile const version_info_t version_info_stmbl;
+    uint32_t len = 0;
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%s v%i.%i.%i %s\n",
+      version_info_stmbl.product_name,
+      version_info_stmbl.major,
+      version_info_stmbl.minor,
+      version_info_stmbl.patch,
+      version_info_stmbl.git_version);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"Branch %s\n", version_info_stmbl.git_branch);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"Compiled %s %s ", version_info_stmbl.build_date, version_info_stmbl.build_time);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"by %s on %s\n", version_info_stmbl.build_user, version_info_stmbl.build_host);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"GCC        %s\n", __VERSION__);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"newlib     %s\n", _NEWLIB_VERSION);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"size: %lu crc:%lx\n", version_info_stmbl.image_size, version_info_stmbl.image_crc);
+    return len;
   }
   return 0;
 }
