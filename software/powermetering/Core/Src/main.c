@@ -397,7 +397,7 @@ void vApplicationStackOverflowHook(TaskHandle_t *pxTask, char *pcTaskName)
 {
     taskDISABLE_INTERRUPTS();
     SEGGER_RTT_printf(0, "StackOverflow in %s\n",pcTaskName);
-    while(42);
+    while(1);
 }
 
 /* USER CODE END 0 */
