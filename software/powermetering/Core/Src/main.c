@@ -162,6 +162,7 @@ union ade_burst_rx_t foobar;
 
 uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
+uint8_t isumrms[10];
 
 void SPI_get_data(void)
 {
@@ -172,6 +173,7 @@ void SPI_get_data(void)
   write_ADE9000_32(ADDR_VLEVEL, 2740646); //magic number™
   write_ADE9000_16(ADDR_CONFIG1, 1 << 11);
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
+  write_ADE9000_32(ADDR_CONFIG0, 1<<0); //-IN for fault current
 
   write_ADE9000_32(ADDR_AVGAIN, 0x115afd);
   write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
@@ -198,6 +200,7 @@ void SPI_get_data(void)
     get_ADE9000_data_reg(ADDR_ANGL_VB_IB, angl_vb_ib);
     get_ADE9000_data_reg(ADDR_ANGL_VC_IC, angl_vc_ic);
 
+    get_ADE9000_data_reg(ADDR_ISUMRMS, isumrms);
 
 
     get_ADE9000_data_reg(ADDR_STATUS0, status0);
@@ -318,6 +321,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     float birms1012 = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
     float cirms1012 = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
     float nirms1012 = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
+    float isumrms_f =  ((isumrms[3] << 24) + (isumrms[2] << 16) + (isumrms[5] << 8) + isumrms[4]) / CUR_CONST;
 
     float awatt = ((foobar.awatt_h << 16) + foobar.awatt_l) * 0.004667801635019326;
     float bwatt = ((foobar.bwatt_h << 16) + foobar.bwatt_l) * 0.004667801635019326;
@@ -349,18 +353,18 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,"UL1 = %f; UL2 = %f; UL3=%f; ang_UL2=%f; ang_UL3=%f; ang_IL1=%f; ang_IL2=%f; ang_IL3=%f; IL1=%f; IL2=%f; IL3=%f;",
     return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN -2, 
       "{\"status\": [%d,%d], "
-        "\"U\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1(one)\": %f, \"L2(one)\": %f, \"L3(one)\": %f, \"L1(1012)\": %f, \"L2(1012)\": %f, \"L3(1012)\": %f}, "
-        "\"ang_U\":{ \"L2\":%f, \"L3\": %f}, "
-        "\"ang_I\":{ \"L1\":%f, \"L2\": %f, \"L3\": %f}, "
-        "\"I\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"N\": %f, \"L1(one)\": %f, \"L2(one)\": %f, \"L3(one)\": %f, \"N(one)\": %f, \"L1(1012)\": %f, \"L2(1012)\": %f, \"L3(1012)\": %f, \"N(1012)\": %f}," 
-        "\"P\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f},"
-        "\"Q\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f},"
-        "\"S\": {\"L1\": %f, \"L2\": %f, \"L3\": %f, \"L1f\": %f, \"L2f\": %f, \"L3f\": %f}}",
+        "\"U\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1(one)\": %.2f, \"L2(one)\": %.2f, \"L3(one)\": %.2f, \"L1(1012)\": %.2f, \"L2(1012)\": %.2f, \"L3(1012)\": %.2f}, "
+        "\"ang_U\":{ \"L2\":%.2f, \"L3\": %.2f}, "
+        "\"ang_I\":{ \"L1\":%.2f, \"L2\": %.2f, \"L3\": %.2f}, "
+        "\"I\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"N\": %.2f, \"L1(one)\": %.2f, \"L2(one)\": %.2f, \"L3(one)\": %.2f, \"N(one)\": %.2f, \"L1(1012)\": %.2f, \"L2(1012)\": %.2f, \"L3(1012)\": %.2f, \"N(1012)\": %.2f, \"ISUMRMS\": %.4f}," 
+        "\"P\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1f\": %.2f, \"L2f\": %.2f, \"L3f\": %.2f},"
+        "\"Q\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1f\": %.2f, \"L2f\": %.2f, \"L3f\": %.2f},"
+        "\"S\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1f\": %.2f, \"L2f\": %.2f, \"L3f\": %.2f}}",
     status0_i, status1_i, 
     avrms, bvrms, cvrms, avrmsone, bvrmsone, cvrmsone, avrms1012, bvrms1012, cvrms1012, 
     angl_va_vb_f, angl_va_vc_f, 
     angl_va_ia_f, angl_vb_ib_f, angl_vc_ic_f, 
-    airms, birms, cirms, nirms, airmsone, birmsone, cirmsone, nirmsone, airms1012, birms1012, cirms1012, nirms1012, 
+    airms, birms, cirms, nirms, airmsone, birmsone, cirmsone, nirmsone, airms1012, birms1012, cirms1012, nirms1012, isumrms_f, 
     awatt, bwatt, cwatt, afwatt, bfwatt, cfwatt,
     ava, bva, cva, afva, bfva, cfva,
     avar, bvar, cvar, afvar, bfvar, cfvar);
