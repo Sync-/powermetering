@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name altair04)(type KiCad)(uri ${KIPRJMOD}/supply/altair04.pretty)(options "")(descr ""))
+  (lib (name powermetering)(type KiCad)(uri ${KIPRJMOD}/powermetering.pretty)(options "")(descr ""))
+)

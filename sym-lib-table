@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name ADE9000)(type Legacy)(uri ${KIPRJMOD}/ADE9000.lib)(options "")(descr ""))
+  (lib (name powermetering)(type Legacy)(uri ${KIPRJMOD}/powermetering.lib)(options "")(descr ""))
+  (lib (name altair04)(type Legacy)(uri ${KIPRJMOD}/supply/altair04.lib)(options "")(descr ""))
+)
