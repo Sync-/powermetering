@@ -76,6 +76,20 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t ucHeap[configTOTAL_HEAP_SIZE] __attribute__((section(".ccmram")));
+
+void __malloc_lock(struct _reent *r)
+{
+    vTaskSuspendAll();
+}
+
+
+void __malloc_unlock(struct _reent *r)
+{
+    xTaskResumeAll();
+}
+
+
 void LEDBlink(void)
 {
   while (1)
@@ -299,7 +313,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   } else if(index == 3) {//PACKETCOUNTER
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR,xPortGetFreeHeapSize(),xPortGetMinimumEverFreeHeapSize());
+    extern uint32_t SystemCoreClock;
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d\nSystemCoreClock:%u", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR,ETH->MMCRGUFCR,ETH->MMCRFAECR,ETH->MMCRFCECR,xPortGetFreeHeapSize(),xPortGetMinimumEverFreeHeapSize(),SystemCoreClock);
   } else if(index == 4) {//PHASOR
     int32_t status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
     int32_t status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
