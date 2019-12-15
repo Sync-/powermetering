@@ -76,7 +76,13 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//rtos heap in ccm
 uint8_t ucHeap[configTOTAL_HEAP_SIZE] __attribute__((section(".ccmram")));
+
+//check if malloc locks can be overwritten, do not remove this check
+#ifndef _RETARGETABLE_LOCKING
+#error "newlib must be configured with --enable-newlib-retargetable-locking"
+#endif
 
 void __malloc_lock(struct _reent *r)
 {
