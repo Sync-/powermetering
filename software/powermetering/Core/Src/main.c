@@ -308,6 +308,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"\n\nvTaskList\n");
     vTaskList(insert + len);
     len += strlen(insert);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"\n\nxTaskGetTickCount() %lu\n",xTaskGetTickCount());
     return len;
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
   }else if(index == 1){//CONFIG
