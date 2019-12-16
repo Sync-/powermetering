@@ -22,14 +22,11 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "crc.h"
-#include "fatfs.h"
 #include "i2c.h"
-#include "mbedtls.h"
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
 #include "usart.h"
-#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
