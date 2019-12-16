@@ -42,7 +42,6 @@ Core/Src/influx.c \
 Core/Src/config.c \
 Core/Src/version_stmbl.c \
 Core/Src/gpio.c \
-Core/Src/freertos.c \
 Core/Src/SEGGER_RTT.c \
 Core/Src/SEGGER_RTT_printf.c \
 Core/Src/rtc.c \

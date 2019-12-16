@@ -66,7 +66,6 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -524,9 +523,6 @@ int main(void)
   SEGGER_RTT_printf(0, "Tasks running\n");
 
   /* USER CODE END 2 */
-
-  /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
 
   /* Start scheduler */
   osKernelStart();
