@@ -50,17 +50,12 @@ Core/Src/spi.c \
 Core/Src/usart.c \
 LWIP/App/lwip.c \
 LWIP/Target/ethernetif.c \
-USB_DEVICE/App/usb_device.c \
-USB_DEVICE/App/usbd_cdc_if.c \
-USB_DEVICE/App/usbd_desc.c \
-USB_DEVICE/Target/usbd_conf.c \
 Core/Src/stm32f4xx_it.c \
 Core/Src/stm32f4xx_hal_msp.c \
 Core/Src/stm32f4xx_hal_timebase_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c \
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
@@ -162,10 +157,6 @@ Middlewares/Third_Party/LwIP/src/core/ipv6/ip6_addr.c \
 Middlewares/Third_Party/LwIP/src/core/ipv6/ip6_frag.c \
 Middlewares/Third_Party/LwIP/system/OS/sys_arch.c \
 Middlewares/Third_Party/LwIP/src/apps/mqtt/mqtt.c \
-Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c \
-Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
-Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c \
-Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c \
 Core/Src/i2c.c \
 Core/Src/sdio.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
@@ -176,90 +167,6 @@ Middlewares/Third_Party/LwIP/src/apps/httpd/httpd.c \
 Middlewares/Third_Party/LwIP/src/apps/httpd/fs.c \
 Core/Src/crc.c \
 Core/Src/ustime.c \
-FATFS/App/fatfs.c \
-FATFS/Target/bsp_driver_sd.c \
-FATFS/Target/sd_diskio.c \
-FATFS/Target/fatfs_platform.c \
-MBEDTLS/App/mbedtls.c \
-MBEDTLS/App/net_sockets.c \
-Middlewares/Third_Party/FatFs/src/diskio.c \
-Middlewares/Third_Party/FatFs/src/ff.c \
-Middlewares/Third_Party/FatFs/src/ff_gen_drv.c \
-Middlewares/Third_Party/FatFs/src/option/syscall.c \
-Middlewares/Third_Party/mbedTLS/library/aes.c \
-Middlewares/Third_Party/mbedTLS/library/aesni.c \
-Middlewares/Third_Party/mbedTLS/library/arc4.c \
-Middlewares/Third_Party/mbedTLS/library/aria.c \
-Middlewares/Third_Party/mbedTLS/library/asn1parse.c \
-Middlewares/Third_Party/mbedTLS/library/asn1write.c \
-Middlewares/Third_Party/mbedTLS/library/base64.c \
-Middlewares/Third_Party/mbedTLS/library/bignum.c \
-Middlewares/Third_Party/mbedTLS/library/blowfish.c \
-Middlewares/Third_Party/mbedTLS/library/camellia.c \
-Middlewares/Third_Party/mbedTLS/library/ccm.c \
-Middlewares/Third_Party/mbedTLS/library/certs.c \
-Middlewares/Third_Party/mbedTLS/library/cipher.c \
-Middlewares/Third_Party/mbedTLS/library/cipher_wrap.c \
-Middlewares/Third_Party/mbedTLS/library/cmac.c \
-Middlewares/Third_Party/mbedTLS/library/ctr_drbg.c \
-Middlewares/Third_Party/mbedTLS/library/debug.c \
-Middlewares/Third_Party/mbedTLS/library/des.c \
-Middlewares/Third_Party/mbedTLS/library/dhm.c \
-Middlewares/Third_Party/mbedTLS/library/ecdh.c \
-Middlewares/Third_Party/mbedTLS/library/ecdsa.c \
-Middlewares/Third_Party/mbedTLS/library/ecjpake.c \
-Middlewares/Third_Party/mbedTLS/library/ecp.c \
-Middlewares/Third_Party/mbedTLS/library/ecp_curves.c \
-Middlewares/Third_Party/mbedTLS/library/entropy.c \
-Middlewares/Third_Party/mbedTLS/library/entropy_poll.c \
-Middlewares/Third_Party/mbedTLS/library/error.c \
-Middlewares/Third_Party/mbedTLS/library/gcm.c \
-Middlewares/Third_Party/mbedTLS/library/havege.c \
-Middlewares/Third_Party/mbedTLS/library/hkdf.c \
-Middlewares/Third_Party/mbedTLS/library/hmac_drbg.c \
-Middlewares/Third_Party/mbedTLS/library/md.c \
-Middlewares/Third_Party/mbedTLS/library/md2.c \
-Middlewares/Third_Party/mbedTLS/library/md4.c \
-Middlewares/Third_Party/mbedTLS/library/md5.c \
-Middlewares/Third_Party/mbedTLS/library/md_wrap.c \
-Middlewares/Third_Party/mbedTLS/library/memory_buffer_alloc.c \
-Middlewares/Third_Party/mbedTLS/library/oid.c \
-Middlewares/Third_Party/mbedTLS/library/padlock.c \
-Middlewares/Third_Party/mbedTLS/library/pem.c \
-Middlewares/Third_Party/mbedTLS/library/pk.c \
-Middlewares/Third_Party/mbedTLS/library/pkcs11.c \
-Middlewares/Third_Party/mbedTLS/library/pkcs12.c \
-Middlewares/Third_Party/mbedTLS/library/pkcs5.c \
-Middlewares/Third_Party/mbedTLS/library/pkparse.c \
-Middlewares/Third_Party/mbedTLS/library/pkwrite.c \
-Middlewares/Third_Party/mbedTLS/library/pk_wrap.c \
-Middlewares/Third_Party/mbedTLS/library/platform.c \
-Middlewares/Third_Party/mbedTLS/library/platform_util.c \
-Middlewares/Third_Party/mbedTLS/library/ripemd160.c \
-Middlewares/Third_Party/mbedTLS/library/rsa.c \
-Middlewares/Third_Party/mbedTLS/library/rsa_internal.c \
-Middlewares/Third_Party/mbedTLS/library/sha1.c \
-Middlewares/Third_Party/mbedTLS/library/sha256.c \
-Middlewares/Third_Party/mbedTLS/library/sha512.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_cache.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_ciphersuites.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_cli.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_cookie.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_srv.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_ticket.c \
-Middlewares/Third_Party/mbedTLS/library/ssl_tls.c \
-Middlewares/Third_Party/mbedTLS/library/threading.c \
-Middlewares/Third_Party/mbedTLS/library/timing.c \
-Middlewares/Third_Party/mbedTLS/library/version.c \
-Middlewares/Third_Party/mbedTLS/library/version_features.c \
-Middlewares/Third_Party/mbedTLS/library/x509.c \
-Middlewares/Third_Party/mbedTLS/library/x509write_crt.c \
-Middlewares/Third_Party/mbedTLS/library/x509write_csr.c \
-Middlewares/Third_Party/mbedTLS/library/x509_create.c \
-Middlewares/Third_Party/mbedTLS/library/x509_crl.c \
-Middlewares/Third_Party/mbedTLS/library/x509_crt.c \
-Middlewares/Third_Party/mbedTLS/library/x509_csr.c \
-Middlewares/Third_Party/mbedTLS/library/xtea.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
 
 # ASM sources
@@ -310,8 +217,6 @@ AS_DEFS =
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
 -DSTM32F407xx \
--DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\"
-
 
 # AS includes
 AS_INCLUDES =  \
@@ -322,8 +227,6 @@ C_INCLUDES =  \
 -ICore/Inc \
 -ILWIP/App \
 -ILWIP/Target \
--IUSB_DEVICE/App \
--IUSB_DEVICE/Target \
 -IMiddlewares/Third_Party/LwIP/src/include \
 -IMiddlewares/Third_Party/LwIP/system \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
@@ -332,8 +235,6 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
 -IMiddlewares/Third_Party/LwIP/src/include/netif/ppp \
--IMiddlewares/ST/STM32_USB_Device_Library/Core/Inc \
--IMiddlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IMiddlewares/Third_Party/LwIP/src/include/lwip \
 -IMiddlewares/Third_Party/LwIP/src/include/lwip/apps \
@@ -346,12 +247,6 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -I../shared/ \
 -IMiddlewares/Third_Party/LwIP/src/apps/httpd \
--IFATFS/Target \
--IFATFS/App \
--IMBEDTLS/App \
--IMiddlewares/Third_Party/mbedTLS/include \
--IMiddlewares/Third_Party/FatFs/src \
--IMiddlewares/Third_Party/mbedTLS/include/mbedtls
 
 
 # compile gcc flags

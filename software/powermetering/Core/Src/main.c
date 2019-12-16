@@ -22,14 +22,11 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "crc.h"
-#include "fatfs.h"
 #include "i2c.h"
-#include "mbedtls.h"
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
 #include "usart.h"
-#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -76,6 +73,26 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//rtos heap in ccm
+uint8_t ucHeap[configTOTAL_HEAP_SIZE] __attribute__((section(".ccmram")));
+
+//check if malloc locks can be overwritten, do not remove this check
+#ifndef _RETARGETABLE_LOCKING
+#error "newlib must be configured with --enable-newlib-retargetable-locking"
+#endif
+
+void __malloc_lock(struct _reent *r)
+{
+    vTaskSuspendAll();
+}
+
+
+void __malloc_unlock(struct _reent *r)
+{
+    xTaskResumeAll();
+}
+
+
 void LEDBlink(void)
 {
   while (1)
@@ -341,6 +358,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"\n\nvTaskList\n");
     vTaskList(insert + len);
     len += strlen(insert);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"\n\nxTaskGetTickCount() %lu\n",xTaskGetTickCount());
     return len;
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
   }else if(index == 1){//CONFIG

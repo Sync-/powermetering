@@ -93,5 +93,5 @@ void influx_init(){
     influx_addr.sin_family = AF_INET;
     influx_addr.sin_port = PP_HTONS(influx_port);
     influx_addr.sin_addr.s_addr = inet_addr(influx_ip);
-    xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE*4, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate((TaskFunction_t)influx_task, "Influx task", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
 }
