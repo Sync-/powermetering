@@ -174,7 +174,7 @@ void get_ADE9000_data(uint16_t reg_num)
 uint8_t burst_tx[10];
 uint8_t burst_tx_empty[750];
 
-union ade_burst_rx_t foobar;
+volatile union ade_burst_rx_t foobar;
 
 uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
@@ -253,9 +253,16 @@ void SPI_get_data(void)
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
+  //DMA setup, SPI1 DMA2 Channel 3, rx: stream2, tx: stream3
+  __HAL_RCC_DMA2_CLK_ENABLE();
+  DMA2_Stream2->CR  &= ~DMA_SxCR_EN;
+  DMA2_Stream2->PAR  = (uint32_t)&(SPI1->DR);
+  DMA2_Stream2->M0AR = (uint32_t)foobar.bytes;
+  DMA2_Stream2->CR   = DMA_SxCR_MINC | DMA_SxCR_CHSEL_0 | DMA_SxCR_CHSEL_1 | DMA_SxCR_MSIZE_0 | DMA_SxCR_PSIZE_0;
+  SPI1->CR2 |= SPI_CR2_RXDMAEN;
+
   while (1)
   { 
-
     get_ADE9000_data_reg(ADDR_APERIOD, ahz);
     get_ADE9000_data_reg(ADDR_BPERIOD, bhz);
     get_ADE9000_data_reg(ADDR_CPERIOD, chz);
@@ -274,12 +281,19 @@ void SPI_get_data(void)
 
     burst_tx[1] = (uint8_t)(((0x600 << 4) & 0xFF00) >> 8);
     burst_tx[0] = (uint8_t)(((0x600 << 4) | (1 << 3)) & 0x00FF);
+
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_RESET);
     HAL_SPI_Transmit(&hspi1, burst_tx, 1, 10);
-    HAL_SPI_TransmitReceive(&hspi1, burst_tx_empty, foobar.bytes, 0x3E * 2, 10);
-    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 
-    vTaskDelay(1);
+    DMA2_Stream2->CR  &= ~DMA_SxCR_EN;
+    DMA2_Stream2->NDTR = 0x3E * 2;
+    DMA2->LIFCR        = DMA_LIFCR_CTCIF2 | DMA_LIFCR_CFEIF2;
+    DMA2_Stream2->CR  |= DMA_SxCR_EN;
+    SPI1->CR1 |= SPI_CR1_RXONLY;
+    vTaskDelay(2);
+    SPI1->CR1 &= ~SPI_CR1_RXONLY;
+
+    HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
   }
 }
 
