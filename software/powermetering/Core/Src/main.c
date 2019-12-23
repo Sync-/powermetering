@@ -294,6 +294,7 @@ void SPI_get_data(void)
     SPI1->CR1 &= ~SPI_CR1_RXONLY;
 
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
+    vTaskDelay(1);
   }
 }
 
@@ -386,6 +387,7 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
   }
   else if (index == 4)
   { //PHASOR
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
     status0_i = (status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4];
     status1_i = (status1[3] << 24) + (status1[2] << 16) + (status1[5] << 8) + status1[4];
     avrms = ((foobar.avrms_h << 16) + foobar.avrms_l) / VOLT_CONST;
@@ -435,7 +437,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     angl_vc_ic_f = ((angl_vc_ic[3] << 8) + angl_vc_ic[2]) * 0.017578125f;
 
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,"UL1 = %f; UL2 = %f; UL3=%f; ang_UL2=%f; ang_UL3=%f; ang_IL1=%f; ang_IL2=%f; ang_IL3=%f; IL1=%f; IL2=%f; IL3=%f;",
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,
+
+    int foo =  snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,
                     "{\"status\": [%d,%d], "
                     "\"U\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1(one)\": %.2f, \"L2(one)\": %.2f, \"L3(one)\": %.2f, \"L1(1012)\": %.2f, \"L2(1012)\": %.2f, \"L3(1012)\": %.2f}, "
                     "\"ang_U\":{ \"L2\":%.2f, \"L3\": %.2f}, "
@@ -452,6 +455,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
                     awatt, bwatt, cwatt, afwatt, bfwatt, cfwatt,
                     ava, bva, cva, afva, bfva, cfva,
                     avar, bvar, cvar, afvar, bfvar, cfvar);
+      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+      return foo;
   } else if(index == 5) {//VERSION
     extern volatile const version_info_t version_info_stmbl;
     uint32_t len = 0;
@@ -515,6 +520,23 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   MX_CRC_Init();
+
+  //debug: 95,96,97,98
+  //pb8, pb9,pe0, pe1
+  __HAL_RCC_GPIOE_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /* USER CODE BEGIN 2 */
   MX_LWIP_Init();
   ETH->MMCRIMR |= ETH_MMCRIMR_RGUFM | ETH_MMCRIMR_RFAEM   | ETH_MMCRIMR_RFCEM;
