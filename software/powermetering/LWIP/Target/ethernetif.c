@@ -30,7 +30,7 @@
 #include "cmsis_os.h"
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
-
+#include "tcpip.h"
 /* USER CODE END 0 */
 
 /* Private define ------------------------------------------------------------*/
@@ -437,8 +437,14 @@ static struct pbuf * low_level_input(struct netif *netif)
   
 
   /* get received frame */
-  if (HAL_ETH_GetReceivedFrame_IT(&heth) != HAL_OK)
+  // https://community.st.com/s/question/0D50X0000BOtUflSQF/bug-stm32-lwip-ethernet-driver-rx-deadlock
+  HAL_StatusTypeDef status;
+  LOCK_TCPIP_CORE();
+  status = HAL_ETH_GetReceivedFrame_IT(&heth);
+  UNLOCK_TCPIP_CORE();
+  if (status != HAL_OK) {
     return NULL;
+  }
   
   /* Obtain the size of the packet and put it into the "len" variable. */
   len = heth.RxFrameInfos.length;

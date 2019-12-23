@@ -263,6 +263,10 @@ void SPI_get_data(void)
 
   while (1)
   { 
+    //dummy read, first read after dma transfer is broken for some reason
+    uint8_t status0_dummy[10];
+    get_ADE9000_data_reg(ADDR_STATUS0, status0_dummy);
+
     get_ADE9000_data_reg(ADDR_APERIOD, ahz);
     get_ADE9000_data_reg(ADDR_BPERIOD, bhz);
     get_ADE9000_data_reg(ADDR_CPERIOD, chz);
@@ -294,7 +298,7 @@ void SPI_get_data(void)
     SPI1->CR1 &= ~SPI_CR1_RXONLY;
 
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
-    vTaskDelay(1);
+    vTaskDelay(2);
   }
 }
 
