@@ -12,7 +12,7 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.SetDevice ("STM32F746VG");
+  Project.SetDevice ("STM32F407VG");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("50 MHz");
