@@ -77,6 +77,8 @@ void MX_LWIP_Init(void)
   if(!ip4addr_aton(ip_string, &ipaddr)){
     IP4_ADDR(&ipaddr, IP_ADDRESS[0], IP_ADDRESS[1], IP_ADDRESS[2], IP_ADDRESS[3]);
   }
+  char* ip = ip4addr_ntoa(&ipaddr);
+  SEGGER_RTT_printf(0,"%s\n",ip);
   IP4_ADDR(&netmask, NETMASK_ADDRESS[0], NETMASK_ADDRESS[1] , NETMASK_ADDRESS[2], NETMASK_ADDRESS[3]);
   IP4_ADDR(&gw, GATEWAY_ADDRESS[0], GATEWAY_ADDRESS[1], GATEWAY_ADDRESS[2], GATEWAY_ADDRESS[3]);
 
