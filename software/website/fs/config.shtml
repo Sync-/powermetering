@@ -17,7 +17,7 @@ var ui = [
         value: [
           {
             type: "text",
-            value: "name"
+            value: "Name"
           },
           {
             type: "text_value",
@@ -28,18 +28,26 @@ var ui = [
           },
           {
             type: "text",
-            value: "ip"
+            value: "IP"
           },
           {
             type: "text_value",
             name: "ip"
           },
           {
+            type: "text",
+            value: "Primary Current"
+          },
+          {
+            type: "text_value",
+            name: "trafo_pri"
+          },
+          {
             type: "br"
           },
           {
             type: "text",
-            value: "influx_en "
+            value: "Influx DB enabled"
           },
           {
             type: "bool_value",
@@ -56,7 +64,7 @@ var ui = [
             value: [
               {
                 type: "text",
-                value: "influx_ip"
+                value: "Influx IP"
               },
               {
                 type: "text_value",
@@ -67,7 +75,7 @@ var ui = [
               },
               {
                 type: "text",
-                value: "influx_port"
+                value: "Influx Port"
               },
               {
                 type: "text_value",
@@ -78,7 +86,7 @@ var ui = [
               },
               {
                 type: "text",
-                value: "influx_db"
+                value: "Influx DB"
               },
               {
                 type: "text_value",
@@ -89,7 +97,7 @@ var ui = [
               },
               {
                 type: "text",
-                value: "influx_tag"
+                value: "Influx tag"
               },
               {
                 type: "text_value",
@@ -100,7 +108,7 @@ var ui = [
               },
               {
                 type: "text",
-                value: "influx_tag_value"
+                value: "Influx tag value"
               },
               {
                 type: "text_value",
@@ -111,7 +119,7 @@ var ui = [
               },
               {
                 type: "text",
-                value: "influx_measurement"
+                value: "Influx measurement"
               },
               {
                 type: "text_value",

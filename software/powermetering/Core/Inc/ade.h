@@ -1,9 +1,11 @@
 #pragma once
 
+#include <stdint.h>
+
 #define V_PER_BIT (0.707f / 52702092.0f)
 
 #define R_SHUNT (0.05f * 2.0f)                 //double the pcb value
-#define CUR_PRI 400.0f                         //primary current
+#define CUR_PRI 100.0f                         //primary current
 #define CUR_SEC 5.00f                          //secondary current
 #define CUR_TF ((R_SHUNT * CUR_SEC) / CUR_PRI) //volts per amp
 #define CUR_CONST (CUR_TF / V_PER_BIT * 2.0f)  //amps per bit
@@ -15,11 +17,16 @@
 
 #define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0f / 20694066.0f)) * 2.0f)
 
+void SPI_get_data(void);
+void write_ADE9000_16(uint16_t reg_num, uint16_t data);
+void write_ADE9000_32(uint16_t reg_num, uint32_t data);
+void get_ADE9000_data_reg(uint16_t reg_num, uint8_t *arr);
+void ade_convert();
+
 //#pragma pack(push, 1)
-typedef union ade_burst_rx_t {
+union ade_burst_rx_t {
   uint8_t bytes[750];
-  struct
-  {
+  struct{
     //    uint8_t padding[2];
 
     int32_t av_pcf;
@@ -160,3 +167,65 @@ typedef union ade_burst_rx_t {
   };
 };
 //#pragma pack(pop)
+
+struct ade_float_t {
+  int32_t status0;
+  int32_t status1;
+  float avrms;
+  float bvrms;
+  float cvrms;
+  float avrmsone;
+  float bvrmsone;
+  float cvrmsone;
+  float avrms1012;
+  float bvrms1012;
+  float cvrms1012;
+  float airms;
+  float birms;
+  float cirms;
+  float nirms;
+  float airmsone;
+  float birmsone;
+  float cirmsone;
+  float nirmsone;
+  float airms1012;
+  float birms1012;
+  float cirms1012;
+  float nirms1012;
+  float isumrms;
+  float awatt;
+  float bwatt;
+  float cwatt;
+  float afwatt;
+  float bfwatt;
+  float cfwatt;
+  float ava;
+  float bva;
+  float cva;
+  float afva;
+  float bfva;
+  float cfva;
+  float avar;
+  float bvar;
+  float cvar;
+  float afvar;
+  float bfvar;
+  float cfvar;
+  float angl_va_vb;
+  float angl_va_vc;
+  float angl_va_ia;
+  float angl_vb_ib;
+  float angl_vc_ic;
+  float avthd;
+  float bvthd;
+  float cvthd;
+  float aithd;
+  float bithd;
+  float cithd;
+  float apf;
+  float bpf;
+  float cpf;
+  float ahz;
+  float bhz;
+  float chz;
+};

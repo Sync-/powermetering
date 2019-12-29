@@ -166,6 +166,7 @@ Middlewares/Third_Party/LwIP/src/apps/httpd/httpd.c \
 Middlewares/Third_Party/LwIP/src/apps/httpd/fs.c \
 Core/Src/crc.c \
 Core/Src/ustime.c \
+Core/Src/ade.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
 
 # ASM sources

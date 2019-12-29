@@ -32,39 +32,12 @@ void influx_task(void){
     int ret;
 
     while(1){
-        float airms = ((foobar.airms1012_h << 16) + foobar.airms1012_l) / CUR_CONST;
-        float birms = ((foobar.birms1012_h << 16) + foobar.birms1012_l) / CUR_CONST;
-        float cirms = ((foobar.cirms1012_h << 16) + foobar.cirms1012_l) / CUR_CONST;
-        float nirms = ((foobar.nirms1012_h << 16) + foobar.nirms1012_l) / CUR_CONST;
-
-        float avrms = ((foobar.avrms1012_h << 16) + foobar.avrms1012_l) / VOLT_CONST;
-        float bvrms = ((foobar.bvrms1012_h << 16) + foobar.bvrms1012_l) / VOLT_CONST;
-        float cvrms = ((foobar.cvrms1012_h << 16) + foobar.cvrms1012_l) / VOLT_CONST;
-
-        float avthd = ((foobar.avthd_h << 16) + foobar.avthd_l) * powf(2, -27);
-        float bvthd = ((foobar.bvthd_h << 16) + foobar.bvthd_l) * powf(2, -27);
-        float cvthd = ((foobar.cvthd_h << 16) + foobar.cvthd_l) * powf(2, -27);
-
-        float aithd = ((foobar.aithd_h << 16) + foobar.aithd_l) * powf(2, -27);
-        float bithd = ((foobar.bithd_h << 16) + foobar.bithd_l) * powf(2, -27);
-        float cithd = ((foobar.cithd_h << 16) + foobar.cithd_l) * powf(2, -27);
-
-        float apf = ((foobar.apf_h << 16) + foobar.apf_l) * powf(2, -27);
-        float bpf = ((foobar.bpf_h << 16) + foobar.bpf_l) * powf(2, -27);
-        float cpf = ((foobar.cpf_h << 16) + foobar.cpf_l) * powf(2, -27);
-
-        int32_t ahz_i = (ahz[3] << 24) + (ahz[2] << 16) + (ahz[5] << 8) + ahz[4];
-        int32_t bhz_i = (bhz[3] << 24) + (bhz[2] << 16) + (bhz[5] << 8) + bhz[4];
-        int32_t chz_i = (chz[3] << 24) + (chz[2] << 16) + (chz[5] << 8) + chz[4];
-        float ahz_f = (8000.0f * powf(2.0f, 16.0f)) / (ahz_i + 1.0f);
-        float bhz_f = (8000.0f * powf(2.0f, 16.0f)) / (bhz_i + 1.0f);
-        float chz_f = (8000.0f * powf(2.0f, 16.0f)) / (chz_i + 1.0f);
-
-        int influx_data_len = snprintf(influx_data, sizeof(influx_data), "%s,%s=%s avrms=%.2f,bvrms=%.2f,cvrms=%.2f,airms=%.2f,birms=%.2f,cirms=%.2f,nirms=%.2f,avthd=%.3f,bvthd=%3f,cvthd=%3f,aithd=%3f,bithd=%3f,cithd=%3f,apf=%3f,bpf=%3f,cpf=%3f,ahz=%.4f,bhz=%.4f,chz=%.4f\r\n\r\n",
+        extern struct ade_float_t ade_f;
+        int influx_data_len = snprintf(influx_data, sizeof(influx_data), "%s,%s=%s avrms=%.2f,bvrms=%.2f,cvrms=%.2f,airms=%.2f,birms=%.2f,cirms=%.2f,nirms=%.2f,avthd=%.3f,bvthd=%3f,cvthd=%3f,aithd=%3f,bithd=%3f,cithd=%3f,apf=%3f,bpf=%3f,cpf=%3f,ahz=%.4f,bhz=%.4f,chz=%.4f,isum=%.4f\r\n\r\n",
         influx_measurement,
         influx_tag,
         influx_tag_value,
-        avrms, bvrms, cvrms, airms, birms, cirms, nirms, avthd, bvthd, cvthd, aithd, bithd, cithd, apf, bpf, cpf, ahz_f, bhz_f, chz_f);
+        ade_f.avrms1012, ade_f.bvrms1012, ade_f.cvrms1012, ade_f.airms1012, ade_f.birms1012, ade_f.cirms1012, ade_f.nirms1012, ade_f.avthd, ade_f.bvthd, ade_f.cvthd, ade_f.aithd, ade_f.bithd, ade_f.cithd, ade_f.apf, ade_f.bpf, ade_f.cpf, ade_f.ahz, ade_f.bhz, ade_f.chz,ade_f.isumrms);
         influx_request[0] = '\0';
         influx_request_len = snprintf(influx_request,sizeof(influx_request),"POST /write?db=%s HTTP/1.1\r\nHost: %s:%d\r\nUser-Agent: lwip\r\nAccept: */*\r\nContent-Length: %d\r\nContent-Type: application/x-www-form-urlencoded\r\nConnection: close\r\n\r\n%s",influx_db,influx_ip,influx_port,influx_data_len-4,influx_data);
         influx_socket = lwip_socket(AF_INET, SOCK_STREAM, 0);
