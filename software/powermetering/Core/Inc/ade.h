@@ -5,7 +5,7 @@
 #define V_PER_BIT (0.707f / 52702092.0f)
 
 #define R_SHUNT (0.05f * 2.0f)                 //double the pcb value
-#define CUR_PRI 100.0f                         //primary current
+//#define CUR_PRI 100.0f                         //primary current
 #define CUR_SEC 5.00f                          //secondary current
 #define CUR_TF ((R_SHUNT * CUR_SEC) / CUR_PRI) //volts per amp
 #define CUR_CONST (CUR_TF / V_PER_BIT * 2.0f)  //amps per bit

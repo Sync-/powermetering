@@ -40,7 +40,7 @@ var ui = [
           },
           {
             type: "text_value",
-            name: "trafo_pri"
+            name: "cur_pri"
           },
           {
             type: "br"

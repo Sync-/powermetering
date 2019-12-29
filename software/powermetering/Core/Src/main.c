@@ -164,7 +164,7 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 
 
-char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR", "VERSION"};
+char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR", "VERSION", "RESET"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
@@ -230,7 +230,11 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"newlib     %s\n", _NEWLIB_VERSION);
     len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"size: %lu crc:%lx\n", version_info_stmbl.image_size, version_info_stmbl.image_crc);
     return len;
+  } else if(index == 6) {//RESET
+    HAL_NVIC_SystemReset();
+    return 0;
   }
+
   return 0;
 }
 

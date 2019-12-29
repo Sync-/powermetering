@@ -3,6 +3,7 @@
 #include "cmsis_os.h"
 #include "ADE9000.h"
 #include "main.h"
+#include "config.h"
 #include <math.h>
 
 volatile union ade_burst_rx_t ade_raw;
@@ -11,6 +12,7 @@ uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 uint8_t isumrms[10];
 uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
 uint8_t burst_tx[10];
+int CUR_PRI;
 
 extern SPI_HandleTypeDef hspi1;
 
@@ -96,6 +98,11 @@ void SPI_get_data(void)
   DMA2_Stream2->M0AR = (uint32_t)ade_raw.bytes;
   DMA2_Stream2->CR   = DMA_SxCR_MINC | DMA_SxCR_CHSEL_0 | DMA_SxCR_CHSEL_1 | DMA_SxCR_MSIZE_0 | DMA_SxCR_PSIZE_0;
   SPI1->CR2 |= SPI_CR2_RXDMAEN;
+
+  config_get_int("cur_pri", &CUR_PRI);
+  if(CUR_PRI < 1){
+    CUR_PRI = 400;
+  }
 
   while (1)
   { 
