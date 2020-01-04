@@ -2,7 +2,9 @@
 
 #include <stdint.h>
 
+// The ADC full-scale voltage at gain = 1 is 0.707 V rms.
 #define V_PER_BIT (0.707f / 52702092.0f)
+
 
 #define R_SHUNT (0.05f * 2.0f)                 //double the pcb value
 //#define CUR_PRI 100.0f                         //primary current
@@ -15,7 +17,8 @@
 #define VOLT_TF ((1.0f / (R_HIGH + R_LOW)) * R_LOW) //volts per volt
 #define VOLT_CONST (VOLT_TF / V_PER_BIT * 2.0f)
 
-#define PWR_CONST (((VOLT_TF * CUR_TF) / (1.0f / 20694066.0f)) * 2.0f)
+#define P_FULL_SCALE 20694066.0f
+#define PWR_CONST (((VOLT_TF / 0.707f)  * (CUR_TF / 0.707f)  * P_FULL_SCALE) * 4.0f)
 
 void SPI_get_data(void);
 void write_ADE9000_16(uint16_t reg_num, uint16_t data);
