@@ -209,8 +209,8 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
                     ade_f.angl_va_ia, ade_f.angl_vb_ib, ade_f.angl_vc_ic,
                     ade_f.airms, ade_f.birms, ade_f.cirms, ade_f.nirms, ade_f.airmsone, ade_f.birmsone, ade_f.cirmsone, ade_f.nirmsone, ade_f.airms1012, ade_f.birms1012, ade_f.cirms1012, ade_f.nirms1012, ade_f.isumrms,
                     ade_f.awatt, ade_f.bwatt, ade_f.cwatt, ade_f.afwatt, ade_f.bfwatt, ade_f.cfwatt,
-                    ade_f.ava, ade_f.bva, ade_f.cva, ade_f.afva, ade_f.bfva, ade_f.cfva,
-                    ade_f.avar, ade_f.bvar, ade_f.cvar, ade_f.afvar, ade_f.bfvar, ade_f.cfvar
+                    ade_f.avar, ade_f.bvar, ade_f.cvar, ade_f.afvar, ade_f.bfvar, ade_f.cfvar,
+                    ade_f.ava, ade_f.bva, ade_f.cva, ade_f.afva, ade_f.bfva, ade_f.cfva
                     //ade_f.apf, ade_f.bpf, ade_f.cpf
                     );
       return len;
