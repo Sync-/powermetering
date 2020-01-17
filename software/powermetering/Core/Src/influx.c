@@ -33,11 +33,11 @@ void influx_task(void){
 
     while(1){
         extern struct ade_float_t ade_f;
-        int influx_data_len = snprintf(influx_data, sizeof(influx_data), "%s,%s=%s avrms=%.2f,bvrms=%.2f,cvrms=%.2f,airms=%.2f,birms=%.2f,cirms=%.2f,nirms=%.2f,avthd=%.3f,bvthd=%3f,cvthd=%3f,aithd=%3f,bithd=%3f,cithd=%3f,apf=%3f,bpf=%3f,cpf=%3f,ahz=%.4f,bhz=%.4f,chz=%.4f,isum=%.4f\r\n\r\n",
+        int influx_data_len = snprintf(influx_data, sizeof(influx_data), "%s,%s=%s avrms=%.2f,bvrms=%.2f,cvrms=%.2f,airms=%.2f,birms=%.2f,cirms=%.2f,nirms=%.2f,avthd=%.3f,bvthd=%3f,cvthd=%3f,aithd=%3f,bithd=%3f,cithd=%3f,apf=%3f,bpf=%3f,cpf=%3f,ahz=%.4f,bhz=%.4f,chz=%.4f,isum=%.4f,awatt=%.4f,bwatt=%.4f,cwatt=%.4f,afwatt=%.4f,bfwatt=%.4f,cfwatt=%.4f,avar=%.4f,bvar=%.4f,cvar=%.4f,afvar=%.4f,bfvar=%.4f,cfvar=%.4f,ava=%.4f,bva=%.4f,cva=%.4f,afva=%.4f,bfva=%.4f,cfva=%.4f\r\n\r\n",
         influx_measurement,
         influx_tag,
         influx_tag_value,
-        ade_f.avrms1012, ade_f.bvrms1012, ade_f.cvrms1012, ade_f.airms1012, ade_f.birms1012, ade_f.cirms1012, ade_f.nirms1012, ade_f.avthd, ade_f.bvthd, ade_f.cvthd, ade_f.aithd, ade_f.bithd, ade_f.cithd, ade_f.apf, ade_f.bpf, ade_f.cpf, ade_f.ahz, ade_f.bhz, ade_f.chz,ade_f.isumrms);
+                ade_f.avrms1012, ade_f.bvrms1012, ade_f.cvrms1012, ade_f.airms1012, ade_f.birms1012, ade_f.cirms1012, ade_f.nirms1012, ade_f.avthd, ade_f.bvthd, ade_f.cvthd, ade_f.aithd, ade_f.bithd, ade_f.cithd, ade_f.apf, ade_f.bpf, ade_f.cpf, ade_f.ahz, ade_f.bhz, ade_f.chz,ade_f.isumrms,ade_f.awatt, ade_f.bwatt, ade_f.cwatt, ade_f.afwatt, ade_f.bfwatt, ade_f.cfwatt,ade_f.avar, ade_f.bvar, ade_f.cvar, ade_f.afvar, ade_f.bfvar, ade_f.cfvar,ade_f.ava, ade_f.bva, ade_f.cva, ade_f.afva, ade_f.bfva, ade_f.cfva);
         influx_request[0] = '\0';
         influx_request_len = snprintf(influx_request,sizeof(influx_request),"POST /write?db=%s HTTP/1.1\r\nHost: %s:%d\r\nUser-Agent: lwip\r\nAccept: */*\r\nContent-Length: %d\r\nContent-Type: application/x-www-form-urlencoded\r\nConnection: close\r\n\r\n%s",influx_db,influx_ip,influx_port,influx_data_len-4,influx_data);
         influx_socket = lwip_socket(AF_INET, SOCK_STREAM, 0);
