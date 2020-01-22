@@ -1,5 +1,4 @@
 EESchema Schematic File Version 5
-LIBS:powermetering-cache
 EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
@@ -592,7 +591,7 @@ Wire Wire Line
 	10300 900  10300 800 
 Connection ~ 10300 800 
 Wire Wire Line
-	10300 800  10400 800 
+	10300 800  10350 800 
 Wire Wire Line
 	10200 900  10200 800 
 Connection ~ 10200 800 
@@ -966,9 +965,6 @@ Wire Wire Line
 	12850 1250 13100 1250
 Wire Wire Line
 	12850 950  13100 950 
-Wire Wire Line
-	10500 800  10400 800 
-Connection ~ 10400 800 
 Connection ~ 14600 950 
 Wire Wire Line
 	14600 950  14850 950 
@@ -1502,4 +1498,51 @@ F 3 "~" H 9000 4200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8950 4200 8800 4200
+$Comp
+L Device:CP C28
+U 1 1 5E135587
+P 11150 950
+F 0 "C28" H 11268 996 50  0000 L CNN
+F 1 "CP" H 11268 905 50  0000 L CNN
+F 2 "" H 11188 800 50  0001 C CNN
+F 3 "~" H 11150 950 50  0001 C CNN
+	1    11150 950 
+	1    0    0    -1  
+$EndComp
+$Comp
+L stmbl:D_Schottky D10
+U 1 1 5E135FC5
+P 10500 650
+F 0 "D10" H 10500 434 50  0000 C CNN
+F 1 "D_Schottky" H 10500 525 50  0000 C CNN
+F 2 "" H 10500 650 50  0000 C CNN
+F 3 "" H 10500 650 50  0000 C CNN
+	1    10500 650 
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	10500 800  10650 800 
+Wire Wire Line
+	10650 650  10650 800 
+Connection ~ 10650 800 
+Wire Wire Line
+	10650 800  11150 800 
+Wire Wire Line
+	10350 650  10350 800 
+Connection ~ 10350 800 
+Wire Wire Line
+	10350 800  10400 800 
+$Comp
+L stmbl:GND #PWR0153
+U 1 1 5E13711E
+P 11150 1150
+F 0 "#PWR0153" H 11150 900 50  0001 C CNN
+F 1 "GND" H 11155 977 50  0000 C CNN
+F 2 "" H 11150 1150 50  0000 C CNN
+F 3 "" H 11150 1150 50  0000 C CNN
+	1    11150 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11150 1150 11150 1100
 $EndSCHEMATC
