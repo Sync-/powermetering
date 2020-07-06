@@ -32,7 +32,7 @@ union ade_burst_rx_t {
   struct{
     //    uint8_t padding[2];
 
-    int32_t av_pcf;
+    int32_t av_pcf;//0x600 1536
     int32_t bv_pcf;
     int32_t cv_pcf;
     int32_t ni_pcf;
@@ -85,12 +85,12 @@ union ade_burst_rx_t {
     uint16_t cfvar_h;
     uint16_t cfvar_l;
 
-    int16_t apf_h;
-    int16_t apf_l;
-    int16_t bpf_h;
-    int16_t bpf_l;
-    int16_t cpf_h;
-    int16_t cpf_l;
+    uint16_t apf_h;//0x61A
+    uint16_t apf_l;
+    uint16_t bpf_h;//0x61B
+    uint16_t bpf_l;
+    uint16_t cpf_h;//0x61C
+    uint16_t cpf_l;
 
     int16_t avthd_h;
     int16_t avthd_l;
@@ -166,7 +166,7 @@ union ade_burst_rx_t {
     uint16_t cvrms1012_l;
 
     uint16_t nirms1012_h;
-    uint16_t nirms1012_l;
+    uint16_t nirms1012_l;//0x6BC 1724
   };
 };
 //#pragma pack(pop)

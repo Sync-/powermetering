@@ -12,18 +12,18 @@
 #include <math.h>
 
 //char request[] = "POST /write?db=trifasi_db HTTP/1.1\r\nHost: 192.168.178.121:8086\r\nUser-Agent: lwip\r\nAccept: */*\r\nContent-Length: 50\r\nContent-Type: application/x-www-form-urlencoded\r\nConnection: close\r\n\r\nmymeas,mytag=2 myfield=100,test=1,test2=3,blah=123\r\n\r\n";
-int influx_socket;
-int influx_request_len;
-char influx_request[1000];
-char influx_data[1000];
-struct sockaddr_in influx_addr;
+static int influx_socket;
+static int influx_request_len;
+static char influx_request[1000];
+static char influx_data[1000];
+static struct sockaddr_in influx_addr;
 
-char influx_ip[CONFIG_STRINGLENGTH];
-int  influx_port;
-char influx_db[CONFIG_STRINGLENGTH];
-char influx_tag[CONFIG_STRINGLENGTH];
-char influx_tag_value[CONFIG_STRINGLENGTH];
-char influx_measurement[CONFIG_STRINGLENGTH];
+static char influx_ip[CONFIG_STRINGLENGTH];
+static int  influx_port;
+static char influx_db[CONFIG_STRINGLENGTH];
+static char influx_tag[CONFIG_STRINGLENGTH];
+static char influx_tag_value[CONFIG_STRINGLENGTH];
+static char influx_measurement[CONFIG_STRINGLENGTH];
 
 extern union ade_burst_rx_t foobar;
 extern uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];

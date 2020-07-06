@@ -164,7 +164,7 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 
 
-char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR", "VERSION", "RESET"};
+char* tags[] = {"STAT","CONFIG","NAME", "PKTCNT", "PHASOR", "VERSION", "RESET", "RAW"};
 
 uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
 {
@@ -187,7 +187,9 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
   }
   else if (index == 3)
   { //PACKETCOUNTER
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR, ETH->MMCRGUFCR, ETH->MMCRFAECR, ETH->MMCRFCECR, xPortGetFreeHeapSize(), xPortGetMinimumEverFreeHeapSize());
+extern  uint32_t influxcount;
+
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d\ncount:%lu", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR, ETH->MMCRGUFCR, ETH->MMCRFAECR, ETH->MMCRFCECR, xPortGetFreeHeapSize(), xPortGetMinimumEverFreeHeapSize(),influxcount);
   }
   else if (index == 4)
   { //PHASOR
@@ -233,6 +235,19 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
   } else if(index == 6) {//RESET
     HAL_NVIC_SystemReset();
     return 0;
+  } else if(index == 7) {//RAW
+    uint32_t len = 0;
+    extern volatile union ade_burst_rx_t ade_raw;
+    //for(int i = 0; i < 0x3E * 2;i++){
+    //  len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%i\n", ade_raw.bytes[i]);
+    //}
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.apf_h);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.apf_l);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.bpf_h);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.bpf_l);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.cpf_h);
+    len += snprintf(insert + len, LWIP_HTTPD_MAX_TAG_INSERT_LEN - len - 1,"%u\n", ade_raw.cpf_l);
+    return len;
   }
 
   return 0;
@@ -287,11 +302,6 @@ int main(void)
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
     GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -315,6 +325,7 @@ int main(void)
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE values", configMINIMAL_STACK_SIZE * 2, NULL, configMAX_PRIORITIES - 2, NULL);
   influx_init();
+  influx_init2();
 
 
   SEGGER_RTT_printf(0, "Tasks running\n");

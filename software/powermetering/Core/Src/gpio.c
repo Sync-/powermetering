@@ -60,8 +60,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PEPin PEPin PEPin PE0 
                            PE1 */
-  GPIO_InitStruct.Pin = LED3_Pin|LED2_Pin|LED1_Pin|GPIO_PIN_0 
-                          |GPIO_PIN_1;
+  GPIO_InitStruct.Pin = LED3_Pin|LED2_Pin|LED1_Pin|GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
