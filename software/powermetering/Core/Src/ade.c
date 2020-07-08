@@ -79,14 +79,23 @@ void SPI_get_data(void)
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
   write_ADE9000_32(ADDR_CONFIG0, 1<<0); //-IN for fault current
 
-  write_ADE9000_32(ADDR_AVGAIN, 0x115afd);
-  write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
-  write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
+  uint32_t avgain,bvgain,cvgain;
+  config_get_int("avg", &avgain);
+  config_get_int("bvg", &bvgain);
+  config_get_int("cvg", &cvgain);
+  write_ADE9000_32(ADDR_AVGAIN, avgain);
+  write_ADE9000_32(ADDR_BVGAIN, bvgain);
+  write_ADE9000_32(ADDR_CVGAIN, cvgain);
 
-  write_ADE9000_32(ADDR_AIGAIN, 0xff97dd4a);
-  write_ADE9000_32(ADDR_BIGAIN, 0xff94bcdc);
-  write_ADE9000_32(ADDR_CIGAIN, 0xff78404e);
-  write_ADE9000_32(ADDR_NIGAIN, 0xff8c79e6);
+  uint32_t aigain,bigain,cigain,nigain;
+  config_get_int("aig", &aigain);
+  config_get_int("big", &bigain);
+  config_get_int("cig", &cigain);
+  config_get_int("nig", &nigain);
+  write_ADE9000_32(ADDR_AIGAIN, aigain);
+  write_ADE9000_32(ADDR_BIGAIN, bigain);
+  write_ADE9000_32(ADDR_CIGAIN, cigain);
+  write_ADE9000_32(ADDR_NIGAIN, nigain);
 
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
@@ -142,6 +151,9 @@ void SPI_get_data(void)
 
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
     vTaskDelay(2);
+    //get_ADE9000_data_reg(ADDR_APF, angl_vc_ic);
+    //get_ADE9000_data_reg(ADDR_BPF, angl_vc_ic);
+    //get_ADE9000_data_reg(ADDR_CPF, angl_vc_ic);
     ade_convert();
   }
 }
