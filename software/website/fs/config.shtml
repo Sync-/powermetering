@@ -47,6 +47,38 @@ var ui = [
           },
           {
             type: "text",
+            value: "Calibration Data av,bv,cv,ai,bi,ci,ni"
+          },
+          {
+            type: "text_value",
+            name: "avg"
+          },
+          {
+            type: "text_value",
+            name: "bvg"
+          },
+          {
+            type: "text_value",
+            name: "cvg"
+          },
+          {
+            type: "text_value",
+            name: "aig"
+          },
+          {
+            type: "text_value",
+            name: "big"
+          },
+          {
+            type: "text_value",
+            name: "cig"
+          },
+          {
+            type: "text_value",
+            name: "nig"
+          },
+          {
+            type: "text",
             value: "Influx DB enabled"
           },
           {

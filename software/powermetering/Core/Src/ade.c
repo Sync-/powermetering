@@ -10,6 +10,9 @@ volatile union ade_burst_rx_t ade_raw;
 struct ade_float_t ade_f;
 uint8_t ahz[10], bhz[10], chz[10], status0[10], status1[10];
 uint8_t isumrms[10];
+uint8_t apf[10];
+uint8_t bpf[10];
+uint8_t cpf[10];
 uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
 uint8_t burst_tx[10];
 int CUR_PRI;
@@ -79,14 +82,23 @@ void SPI_get_data(void)
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
   write_ADE9000_32(ADDR_CONFIG0, 1<<0); //-IN for fault current
 
-  write_ADE9000_32(ADDR_AVGAIN, 0x115afd);
-  write_ADE9000_32(ADDR_BVGAIN, 0x1141e0);
-  write_ADE9000_32(ADDR_CVGAIN, 0x10bd00);
+  uint32_t avgain,bvgain,cvgain;
+  config_get_int("avg", &avgain);
+  config_get_int("bvg", &bvgain);
+  config_get_int("cvg", &cvgain);
+  write_ADE9000_32(ADDR_AVGAIN, avgain);
+  write_ADE9000_32(ADDR_BVGAIN, bvgain);
+  write_ADE9000_32(ADDR_CVGAIN, cvgain);
 
-  write_ADE9000_32(ADDR_AIGAIN, 0xff97dd4a);
-  write_ADE9000_32(ADDR_BIGAIN, 0xff94bcdc);
-  write_ADE9000_32(ADDR_CIGAIN, 0xff78404e);
-  write_ADE9000_32(ADDR_NIGAIN, 0xff8c79e6);
+  uint32_t aigain,bigain,cigain,nigain;
+  config_get_int("aig", &aigain);
+  config_get_int("big", &bigain);
+  config_get_int("cig", &cigain);
+  config_get_int("nig", &nigain);
+  write_ADE9000_32(ADDR_AIGAIN, aigain);
+  write_ADE9000_32(ADDR_BIGAIN, bigain);
+  write_ADE9000_32(ADDR_CIGAIN, cigain);
+  write_ADE9000_32(ADDR_NIGAIN, nigain);
 
   write_ADE9000_16(ADDR_RUN, 1);
   write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
@@ -125,6 +137,10 @@ void SPI_get_data(void)
 
     get_ADE9000_data_reg(ADDR_STATUS0, status0);
     get_ADE9000_data_reg(ADDR_STATUS1, status1);
+
+    get_ADE9000_data_reg(ADDR_APF, apf);
+    get_ADE9000_data_reg(ADDR_BPF, bpf);
+    get_ADE9000_data_reg(ADDR_CPF, cpf);
 
     burst_tx[1] = (uint8_t)(((0x600 << 4) & 0xFF00) >> 8);
     burst_tx[0] = (uint8_t)(((0x600 << 4) | (1 << 3)) & 0x00FF);
@@ -200,9 +216,17 @@ void ade_convert(){
     ade_f.aithd = ((ade_raw.aithd_h << 16) + ade_raw.aithd_l) * powf(2, -27);
     ade_f.bithd = ((ade_raw.bithd_h << 16) + ade_raw.bithd_l) * powf(2, -27);
     ade_f.cithd = ((ade_raw.cithd_h << 16) + ade_raw.cithd_l) * powf(2, -27);
-    ade_f.apf = ((ade_raw.apf_h << 16) + ade_raw.apf_l) * powf(2, -27);
-    ade_f.bpf = ((ade_raw.bpf_h << 16) + ade_raw.bpf_l) * powf(2, -27);
-    ade_f.cpf = ((ade_raw.cpf_h << 16) + ade_raw.cpf_l) * powf(2, -27);
+    //old power factor from burst read, broken.
+    //ade_f.apf = ((ade_raw.apf_h << 16) + ade_raw.apf_l) * powf(2, -27);
+    //ade_f.bpf = ((ade_raw.bpf_h << 16) + ade_raw.bpf_l) * powf(2, -27);
+    //ade_f.cpf = ((ade_raw.cpf_h << 16) + ade_raw.cpf_l) * powf(2, -27);
+    int32_t apf_i = (apf[3] << 24) + (apf[2] << 16) + (apf[5] << 8) + apf[4];
+    int32_t bpf_i = (bpf[3] << 24) + (bpf[2] << 16) + (bpf[5] << 8) + bpf[4];
+    int32_t cpf_i = (cpf[3] << 24) + (cpf[2] << 16) + (cpf[5] << 8) + cpf[4];
+    ade_f.apf = apf_i * powf(2, -27);
+    ade_f.bpf = bpf_i * powf(2, -27);
+    ade_f.cpf = cpf_i * powf(2, -27);
+
     int32_t ahz_i = (ahz[3] << 24) + (ahz[2] << 16) + (ahz[5] << 8) + ahz[4];
     int32_t bhz_i = (bhz[3] << 24) + (bhz[2] << 16) + (bhz[5] << 8) + bhz[4];
     int32_t chz_i = (chz[3] << 24) + (chz[2] << 16) + (chz[5] << 8) + chz[4];
