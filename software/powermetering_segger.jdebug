@@ -13,7 +13,7 @@ void OnProjectLoad (void) {
   // Dialog-generated settings
   //
   Project.SetDevice ("STM32F407VG");
-  Project.SetHostIF ("USB", "");
+  Project.SetHostIF ("IP", "192.168.178.156");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("50 MHz");
   Project.AddSvdFile ("Cortex-M4F.svd");
@@ -21,6 +21,7 @@ void OnProjectLoad (void) {
   //
   // User settings
   //
+  Project.SetOSPlugin ("FreeRTOSPlugin");
   File.Open ("./powermetering/build/powermetering.elf");
 }
 
