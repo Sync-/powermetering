@@ -231,4 +231,10 @@ struct ade_float_t {
   float ahz;
   float bhz;
   float chz;
+  float energy_a;
+  float energy_b;
+  float energy_c;
+  float kwh_a;
+  float kwh_b;
+  float kwh_c;
 };

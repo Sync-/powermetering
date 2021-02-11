@@ -15,6 +15,11 @@ uint8_t bpf[10];
 uint8_t cpf[10];
 uint8_t angl_va_vb[10], angl_va_vc[10], angl_va_ia[10], angl_vb_ib[10], angl_vc_ic[10];
 uint8_t burst_tx[10];
+int64_t active_energy_a,active_energy_b,active_energy_c;
+uint8_t ade_lo[10], ade_hi[10];
+uint32_t lo; 
+int32_t hi;
+uint8_t count = 0;
 int CUR_PRI;
 
 extern SPI_HandleTypeDef hspi1;
@@ -100,8 +105,9 @@ void SPI_get_data(void)
   write_ADE9000_32(ADDR_CIGAIN, cigain);
   write_ADE9000_32(ADDR_NIGAIN, nigain);
 
+  write_ADE9000_16(ADDR_EGY_TIME, 100); //accum energy over 100 halfcycles -> 1s
+  write_ADE9000_16(ADDR_EP_CFG, (1 << 4) | (1 << 1) | (1 << 0)); //EGY_LD_ACCUM + EGY_TMR_MODE + EGY_PWR_EN
   write_ADE9000_16(ADDR_RUN, 1);
-  write_ADE9000_16(ADDR_EP_CFG, 1 << 0);
 
   //DMA setup, SPI1 DMA2 Channel 3, rx: stream2, tx: stream3
   __HAL_RCC_DMA2_CLK_ENABLE();
@@ -141,6 +147,42 @@ void SPI_get_data(void)
     get_ADE9000_data_reg(ADDR_APF, apf);
     get_ADE9000_data_reg(ADDR_BPF, bpf);
     get_ADE9000_data_reg(ADDR_CPF, cpf);
+
+    if(status0[4] & 0x01 ) { //if EGYRDY
+      get_ADE9000_data_reg(ADDR_AFWATTHR_LO, ade_lo);
+      get_ADE9000_data_reg(ADDR_AFWATTHR_HI, ade_hi);
+      lo = (ade_lo[3] << 24) + (ade_lo[2] << 16) + (ade_lo[5] << 8) + ade_lo[4];
+      hi = (int32_t)((ade_hi[3] << 24) + (ade_hi[2] << 16) + (ade_hi[5] << 8) + ade_hi[4]);
+      active_energy_a = hi; //hopefully it extends the sign
+      active_energy_a <<= 13;
+      active_energy_a += lo & 0x1fff;
+
+      get_ADE9000_data_reg(ADDR_BFWATTHR_LO, ade_lo);
+      get_ADE9000_data_reg(ADDR_BFWATTHR_HI, ade_hi);
+      lo = (ade_lo[3] << 24) + (ade_lo[2] << 16) + (ade_lo[5] << 8) + ade_lo[4];
+      hi = (int32_t)((ade_hi[3] << 24) + (ade_hi[2] << 16) + (ade_hi[5] << 8) + ade_hi[4]);
+      active_energy_b = hi; //hopefully it extends the sign
+      active_energy_b <<= 13;
+      active_energy_b += lo & 0x1fff;
+
+      get_ADE9000_data_reg(ADDR_CFWATTHR_LO, ade_lo);
+      get_ADE9000_data_reg(ADDR_CFWATTHR_HI, ade_hi);
+      lo = (ade_lo[3] << 24) + (ade_lo[2] << 16) + (ade_lo[5] << 8) + ade_lo[4];
+      hi = (int32_t)((ade_hi[3] << 24) + (ade_hi[2] << 16) + (ade_hi[5] << 8) + ade_hi[4]);
+      active_energy_c = hi; //hopefully it extends the sign
+      active_energy_c <<= 13;
+      active_energy_c += lo & 0x1fff;
+      write_ADE9000_32(ADDR_STATUS0, ((status0[3] << 24) + (status0[2] << 16) + (status0[5] << 8) + status0[4])); //Reset EGYRDY... One has to write 1 to the register you want to reset....
+      if (count < 10) {
+        count++;
+        active_energy_a = 0; //discard initial garbage values...
+        active_energy_b = 0; //discard initial garbage values...
+        active_energy_c = 0; //discard initial garbage values...
+      }
+      ade_f.kwh_a += (active_energy_a / (PWR_CONST * 8000))/1000.0f/3600.0f;
+      ade_f.kwh_b += (active_energy_b / (PWR_CONST * 8000))/1000.0f/3600.0f;
+      ade_f.kwh_c += (active_energy_c / (PWR_CONST * 8000))/1000.0f/3600.0f;
+    }
 
     burst_tx[1] = (uint8_t)(((0x600 << 4) & 0xFF00) >> 8);
     burst_tx[0] = (uint8_t)(((0x600 << 4) | (1 << 3)) & 0x00FF);
@@ -233,4 +275,6 @@ void ade_convert(){
     ade_f.ahz = (8000.0f * powf(2.0f, 16.0f)) / (ahz_i + 1.0f);
     ade_f.bhz = (8000.0f * powf(2.0f, 16.0f)) / (bhz_i + 1.0f);
     ade_f.chz = (8000.0f * powf(2.0f, 16.0f)) / (chz_i + 1.0f);
+
+    ade_f.energy_a = (active_energy_a / (PWR_CONST * 8000))/1000.0f;
 }
