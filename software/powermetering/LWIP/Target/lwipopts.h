@@ -37,6 +37,8 @@
  extern "C" {
 #endif
 
+#define LWIP_ERRNO_INCLUDE "sys/errno.h"
+
 /* STM32CubeMX Specific Parameters (not defined in opt.h) ---------------------*/
 /* Parameters set in STM32CubeMX LwIP Configuration GUI -*/
 /*----- WITH_RTOS enabled (Since FREERTOS is set) -----*/
