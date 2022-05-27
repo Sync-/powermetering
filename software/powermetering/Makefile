@@ -39,6 +39,7 @@ C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/fwupdate.c \
 Core/Src/influx.c \
+Core/Src/dmr.c \
 Core/Src/mqtt_client.c \
 Core/Src/config.c \
 Core/Src/version_stmbl.c \
