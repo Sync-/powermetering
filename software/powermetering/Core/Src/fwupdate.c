@@ -16,7 +16,7 @@ char data_buffer[80]; struct sockaddr_in sa,ra,isa;
 uint8_t rx_buf[128];
 int rec_size;
 uint32_t total_size;
-CRC_HandleTypeDef hcrc;
+extern CRC_HandleTypeDef hcrc;
 
 #define FW_TMP_ADDRESS 0x08080000
 //#define FW_SECTOR FLASH_SECTOR_7
