@@ -1,11 +1,15 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
+
+use strict;
 
 open(OUTPUT, "> fsdata.c");
 
 chdir("fs");
 open(FILES, "find . -type f |");
 
-while($file = <FILES>) {
+my (@fvars, @files);
+
+while(my $file = <FILES>) {
 
     # Do not include files in CVS directories nor backup files.
     if($file =~ /(CVS|~)/) {
@@ -54,18 +58,19 @@ while($file = <FILES>) {
     unlink("/tmp/header");
 
     $file =~ s/\.//;
-    $fvar = $file;
+    my $fvar = $file;
     $fvar =~ s-/-_-g;
     $fvar =~ s-\.-_-g;
     print(OUTPUT "static const unsigned char data".$fvar."[] = {\n");
     print(OUTPUT "\t/* $file */\n\t");
-    for($j = 0; $j < length($file); $j++) {
+    for(my $j = 0; $j < length($file); $j++) {
 	printf(OUTPUT "%#02x, ", unpack("C", substr($file, $j, 1)));
     }
     printf(OUTPUT "0,\n");
     
     
-    $i = 0;
+    my $i = 0;
+    my $data;
     while(read(FILE, $data, 1)) {
         if($i == 0) {
             print(OUTPUT "\t");
@@ -83,9 +88,11 @@ while($file = <FILES>) {
     push(@files, $file);
 }
 
+my $i;
 for($i = 0; $i < @fvars; $i++) {
-    $file = $files[$i];
-    $fvar = $fvars[$i];
+    my $file = $files[$i];
+    my $fvar = $fvars[$i];
+    my $prevfile;
 
     if($i == 0) {
         $prevfile = "NULL";
