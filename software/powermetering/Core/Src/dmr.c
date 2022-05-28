@@ -41,7 +41,7 @@ void influx_task(void){
 
 extern struct ade_float_t ade_f;
 
-int32_t dmr_rx, dmr_tx, dmr_cc;
+int32_t dmr_rx, dmr_tx, dmr_cc, dmr_wait;
 
 typedef enum {
 	SYNC_BS_SOURCED_VOICE,
@@ -389,7 +389,7 @@ void dmr_task(void) {
 		dmr_usbd_encode(dmr_cc, SYNC_MS_SOURCED_DATA, msg);
 		dmr_put_dbuf();
 		
-        	vTaskDelay(500);
+        	vTaskDelay(dmr_wait);
 	}
 }
 
@@ -414,6 +414,11 @@ void dmr_task_init(void) {
 	config_get_int("dmr_cc", &dmr_cc);
 	if (dmr_cc == 0)
 		return;
+	
+	config_get_int("dmr_wait", &dmr_wait);
+	if (dmr_wait == 0)
+		dmr_wait = 60;
+	dmr_wait *= 1000;
 	
 	xTaskCreate((TaskFunction_t)dmr_task, "MMDVM task", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
 }
