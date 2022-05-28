@@ -26,7 +26,6 @@
 #include "rtc.h"
 #include "sdio.h"
 #include "spi.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -39,6 +38,7 @@
 #include "fs.h"
 #include "string.h"
 #include "influx.h"
+#include "dmr.h"
 #include "ade.h"
 #include "fwupdate.h"
 #include "lwip.h"
@@ -281,7 +281,6 @@ int main(void)
   MX_SPI1_Init();
   MX_SDIO_SD_Init();
   MX_I2C1_Init();
-  MX_USART2_UART_Init();
   MX_CRC_Init();
 
   //debug: 95,96,97,98
@@ -317,6 +316,7 @@ int main(void)
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE values", configMINIMAL_STACK_SIZE * 2, NULL, configMAX_PRIORITIES - 2, NULL);
   influx_init();
+  dmr_task_init();
 
 
   SEGGER_RTT_printf(0, "Tasks running\n");
