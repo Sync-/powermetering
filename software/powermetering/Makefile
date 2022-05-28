@@ -48,7 +48,6 @@ Core/Src/SEGGER_RTT.c \
 Core/Src/SEGGER_RTT_printf.c \
 Core/Src/rtc.c \
 Core/Src/spi.c \
-Core/Src/usart.c \
 LWIP/App/lwip.c \
 LWIP/Target/ethernetif.c \
 Core/Src/stm32f4xx_it.c \
