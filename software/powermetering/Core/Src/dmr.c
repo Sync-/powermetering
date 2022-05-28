@@ -394,7 +394,12 @@ void dmr_task(void) {
 }
 
 void dmr_task_init(void) {
+	char* string[CONFIG_STRINGLENGTH];
 	float freq;
+	
+	config_get_string("dmr_en", string);
+	if (strncmp(string,"on",CONFIG_STRINGLENGTH) != 0)
+		return;
 	
 	config_get_float("dmr_tx", &freq);
 	if (freq == 0)
