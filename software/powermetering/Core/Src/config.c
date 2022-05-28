@@ -86,7 +86,7 @@ void config_get_string(const char* key2, char* value2){
             continue;
 
         if(strncmp(key2,key,CONFIG_STRINGLENGTH) == 0){
-            SEGGER_RTT_printf(0, "found %s => %s\n", key, value);
+            //SEGGER_RTT_printf(0, "found %s => %s\n", key, value);
             strncpy(value2,value,CONFIG_STRINGLENGTH);
             break;
         }
@@ -96,12 +96,14 @@ void config_get_string(const char* key2, char* value2){
 
 void config_get_int(const char* name, int32_t* value){
     char* string[CONFIG_STRINGLENGTH];
+    string[0]='\0';
     config_get_string(name, string);
     *value = atoi(string);
 }
 
 void config_get_float(const char* name, float* value){
     char* string[CONFIG_STRINGLENGTH];
+    string[0]='\0';
     config_get_string(name, string);
     *value = strtof(string,NULL);
 }
