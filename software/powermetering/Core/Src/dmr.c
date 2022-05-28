@@ -397,19 +397,21 @@ void dmr_task_init(void) {
 	float freq;
 	
 	config_get_float("dmr_tx", &freq);
+	if (freq == 0)
+		return;
 	dmr_tx = freq * 1e6 + 0.5;
-	dmr_tx = 430012500;
 	
 	config_get_float("dmr_rx", &freq);
+	if (freq == 0)
+		return;
 	dmr_rx = freq * 1e6 + 0.5;
-	dmr_rx = 439800000;
 	
 	config_get_int("dmr_cc", &dmr_cc);
-	dmr_cc = 1;
+	if (dmr_cc == 0)
+		return;
 	
 	xTaskCreate((TaskFunction_t)dmr_task, "MMDVM task", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
 }
-
 
 //EOF
 
