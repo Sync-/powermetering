@@ -212,6 +212,17 @@ var ui = [
               {
                 type: "br"
               },
+              {
+                type: "text",
+                value: "DMR wait(s)"
+              },
+              {
+                type: "text_value",
+                name: "dmr_wait"
+              },
+              {
+                type: "br"
+              },
             ]
           },
         ]
