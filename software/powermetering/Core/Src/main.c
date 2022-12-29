@@ -42,6 +42,7 @@
 #include "ade.h"
 #include "fwupdate.h"
 #include "lwip.h"
+#include "netif.h"
 #include <math.h>
 /* USER CODE END Includes */
 
@@ -108,26 +109,77 @@ void linktask(void)
   uint32_t reg;
   uint32_t link = 0;
   extern struct netif gnetif;
+  extern struct dhcp dhcpstruct;
+  extern uint8_t network_state;
   extern ETH_HandleTypeDef heth;
+  extern ip4_addr_t ipaddr;
+  extern ip4_addr_t netmask;
+  extern ip4_addr_t gw;
+  extern uint8_t IP_ADDRESS[4];
+  extern uint8_t NETMASK_ADDRESS[4];
+  extern uint8_t GATEWAY_ADDRESS[4];
+
   while (1) {
     HAL_ETH_ReadPHYRegister(&heth, PHY_SR, &reg);
-    if ((reg & 256))
-    {
-      if (link == 0)
-      {
+    if ((reg & 256)){
+      if (link == 0){
         link = 1;
         HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
-        SEGGER_RTT_printf(0, "Link is up\n");
-        netif_set_up(&gnetif);
-        netif_set_link_up(&gnetif);
+        SEGGER_RTT_printf(0, "Link goes up\n");
+
+        char ip_name[CONFIG_STRINGLENGTH];
+        config_get_string("name", ip_name);
+        netif_set_hostname(&gnetif, ip_name);
+
+        dhcp_start(&gnetif);
+        network_state = 1; //dhcp_started
+        SEGGER_RTT_printf(0, "DHCP started\n");
+        vTaskDelay(15000);
       }
-    }
-    else
-    {
+    }else{
       link = 0;
       HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
-      SEGGER_RTT_printf(0, "Link is down\n");
+      SEGGER_RTT_printf(0, "Link goes down\n");
       netif_set_link_down(&gnetif);
+
+      dhcp_stop(&gnetif);
+      network_state = 0; //dhcp_off
+      SEGGER_RTT_printf(0, "Link is down\n");
+    }
+
+    if (network_state == 1 && (dhcp_supplied_address(&gnetif) == 1)){
+      SEGGER_RTT_printf(0, "DHCP got IP\n");
+      network_state = 2; //dhcp_started
+
+      ipaddr = dhcpstruct.offered_ip_addr;
+      netmask = dhcpstruct.offered_sn_mask;
+      gw = dhcpstruct.offered_gw_addr;
+
+      char* ip = ip4addr_ntoa(&ipaddr);
+      SEGGER_RTT_printf(0,"%s\n",ip);
+
+      netif_set_up(&gnetif);
+      netif_set_link_up(&gnetif);
+      SEGGER_RTT_printf(0, "DHCP UP\n");
+    }else if (network_state == 1 && (dhcp_supplied_address(&gnetif) == 0)){
+      SEGGER_RTT_printf(0, "DHCP no ip\n");
+      network_state = 3; //dhcp_fixedip
+
+      char ip_string[CONFIG_STRINGLENGTH];
+      config_get_string("ip", ip_string);
+      if(!ip4addr_aton(ip_string, &ipaddr)){
+        IP4_ADDR(&ipaddr, IP_ADDRESS[0], IP_ADDRESS[1], IP_ADDRESS[2], IP_ADDRESS[3]);
+      }
+      char* ip = ip4addr_ntoa(&ipaddr);
+      SEGGER_RTT_printf(0,"%s\n",ip);
+      IP4_ADDR(&netmask, NETMASK_ADDRESS[0], NETMASK_ADDRESS[1] , NETMASK_ADDRESS[2], NETMASK_ADDRESS[3]);
+      IP4_ADDR(&gw, GATEWAY_ADDRESS[0], GATEWAY_ADDRESS[1], GATEWAY_ADDRESS[2], GATEWAY_ADDRESS[3]);
+
+      dhcp_inform(&gnetif);
+
+      netif_set_up(&gnetif);
+      netif_set_link_up(&gnetif);
+      SEGGER_RTT_printf(0, "Static IP\n");
     }
     vTaskDelay(100);
   }

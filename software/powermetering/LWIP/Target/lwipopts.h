@@ -125,6 +125,8 @@
 #define SYS_LIGHTWEIGHT_PROT 1
 #define LWIP_TCPIP_CORE_LOCKING 1
 #define MQTT_OUTPUT_RINGBUF_SIZE 1024
+#define LWIP_DHCP   1
+#define LWIP_NETIF_HOSTNAME 1
 /* USER CODE END 1 */
 
 #ifdef __cplusplus

@@ -47,6 +47,9 @@ uint8_t GATEWAY_ADDRESS[4];
 
 /* USER CODE BEGIN 2 */
 
+struct dhcp dhcpstruct;
+uint8_t network_state;
+
 /* USER CODE END 2 */
 
 /**
@@ -100,7 +103,8 @@ void MX_LWIP_Init(void)
   }
 
 /* USER CODE BEGIN 3 */
-
+  dhcp_set_struct(&gnetif, &dhcpstruct);
+  network_state = 0;
 /* USER CODE END 3 */
 }
 
