@@ -54,7 +54,7 @@ void config_write(uint8_t* data, uint32_t len){
 }
 
 uint32_t config_read(uint8_t* data, uint32_t size){
-    uint32_t len = LWIP_MIN(size, strnlen(flash_config, CONFIG_SIZE));
+    uint32_t len = LWIP_MIN(size, strnlen(flash_config, CONFIG_SIZE-2));
     SEGGER_RTT_printf(0, "config_read len:%d\n",len);
     strncpy(data,flash_config,len);
     return len;

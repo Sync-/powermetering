@@ -38,7 +38,7 @@
 #include "fs.h"
 #include "string.h"
 #include "influx.h"
-#include "dmr.h"
+//#include "dmr.h"
 #include "ade.h"
 #include "fwupdate.h"
 #include "lwip.h"
@@ -204,13 +204,16 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
 
 err_t httpd_post_receive_data(void *connection, struct pbuf *p)
 {
-  SEGGER_RTT_printf(0, "httpd_post_receive_data: %u %s\n", p->tot_len,p->payload);
+  //p->payload is not a null terminated string, this prints garbage
+  //SEGGER_RTT_printf(0, "httpd_post_receive_data: %u %s\n", p->tot_len,p->payload);
   config_write(p->payload,p->tot_len);
+  pbuf_free(p);
   return ERR_OK;
 }
 
 void httpd_post_finished(void *connection, char *response_uri, u16_t response_uri_len)
 {
+  snprintf(response_uri, response_uri_len, "/config.shtml");
   SEGGER_RTT_printf(0, "httpd_post_finished\n");
 }
 
@@ -368,7 +371,7 @@ int main(void)
   xTaskCreate((TaskFunction_t)LEDBlink, "LED Keepalive", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 3, NULL);
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE values", configMINIMAL_STACK_SIZE * 2, NULL, configMAX_PRIORITIES - 2, NULL);
   influx_init();
-  dmr_task_init();
+  //dmr_task_init();
 
 
   SEGGER_RTT_printf(0, "Tasks running\n");

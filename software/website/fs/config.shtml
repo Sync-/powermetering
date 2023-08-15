@@ -162,69 +162,6 @@ var ui = [
               },
             ]
           },
-          {
-            type: "text",
-            value: "DMR enabled"
-          },
-          {
-            type: "bool_value",
-            name: "dmr_en",
-            id: "dmr_en",
-            onchange: "if($('dmr_en').checked == true){$('dmr_div').removeAttribute('hidden');} else{$('dmr_div').hidden = 'true';};",
-          },
-          {
-            type: "br"
-          },
-          {
-            type: "div",
-            id: "dmr_div",
-            value: [
-              {
-                type: "text",
-                value: "DMR tx"
-              },
-              {
-                type: "text_value",
-                name: "dmr_tx"
-              },
-              {
-                type: "br"
-              },
-              {
-                type: "text",
-                value: "DMR rx"
-              },
-              {
-                type: "text_value",
-                name: "dmr_rx"
-              },
-              {
-                type: "br"
-              },
-              {
-                type: "text",
-                value: "DMR color code"
-              },
-              {
-                type: "text_value",
-                name: "dmr_cc"
-              },
-              {
-                type: "br"
-              },
-              {
-                type: "text",
-                value: "DMR wait(s)"
-              },
-              {
-                type: "text_value",
-                name: "dmr_wait"
-              },
-              {
-                type: "br"
-              },
-            ]
-          },
         ]
       },
       {
@@ -385,12 +322,12 @@ function init(){
   else{
     $('influx_div').hidden = 'true';
   }
-  if($('dmr_en').checked == true){
-    $('dmr_div').removeAttribute('hidden');
-  } 
-  else{
-    $('dmr_div').hidden = 'true';
-  }
+  // if($('dmr_en').checked == true){
+  //   $('dmr_div').removeAttribute('hidden');
+  // } 
+  // else{
+  //   $('dmr_div').hidden = 'true';
+  // }
 
 }
 
@@ -451,7 +388,7 @@ input[type=submit]:hover,input[type=button]:hover {
   <h1><!--#NAME--></h1>
   <div id="config" hidden><!--#CONFIG--></div>
   <input type="text" id="config_input_text" style="width: 300px;"></input>
-  <input type="button" onclick="update_values(parseQuery($('config_input_text').value), ui); $('ui').innerHTML = init_ui(ui); if($('influx_en').checked == true){$('influx_div').removeAttribute('hidden');} else{$('influx_div').hidden = 'true';if($('dmr_en').checked == true){$('dmr_div').removeAttribute('hidden');} else{$('dmr_div').hidden = 'true';};" value="load config"></input>
+  <input type="button" onclick="update_values(parseQuery($('config_input_text').value), ui); $('ui').innerHTML = init_ui(ui); if($('influx_en').checked == true){$('influx_div').removeAttribute('hidden');} else{$('influx_div').hidden = 'true';}" value="load config"></input>
   <div id="ui"></div>
 </body>
 </html>
