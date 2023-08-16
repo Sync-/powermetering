@@ -91,6 +91,12 @@ void ade_init(){
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
   write_ADE9000_32(ADDR_CONFIG0, 1<<0); //-IN for fault current
 
+  int32_t adc_redir;
+  config_get_int("adc_redir", &adc_redir);
+  if (adc_redir != 0) {
+    write_ADE9000_32(ADDR_ADC_REDIRECT, adc_redir);
+  }
+
   float avgain,bvgain,cvgain;
   config_get_float("avg", &avgain);
   config_get_float("bvg", &bvgain);

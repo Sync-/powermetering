@@ -79,6 +79,14 @@ var ui = [
           },
           {
             type: "text",
+            value: "ADC_REDIRECT register value"
+          },
+          {
+            type: "text_value",
+            name: "adc_redir"
+          },
+          {
+            type: "text",
             value: "Influx DB enabled"
           },
           {
