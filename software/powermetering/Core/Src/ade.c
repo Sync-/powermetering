@@ -20,6 +20,7 @@ uint8_t ade_lo[10], ade_hi[10];
 uint32_t lo; 
 int32_t hi;
 uint8_t count = 0;
+uint32_t ade_reconfigure = 0;
 int CUR_PRI;
 
 extern SPI_HandleTypeDef hspi1;
@@ -75,9 +76,12 @@ void write_ADE9000_32(uint16_t reg_num, uint32_t data)
   HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
 }
 
+uint32_t ade_conv_gain(double gain){
+    int32_t gain_s = (gain-1.0)*134217728; //2^27
+    return *((uint32_t*)(&gain_s));
+}
 
-void SPI_get_data(void)
-{
+void ade_init(){
   write_ADE9000_16(ADDR_CONFIG1, 1 << 0); //SWRST
 
   vTaskDelay(10);
@@ -87,23 +91,23 @@ void SPI_get_data(void)
   write_ADE9000_16(ADDR_PGA_GAIN, 0b0001010101010101);
   write_ADE9000_32(ADDR_CONFIG0, 1<<0); //-IN for fault current
 
-  uint32_t avgain,bvgain,cvgain;
-  config_get_int("avg", &avgain);
-  config_get_int("bvg", &bvgain);
-  config_get_int("cvg", &cvgain);
-  write_ADE9000_32(ADDR_AVGAIN, avgain);
-  write_ADE9000_32(ADDR_BVGAIN, bvgain);
-  write_ADE9000_32(ADDR_CVGAIN, cvgain);
+  float avgain,bvgain,cvgain;
+  config_get_float("avg", &avgain);
+  config_get_float("bvg", &bvgain);
+  config_get_float("cvg", &cvgain);
+  write_ADE9000_32(ADDR_AVGAIN, ade_conv_gain(avgain));
+  write_ADE9000_32(ADDR_BVGAIN, ade_conv_gain(bvgain));
+  write_ADE9000_32(ADDR_CVGAIN, ade_conv_gain(cvgain));
 
-  uint32_t aigain,bigain,cigain,nigain;
-  config_get_int("aig", &aigain);
-  config_get_int("big", &bigain);
-  config_get_int("cig", &cigain);
-  config_get_int("nig", &nigain);
-  write_ADE9000_32(ADDR_AIGAIN, aigain);
-  write_ADE9000_32(ADDR_BIGAIN, bigain);
-  write_ADE9000_32(ADDR_CIGAIN, cigain);
-  write_ADE9000_32(ADDR_NIGAIN, nigain);
+  float aigain,bigain,cigain,nigain;
+  config_get_float("aig", &aigain);
+  config_get_float("big", &bigain);
+  config_get_float("cig", &cigain);
+  config_get_float("nig", &nigain);
+  write_ADE9000_32(ADDR_AIGAIN, ade_conv_gain(aigain));
+  write_ADE9000_32(ADDR_BIGAIN, ade_conv_gain(bigain));
+  write_ADE9000_32(ADDR_CIGAIN, ade_conv_gain(cigain));
+  write_ADE9000_32(ADDR_NIGAIN, ade_conv_gain(nigain));
 
   write_ADE9000_16(ADDR_EGY_TIME, 100); //accum energy over 100 halfcycles -> 1s
   write_ADE9000_16(ADDR_EP_CFG, (1 << 4) | (1 << 1) | (1 << 0)); //EGY_LD_ACCUM + EGY_TMR_MODE + EGY_PWR_EN
@@ -116,6 +120,11 @@ void SPI_get_data(void)
   DMA2_Stream2->M0AR = (uint32_t)ade_raw.bytes;
   DMA2_Stream2->CR   = DMA_SxCR_MINC | DMA_SxCR_CHSEL_0 | DMA_SxCR_CHSEL_1 | DMA_SxCR_MSIZE_0 | DMA_SxCR_PSIZE_0;
   SPI1->CR2 |= SPI_CR2_RXDMAEN;
+}
+
+void SPI_get_data(void)
+{
+  ade_init();
 
   config_get_int("cur_pri", &CUR_PRI);
   if(CUR_PRI < 1){
@@ -201,6 +210,10 @@ void SPI_get_data(void)
     HAL_GPIO_WritePin(ADE_CS_GPIO_Port, ADE_CS_Pin, GPIO_PIN_SET);
     vTaskDelay(2);
     ade_convert();
+    if(ade_reconfigure){
+      ade_init();
+      ade_reconfigure = 0;
+    }
   }
 }
 

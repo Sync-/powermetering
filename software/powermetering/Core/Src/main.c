@@ -201,12 +201,13 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
 
   return ERR_OK;
 }
-
+extern uint32_t ade_reconfigure;
 err_t httpd_post_receive_data(void *connection, struct pbuf *p)
 {
   //p->payload is not a null terminated string, this prints garbage
   //SEGGER_RTT_printf(0, "httpd_post_receive_data: %u %s\n", p->tot_len,p->payload);
   config_write(p->payload,p->tot_len);
+  ade_reconfigure = 1;
   pbuf_free(p);
   return ERR_OK;
 }
