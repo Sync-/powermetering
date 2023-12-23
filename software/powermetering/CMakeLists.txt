@@ -112,6 +112,7 @@ add_executable(${PROJECT_NAME}.elf
     Middlewares/Third_Party/LwIP/src/core/init.c
     Middlewares/Third_Party/LwIP/src/core/def.c
     Middlewares/Third_Party/LwIP/src/core/stats.c
+    Middlewares/Third_Party/LwIP/src/core/ipv4/acd.c
     Middlewares/Third_Party/LwIP/src/core/ipv4/autoip.c
     Middlewares/Third_Party/LwIP/src/core/ipv4/igmp.c
     Middlewares/Third_Party/LwIP/src/core/ipv4/icmp.c
@@ -137,8 +138,8 @@ add_executable(${PROJECT_NAME}.elf
     Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c
     Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_sdmmc.c
     Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.c
-    Middlewares/Third_Party/LwIP/src/apps/httpd/httpd.c
-    Middlewares/Third_Party/LwIP/src/apps/httpd/fs.c
+    Middlewares/Third_Party/LwIP/src/apps/http/httpd.c
+    Middlewares/Third_Party/LwIP/src/apps/http/fs.c
     Core/Src/crc.c
     Core/Src/ustime.c
     Core/Src/ade.c

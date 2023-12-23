@@ -27,7 +27,7 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
   }
 }
 
-mqtt_client_t static_client;
+mqtt_client_t *static_client;
 
 /* Called when publish is complete either with sucess or failure */
 static void mqtt_pub_request_cb(void *arg, err_t result)
