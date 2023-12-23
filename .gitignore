@@ -1,4 +1,5 @@
 software/powermetering/build/
+software/powermetering/build2/
 software/bootloader/build/
 *.pyc
 software/powermetering_segger.jdebug.user
