@@ -50,7 +50,7 @@ extern "C" {
 #include "lwip/err.h"
 #include "lwip/apps/snmp_core.h"
 
-/** SNMP variable binding descriptor (publically needed for traps) */
+/** SNMP variable binding descriptor (publicly needed for traps) */
 struct snmp_varbind
 {
   /** pointer to next varbind, NULL for last in list */
@@ -101,10 +101,27 @@ err_t snmp_send_trap_generic(s32_t generic_trap);
 err_t snmp_send_trap_specific(s32_t specific_trap, struct snmp_varbind *varbinds);
 err_t snmp_send_trap(const struct snmp_obj_id* oid, s32_t generic_trap, s32_t specific_trap, struct snmp_varbind *varbinds);
 
+err_t snmp_send_inform_generic(s32_t generic_trap, struct snmp_varbind *varbinds, s32_t *ptr_request_id);
+err_t snmp_send_inform_specific(s32_t specific_trap, struct snmp_varbind *varbinds, s32_t *ptr_request_id);
+err_t snmp_send_inform(const struct snmp_obj_id* oid, s32_t generic_trap, s32_t specific_trap, struct snmp_varbind *varbinds, s32_t *ptr_request_id);
+struct snmp_request;
+typedef void (*snmp_inform_callback_fct)(struct snmp_request *request, void* callback_arg);
+void snmp_set_inform_callback(snmp_inform_callback_fct inform_callback, void* callback_arg);
+
+void snmp_set_default_trap_version(u8_t snmp_version);
+u8_t snmp_get_default_trap_version(void);
+
 #define SNMP_AUTH_TRAPS_DISABLED 0
 #define SNMP_AUTH_TRAPS_ENABLED  1
 void snmp_set_auth_traps_enabled(u8_t enable);
 u8_t snmp_get_auth_traps_enabled(void);
+
+u8_t snmp_v1_enabled(void);
+u8_t snmp_v2c_enabled(void);
+u8_t snmp_v3_enabled(void);
+void snmp_v1_enable(u8_t enable);
+void snmp_v2c_enable(u8_t enable);
+void snmp_v3_enable(u8_t enable);
 
 const char * snmp_get_community(void);
 const char * snmp_get_community_write(void);

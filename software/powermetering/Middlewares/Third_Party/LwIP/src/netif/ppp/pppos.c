@@ -176,6 +176,7 @@ ppp_pcb *pppos_create(struct netif *pppif, pppos_output_cb_fn output_cb,
 {
   pppos_pcb *pppos;
   ppp_pcb *ppp;
+  LWIP_ASSERT_CORE_LOCKED();
 
   pppos = (pppos_pcb *)LWIP_MEMPOOL_ALLOC(PPPOS_PCB);
   if (pppos == NULL) {
@@ -206,8 +207,9 @@ pppos_write(ppp_pcb *ppp, void *ctx, struct pbuf *p)
   err_t err;
   LWIP_UNUSED_ARG(ppp);
 
-  /* Grab an output buffer. */
-  nb = pbuf_alloc(PBUF_RAW, 0, PBUF_POOL);
+  /* Grab an output buffer. Assume PBUF_POOL_BUFSIZE is an acceptable
+   * chunk size for Tx as well. */
+  nb = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_RAM);
   if (nb == NULL) {
     PPPDEBUG(LOG_WARNING, ("pppos_write[%d]: alloc fail\n", ppp->netif->num));
     LINK_STATS_INC(link.memerr);
@@ -216,6 +218,11 @@ pppos_write(ppp_pcb *ppp, void *ctx, struct pbuf *p)
     pbuf_free(p);
     return ERR_MEM;
   }
+
+  /* Empty the buffer */
+  nb->len = 0;
+  /* Set nb->tot_len to actual payload length */
+  nb->tot_len = p->len;
 
   /* If the link has been idle, we'll send a fresh flag character to
    * flush any noise. */
@@ -252,8 +259,9 @@ pppos_netif_output(ppp_pcb *ppp, void *ctx, struct pbuf *pb, u16_t protocol)
   err_t err;
   LWIP_UNUSED_ARG(ppp);
 
-  /* Grab an output buffer. */
-  nb = pbuf_alloc(PBUF_RAW, 0, PBUF_POOL);
+  /* Grab an output buffer. Assume PBUF_POOL_BUFSIZE is an acceptable
+   * chunk size for Tx as well. */
+  nb = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_RAM);
   if (nb == NULL) {
     PPPDEBUG(LOG_WARNING, ("pppos_netif_output[%d]: alloc fail\n", ppp->netif->num));
     LINK_STATS_INC(link.memerr);
@@ -261,6 +269,11 @@ pppos_netif_output(ppp_pcb *ppp, void *ctx, struct pbuf *pb, u16_t protocol)
     MIB2_STATS_NETIF_INC(ppp->netif, ifoutdiscards);
     return ERR_MEM;
   }
+
+  /* Empty the buffer */
+  nb->len = 0;
+  /* Set nb->tot_len to actual payload length */
+  nb->tot_len = pb->tot_len;
 
   /* If the link has been idle, we'll send a fresh flag character to
    * flush any noise. */
@@ -402,12 +415,14 @@ pppos_destroy(ppp_pcb *ppp, void *ctx)
 #if !NO_SYS && !PPP_INPROC_IRQ_SAFE
 /** Pass received raw characters to PPPoS to be decoded through lwIP TCPIP thread.
  *
+ * This is one of the only functions that may be called outside of the TCPIP thread!
+ *
  * @param ppp PPP descriptor index, returned by pppos_create()
  * @param s received data
  * @param l length of received data
  */
 err_t
-pppos_input_tcpip(ppp_pcb *ppp, u8_t *s, int l)
+pppos_input_tcpip(ppp_pcb *ppp, const void *s, int l)
 {
   struct pbuf *p;
   err_t err;
@@ -429,9 +444,10 @@ pppos_input_tcpip(ppp_pcb *ppp, u8_t *s, int l)
 err_t pppos_input_sys(struct pbuf *p, struct netif *inp) {
   ppp_pcb *ppp = (ppp_pcb*)inp->state;
   struct pbuf *n;
+  LWIP_ASSERT_CORE_LOCKED();
 
   for (n = p; n; n = n->next) {
-    pppos_input(ppp, (u8_t*)n->payload, n->len);
+    pppos_input(ppp, n->payload, n->len);
   }
   pbuf_free(p);
   return ERR_OK;
@@ -461,30 +477,36 @@ PACK_STRUCT_END
  * @param l length of received data
  */
 void
-pppos_input(ppp_pcb *ppp, u8_t *s, int l)
+pppos_input(ppp_pcb *ppp, const void *s, int l)
 {
   pppos_pcb *pppos = (pppos_pcb *)ppp->link_ctx_cb;
   struct pbuf *next_pbuf;
+  const u8_t *s_u8 = (const u8_t *)s;
   u8_t cur_char;
   u8_t escaped;
   PPPOS_DECL_PROTECT(lev);
+#if !PPP_INPROC_IRQ_SAFE
+  LWIP_ASSERT_CORE_LOCKED();
+#endif
+
+  /* Don't even bother parsing data if we are disconnected.
+   * Added to that, ppp_input must never be called if the upper layer is down.
+   */
+  PPPOS_PROTECT(lev);
+  if (!pppos->open) {
+    PPPOS_UNPROTECT(lev);
+    return;
+  }
+  PPPOS_UNPROTECT(lev);
 
   PPPDEBUG(LOG_DEBUG, ("pppos_input[%d]: got %d bytes\n", ppp->netif->num, l));
   while (l-- > 0) {
-    cur_char = *s++;
+    cur_char = *s_u8++;
 
     PPPOS_PROTECT(lev);
-    /* ppp_input can disconnect the interface, we need to abort to prevent a memory
-     * leak if there are remaining bytes because pppos_connect and pppos_listen
-     * functions expect input buffer to be free. Furthermore there are no real
-     * reason to continue reading bytes if we are disconnected.
-     */
-    if (!pppos->open) {
-      PPPOS_UNPROTECT(lev);
-      return;
-    }
     escaped = ESCAPE_P(pppos->in_accm, cur_char);
     PPPOS_UNPROTECT(lev);
+
     /* Handle special characters. */
     if (escaped) {
       /* Check for escape sequences. */
@@ -514,6 +536,12 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
           /* Note: If you get lots of these, check for UART frame errors or try different baud rate */
           LINK_STATS_INC(link.chkerr);
           pppos_input_drop(pppos);
+        } else if (!pppos->in_tail) {
+          PPPDEBUG(LOG_INFO,
+                   ("pppos_input[%d]: Dropping null in_tail\n",
+                    ppp->netif->num));
+          LINK_STATS_INC(link.drop);
+          pppos_input_drop(pppos);
         /* Otherwise it's a good packet so pass it on. */
         } else {
           struct pbuf *inp;
@@ -541,10 +569,19 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
           pppos->in_tail = NULL;
 #if IP_FORWARD || LWIP_IPV6_FORWARD
           /* hide the room for Ethernet forwarding header */
-          pbuf_header(inp, -(s16_t)(PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN));
+          if (0
+#if PPP_IPV4_SUPPORT
+           || pppos->in_protocol == PPP_IP
+#endif /* PPP_IPV4_SUPPORT */
+#if PPP_IPV6_SUPPORT
+           || pppos->in_protocol == PPP_IPV6
+#endif /* PPP_IPV6_SUPPORT */
+           ) {
+            pbuf_remove_header(inp, PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN);
+          }
 #endif /* IP_FORWARD || LWIP_IPV6_FORWARD */
 #if PPP_INPROC_IRQ_SAFE
-          if(tcpip_callback_with_block(pppos_input_callback, inp, 0) != ERR_OK) {
+          if(tcpip_try_callback(pppos_input_callback, inp) != ERR_OK) {
             PPPDEBUG(LOG_ERR, ("pppos_input[%d]: tcpip_callback() failed, dropping packet\n", ppp->netif->num));
             pbuf_free(inp);
             LINK_STATS_INC(link.drop);
@@ -552,6 +589,14 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
           }
 #else /* PPP_INPROC_IRQ_SAFE */
           ppp_input(ppp, inp);
+          /* ppp_input can disconnect the interface, we need to abort to prevent a memory
+           * leak if there are remaining bytes because pppos_connect and pppos_listen
+           * functions expect input buffer to be free. Furthermore there are no real
+           * reason to continue reading bytes if we are disconnected.
+           */
+          if (!pppos->open) {
+            break;
+          }
 #endif /* PPP_INPROC_IRQ_SAFE */
         }
 
@@ -574,46 +619,23 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
       }
 
       /* Process character relative to current state. */
-      switch(pppos->in_state) {
-        case PDIDLE:                    /* Idle state - waiting. */
-          /* Drop the character if it's not 0xff
-           * we would have processed a flag character above. */
-          if (cur_char != PPP_ALLSTATIONS) {
-            break;
-          }
-          /* no break */
-          /* Fall through */
-
-        case PDSTART:                   /* Process start flag. */
-          /* Prepare for a new packet. */
-          pppos->in_fcs = PPP_INITFCS;
-          /* no break */
-          /* Fall through */
-
+      switch (pppos->in_state) {
+        case PDIDLE:                    /* Idle state - wait for flag character. */
+          break;
         case PDADDRESS:                 /* Process address field. */
           if (cur_char == PPP_ALLSTATIONS) {
             pppos->in_state = PDCONTROL;
             break;
           }
-          /* no break */
-
           /* Else assume compressed address and control fields so
            * fall through to get the protocol... */
+          /* Fall through */
         case PDCONTROL:                 /* Process control field. */
-          /* If we don't get a valid control code, restart. */
           if (cur_char == PPP_UI) {
             pppos->in_state = PDPROTOCOL1;
             break;
           }
-          /* no break */
-
-#if 0
-          else {
-            PPPDEBUG(LOG_WARNING,
-                     ("pppos_input[%d]: Invalid control <%d>\n", ppp->netif->num, cur_char));
-            pppos->in_state = PDSTART;
-          }
-#endif
+          /* Fall through */
         case PDPROTOCOL1:               /* Process protocol field 1. */
           /* If the lower bit is set, this is the end of the protocol
            * field. */
@@ -634,11 +656,36 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
           if (pppos->in_tail == NULL || pppos->in_tail->len == PBUF_POOL_BUFSIZE) {
             u16_t pbuf_alloc_len;
             if (pppos->in_tail != NULL) {
+              u16_t mru;
               pppos->in_tail->tot_len = pppos->in_tail->len;
               if (pppos->in_tail != pppos->in_head) {
                 pbuf_cat(pppos->in_head, pppos->in_tail);
                 /* give up the in_tail reference now */
                 pppos->in_tail = NULL;
+              }
+              /* Compute MRU including headers length.  If smaller packets are
+               * requested, we must still be able to receive packets of the
+               * default MRU for control packets. */
+              mru = LWIP_MAX(PPP_MRU, PPP_DEFMRU)
+                /* Add 10% more. We only want to avoid filling all PBUFs with garbage,
+                 * we don't have to be pedantic. */
+                + LWIP_MAX(PPP_MRU, PPP_DEFMRU)/10
+#if IP_FORWARD || LWIP_IPV6_FORWARD
+                + PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN
+#endif /* IP_FORWARD || LWIP_IPV6_FORWARD */
+#if PPP_INPROC_IRQ_SAFE
+                + sizeof(struct pppos_input_header)
+#endif /* PPP_INPROC_IRQ_SAFE */
+                + sizeof(pppos->in_protocol);
+              if (pppos->in_head->tot_len > mru) {
+                /* Packet too big. Drop the input packet and let the
+                 * higher layers deal with it.  Continue processing
+                 * received characters in case a new packet starts. */
+                PPPDEBUG(LOG_ERR, ("pppos_input[%d]: packet too big, max_len=%d, dropping packet\n", ppp->netif->num, mru));
+                LINK_STATS_INC(link.lenerr);
+                pppos_input_drop(pppos);
+                pppos->in_state = PDIDLE;  /* Wait for flag character. */
+                break;
               }
             }
             /* If we haven't started a packet, we need a packet header. */
@@ -648,7 +695,14 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
              * + PBUF_LINK_HLEN bytes so the packet is being allocated with enough header
              * space to be forwarded (to Ethernet for example).
              */
-            if (pppos->in_head == NULL) {
+            if (pppos->in_head == NULL && (0
+#if PPP_IPV4_SUPPORT
+             || pppos->in_protocol == PPP_IP
+#endif /* PPP_IPV4_SUPPORT */
+#if PPP_IPV6_SUPPORT
+             || pppos->in_protocol == PPP_IPV6
+#endif /* PPP_IPV6_SUPPORT */
+             )) {
               pbuf_alloc_len = PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN;
             }
 #endif /* IP_FORWARD || LWIP_IPV6_FORWARD */
@@ -656,11 +710,11 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
             if (next_pbuf == NULL) {
               /* No free buffers.  Drop the input packet and let the
                * higher layers deal with it.  Continue processing
-               * the received pbuf chain in case a new packet starts. */
+               * received characters in case a new packet starts. */
               PPPDEBUG(LOG_ERR, ("pppos_input[%d]: NO FREE PBUFS!\n", ppp->netif->num));
               LINK_STATS_INC(link.memerr);
               pppos_input_drop(pppos);
-              pppos->in_state = PDSTART;  /* Wait for flag sequence. */
+              pppos->in_state = PDIDLE;  /* Wait for flag character. */
               break;
             }
             if (pppos->in_head == NULL) {
@@ -696,10 +750,21 @@ pppos_input(ppp_pcb *ppp, u8_t *s, int l)
 static void pppos_input_callback(void *arg) {
   struct pbuf *pb = (struct pbuf*)arg;
   ppp_pcb *ppp;
+  pppos_pcb *pppos;
 
   ppp = ((struct pppos_input_header*)pb->payload)->ppp;
-  if(pbuf_header(pb, -(s16_t)sizeof(struct pppos_input_header))) {
-    LWIP_ASSERT("pbuf_header failed\n", 0);
+  if(pbuf_remove_header(pb, sizeof(struct pppos_input_header))) {
+    LWIP_ASSERT("pbuf_remove_header failed", 0);
+    goto drop;
+  }
+
+  /* A previous call to ppp_input might have disconnected the session
+   * while there were still packets in flight in the tcpip mailbox.
+   * Drop incoming packets because ppp_input must never be called if
+   * the upper layer is down.
+   */
+  pppos = (pppos_pcb *)ppp->link_ctx_cb;
+  if (!pppos->open) {
     goto drop;
   }
 
@@ -810,7 +875,7 @@ pppos_output_append(pppos_pcb *pppos, err_t err, struct pbuf *nb, u8_t c, u8_t a
    * Sure we don't quite fill the buffer if the character doesn't
    * get escaped but is one character worth complicating this? */
   if ((PBUF_POOL_BUFSIZE - nb->len) < 2) {
-    u32_t l = pppos->output_cb(pppos->ppp, (u8_t*)nb->payload, nb->len, pppos->ppp->ctx_cb);
+    u32_t l = pppos->output_cb(pppos->ppp, nb->payload, nb->len, pppos->ppp->ctx_cb);
     if (l != nb->len) {
       return ERR_IF;
     }
@@ -849,7 +914,7 @@ pppos_output_last(pppos_pcb *pppos, err_t err, struct pbuf *nb, u16_t *fcs)
 
   /* Send remaining buffer if not empty */
   if (nb->len > 0) {
-    u32_t l = pppos->output_cb(ppp, (u8_t*)nb->payload, nb->len, ppp->ctx_cb);
+    u32_t l = pppos->output_cb(ppp, nb->payload, nb->len, ppp->ctx_cb);
     if (l != nb->len) {
       err = ERR_IF;
       goto failed;

@@ -52,6 +52,8 @@
  * @ingroup sys_layer
  * All defines related to this section must not be placed in lwipopts.h,
  * but in arch/cc.h!
+ * If the compiler does not provide memset() this file must include a
+ * definition of it, or include a file which defines it.
  * These options cannot be \#defined in lwipopts.h since they are not options
  * of lwIP itself, but options of the lwIP port to your system.
  * @{
@@ -70,9 +72,9 @@
 #define LWIP_RAND() ((u32_t)rand())
 #endif
 
-/** Platform specific diagnostic output.\n
+/** Platform specific diagnostic output.<br>
  * Note the default implementation pulls in printf, which may
- * in turn pull in a lot of standard libary code. In resource-constrained 
+ * in turn pull in a lot of standard library code. In resource-constrained
  * systems, this should be defined to something less resource-consuming.
  */
 #ifndef LWIP_PLATFORM_DIAG
@@ -81,9 +83,9 @@
 #include <stdlib.h>
 #endif
 
-/** Platform specific assertion handling.\n
+/** Platform specific assertion handling.<br>
  * Note the default implementation pulls in printf, fflush and abort, which may
- * in turn pull in a lot of standard libary code. In resource-constrained 
+ * in turn pull in a lot of standard library code. In resource-constrained
  * systems, this should be defined to something less resource-consuming.
  */
 #ifndef LWIP_PLATFORM_ASSERT
@@ -116,12 +118,20 @@
 /* Define generic types used in lwIP */
 #if !LWIP_NO_STDINT_H
 #include <stdint.h>
+/* stdint.h is C99 which should also provide support for 64-bit integers */
+#if !defined(LWIP_HAVE_INT64) && defined(UINT64_MAX)
+#define LWIP_HAVE_INT64 1
+#endif
 typedef uint8_t   u8_t;
 typedef int8_t    s8_t;
 typedef uint16_t  u16_t;
 typedef int16_t   s16_t;
 typedef uint32_t  u32_t;
 typedef int32_t   s32_t;
+#if LWIP_HAVE_INT64
+typedef uint64_t  u64_t;
+typedef int64_t   s64_t;
+#endif
 typedef uintptr_t mem_ptr_t;
 #endif
 
@@ -164,7 +174,7 @@ typedef uintptr_t mem_ptr_t;
 
 /** Define this to 1 in arch/cc.h of your port if your compiler does not provide
  * the limits.h header. You need to define the type limits yourself in this case
- * (e.g. INT_MAX).
+ * (e.g. INT_MAX, SSIZE_MAX).
  */
 #ifndef LWIP_NO_LIMITS_H
 #define LWIP_NO_LIMITS_H 0
@@ -173,6 +183,56 @@ typedef uintptr_t mem_ptr_t;
 /* Include limits.h? */
 #if !LWIP_NO_LIMITS_H
 #include <limits.h>
+#endif
+
+/* Do we need to define ssize_t? This is a compatibility hack:
+ * Unfortunately, this type seems to be unavailable on some systems (even if
+ * sys/types or unistd.h are available).
+ * Being like that, we define it to 'int' if SSIZE_MAX is not defined.
+ */
+#ifdef SSIZE_MAX
+/* If SSIZE_MAX is defined, unistd.h should provide the type as well */
+#ifndef LWIP_NO_UNISTD_H
+#define LWIP_NO_UNISTD_H 0
+#endif
+#if !LWIP_NO_UNISTD_H
+#include <unistd.h>
+#endif
+#else /* SSIZE_MAX */
+typedef int ssize_t;
+#define SSIZE_MAX INT_MAX
+#endif /* SSIZE_MAX */
+
+/* some maximum values needed in lwip code */
+#define LWIP_UINT32_MAX 0xffffffff
+
+/** Define this to 1 in arch/cc.h of your port if your compiler does not provide
+ * the ctype.h header. If ctype.h is available, a few character functions
+ * are mapped to the appropriate functions (lwip_islower, lwip_isdigit...), if
+ * not, a private implementation is provided.
+ */
+#ifndef LWIP_NO_CTYPE_H
+#define LWIP_NO_CTYPE_H 0
+#endif
+
+#if LWIP_NO_CTYPE_H
+#define lwip_in_range(c, lo, up)  ((u8_t)(c) >= (lo) && (u8_t)(c) <= (up))
+#define lwip_isdigit(c)           lwip_in_range((c), '0', '9')
+#define lwip_isxdigit(c)          (lwip_isdigit(c) || lwip_in_range((c), 'a', 'f') || lwip_in_range((c), 'A', 'F'))
+#define lwip_islower(c)           lwip_in_range((c), 'a', 'z')
+#define lwip_isspace(c)           ((c) == ' ' || (c) == '\f' || (c) == '\n' || (c) == '\r' || (c) == '\t' || (c) == '\v')
+#define lwip_isupper(c)           lwip_in_range((c), 'A', 'Z')
+#define lwip_tolower(c)           (lwip_isupper(c) ? (c) - 'A' + 'a' : c)
+#define lwip_toupper(c)           (lwip_islower(c) ? (c) - 'a' + 'A' : c)
+#else
+#include <ctype.h>
+#define lwip_isdigit(c)           isdigit((unsigned char)(c))
+#define lwip_isxdigit(c)          isxdigit((unsigned char)(c))
+#define lwip_islower(c)           islower((unsigned char)(c))
+#define lwip_isspace(c)           isspace((unsigned char)(c))
+#define lwip_isupper(c)           isupper((unsigned char)(c))
+#define lwip_tolower(c)           tolower((unsigned char)(c))
+#define lwip_toupper(c)           toupper((unsigned char)(c))
 #endif
 
 /** C++ const_cast<target_type>(val) equivalent to remove constness from a value (GCC -Wcast-qual) */
@@ -192,14 +252,19 @@ typedef uintptr_t mem_ptr_t;
 #define LWIP_PTR_NUMERIC_CAST(target_type, val) LWIP_CONST_CAST(target_type, val)
 #endif
 
+/** Avoid warnings/errors related to implicitly casting away packed attributes by doing a explicit cast */
+#ifndef LWIP_PACKED_CAST
+#define LWIP_PACKED_CAST(target_type, val) LWIP_CONST_CAST(target_type, val)
+#endif
+
 /** Allocates a memory buffer of specified size that is of sufficient size to align
  * its start address using LWIP_MEM_ALIGN.
  * You can declare your own version here e.g. to enforce alignment without adding
  * trailing padding bytes (see LWIP_MEM_ALIGN_BUFFER) or your own section placement
- * requirements.\n
- * e.g. if you use gcc and need 32 bit alignment:\n
- * \#define LWIP_DECLARE_MEMORY_ALIGNED(variable_name, size) u8_t variable_name[size] \_\_attribute\_\_((aligned(4)))\n
- * or more portable:\n
+ * requirements.<br>
+ * e.g. if you use gcc and need 32 bit alignment:<br>
+ * \#define LWIP_DECLARE_MEMORY_ALIGNED(variable_name, size) u8_t variable_name[size] \_\_attribute\_\_((aligned(4)))<br>
+ * or more portable:<br>
  * \#define LWIP_DECLARE_MEMORY_ALIGNED(variable_name, size) u32_t variable_name[(size + sizeof(u32_t) - 1) / sizeof(u32_t)]
  */
 #ifndef LWIP_DECLARE_MEMORY_ALIGNED
@@ -234,8 +299,8 @@ extern "C" {
 #endif
 
 /** Packed structs support.
-  * Placed BEFORE declaration of a packed struct.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Placed BEFORE declaration of a packed struct.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_BEGIN
@@ -243,8 +308,8 @@ extern "C" {
 #endif /* PACK_STRUCT_BEGIN */
 
 /** Packed structs support.
-  * Placed AFTER declaration of a packed struct.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Placed AFTER declaration of a packed struct.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_END
@@ -252,8 +317,8 @@ extern "C" {
 #endif /* PACK_STRUCT_END */
 
 /** Packed structs support.
-  * Placed between end of declaration of a packed struct and trailing semicolon.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Placed between end of declaration of a packed struct and trailing semicolon.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_STRUCT
@@ -265,8 +330,8 @@ extern "C" {
 #endif /* PACK_STRUCT_STRUCT */
 
 /** Packed structs support.
-  * Wraps u32_t and u16_t members.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Wraps u32_t and u16_t members.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_FIELD
@@ -274,8 +339,8 @@ extern "C" {
 #endif /* PACK_STRUCT_FIELD */
 
 /** Packed structs support.
-  * Wraps u8_t members, where some compilers warn that packing is not necessary.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Wraps u8_t members, where some compilers warn that packing is not necessary.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_FLD_8
@@ -283,20 +348,20 @@ extern "C" {
 #endif /* PACK_STRUCT_FLD_8 */
 
 /** Packed structs support.
-  * Wraps members that are packed structs themselves, where some compilers warn that packing is not necessary.\n
-  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+  * Wraps members that are packed structs themselves, where some compilers warn that packing is not necessary.<br>
+  * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
   * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
   */
 #ifndef PACK_STRUCT_FLD_S
 #define PACK_STRUCT_FLD_S(x) PACK_STRUCT_FIELD(x)
 #endif /* PACK_STRUCT_FLD_S */
 
-/** Packed structs support using \#include files before and after struct to be packed.\n
- * The file included BEFORE the struct is "arch/bpstruct.h".\n
- * The file included AFTER the struct is "arch/epstruct.h".\n
+/** PACK_STRUCT_USE_INCLUDES==1: Packed structs support using \#include files before and after struct to be packed.<br>
+ * The file included BEFORE the struct is "arch/bpstruct.h".<br>
+ * The file included AFTER the struct is "arch/epstruct.h".<br>
  * This can be used to implement struct packing on MS Visual C compilers, see
- * the Win32 port in the lwIP contrib repository for reference.
- * For examples of packed struct declarations, see include/lwip/prot/ subfolder.\n
+ * the Win32 port in the lwIP/contrib subdir for reference.
+ * For examples of packed struct declarations, see include/lwip/prot/ subfolder.<br>
  * A port to GCC/clang is included in lwIP, if you use these compilers there is nothing to do here.
  */
 #ifdef __DOXYGEN__
@@ -307,6 +372,24 @@ extern "C" {
 #ifndef LWIP_UNUSED_ARG
 #define LWIP_UNUSED_ARG(x) (void)x
 #endif /* LWIP_UNUSED_ARG */
+
+/** LWIP_PROVIDE_ERRNO==1: Let lwIP provide ERRNO values and the 'errno' variable.
+ * If this is disabled, cc.h must either define 'errno', include <errno.h>,
+ * define LWIP_ERRNO_STDINCLUDE to get <errno.h> included or
+ * define LWIP_ERRNO_INCLUDE to <errno.h> or equivalent.
+ */
+#if defined __DOXYGEN__
+#define LWIP_PROVIDE_ERRNO
+#endif
+
+/* Use a special, reproducable version of rand() for fuzz tests? */
+#ifdef LWIP_RAND_FOR_FUZZ
+#ifdef LWIP_RAND
+#undef LWIP_RAND
+#endif
+u32_t lwip_fuzz_rand(void);
+#define LWIP_RAND() lwip_fuzz_rand()
+#endif
 
 /**
  * @}

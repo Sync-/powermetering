@@ -47,6 +47,10 @@
 #include "lwip/ip6_addr.h"
 #endif /* PPP_IPV6_SUPPORT */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Disable non-working or rarely used PPP feature, so rarely that we don't want to bloat ppp_opts.h with them */
 #ifndef PPP_OPTIONS
 #define PPP_OPTIONS         0
@@ -262,9 +266,9 @@ typedef struct ppp_settings_s {
 #endif /* PAP_SUPPPORT */
 
 #if CHAP_SUPPORT
+#if PPP_SERVER
   u8_t  chap_timeout_time;       /* Timeout (seconds) for retransmitting req */
   u8_t  chap_max_transmits;      /* max # times to send challenge */
-#if PPP_SERVER
   u8_t  chap_rechallenge_time;   /* Time to wait for auth-req from peer */
 #endif /* PPP_SERVER */
 #endif /* CHAP_SUPPPORT */
@@ -684,6 +688,10 @@ err_t ppp_ioctl(ppp_pcb *pcb, u8_t cmd, void *arg);
 /* Set an lwIP-style link-callback for the selected PPP device */
 #define ppp_set_netif_linkcallback(ppp, link_cb)           \
         netif_set_link_callback(ppp->netif, link_cb);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PPP_H */
 
