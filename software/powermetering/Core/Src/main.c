@@ -41,6 +41,7 @@
 //#include "dmr.h"
 #include "ade.h"
 #include "fwupdate.h"
+#include "mqtt.h"
 #include "lwip.h"
 #include "netif.h"
 #include <math.h>
@@ -130,8 +131,9 @@ void linktask(void)
         char ip_name[CONFIG_STRINGLENGTH];
         config_get_string("name", ip_name);
         netif_set_hostname(&gnetif, ip_name);
-
+        LOCK_TCPIP_CORE();
         dhcp_start(&gnetif);
+        UNLOCK_TCPIP_CORE();
         network_state = 1; //dhcp_started
         SEGGER_RTT_printf(0, "DHCP started\n");
         vTaskDelay(15000);
@@ -140,9 +142,11 @@ void linktask(void)
       link = 0;
       HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
       SEGGER_RTT_printf(0, "Link goes down\n");
+      LOCK_TCPIP_CORE();
       netif_set_link_down(&gnetif);
 
       dhcp_stop(&gnetif);
+      UNLOCK_TCPIP_CORE();
       network_state = 0; //dhcp_off
       SEGGER_RTT_printf(0, "Link is down\n");
     }
@@ -157,9 +161,10 @@ void linktask(void)
 
       char* ip = ip4addr_ntoa(&ipaddr);
       SEGGER_RTT_printf(0,"%s\n",ip);
-
+      LOCK_TCPIP_CORE();
       netif_set_up(&gnetif);
       netif_set_link_up(&gnetif);
+      UNLOCK_TCPIP_CORE();
       SEGGER_RTT_printf(0, "DHCP UP\n");
     }else if (network_state == 1 && (dhcp_supplied_address(&gnetif) == 0)){
       SEGGER_RTT_printf(0, "DHCP no ip\n");
@@ -176,9 +181,10 @@ void linktask(void)
       IP4_ADDR(&gw, GATEWAY_ADDRESS[0], GATEWAY_ADDRESS[1], GATEWAY_ADDRESS[2], GATEWAY_ADDRESS[3]);
 
       dhcp_inform(&gnetif);
-
+      LOCK_TCPIP_CORE();
       netif_set_up(&gnetif);
       netif_set_link_up(&gnetif);
+      UNLOCK_TCPIP_CORE();
       SEGGER_RTT_printf(0, "Static IP\n");
     }
     vTaskDelay(100);
@@ -236,20 +242,20 @@ uint16_t ssi_handler(uint32_t index, char *insert, uint32_t insertlen)
     return len;
     //return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "I bims vong terst inne tag 2 her");
   }else if(index == 1){//CONFIG
-    return config_read(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
+    return config_read((uint8_t*)insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   }else if(index == 2){//NAME
     config_get_string("name", insert);
     return strnlen(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN);
   }
   else if (index == 3)
   { //PACKETCOUNTER
-    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %u\nMMCTGFMSCCR: %u\nMCTGFSCCR: %u\nMMCRGUFCR: %u\nMMCRFAECR: %u\nMMCRFCECR: %u \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR, ETH->MMCRGUFCR, ETH->MMCRFAECR, ETH->MMCRFCECR, xPortGetFreeHeapSize(), xPortGetMinimumEverFreeHeapSize());
+    return snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2, "IP packet counter:\nMMCTGFCR: %lu\nMMCTGFMSCCR: %lu\nMCTGFSCCR: %lu\nMMCRGUFCR: %lu\nMMCRFAECR: %lu\nMMCRFCECR: %lu \nxPortGetFreeHeapSize: %d\nxPortGetMinimumEverFreeHeapSize: %d", ETH->MMCTGFCR, ETH->MMCTGFMSCCR, ETH->MMCTGFSCCR, ETH->MMCRGUFCR, ETH->MMCRFAECR, ETH->MMCRFCECR, xPortGetFreeHeapSize(), xPortGetMinimumEverFreeHeapSize());
   }
   else if (index == 4)
   { //PHASOR
     extern struct ade_float_t ade_f;
     int len =  snprintf(insert, LWIP_HTTPD_MAX_TAG_INSERT_LEN - 2,
-                    "{\"status\": [%d,%d], "
+                    "{\"status\": [%lu,%lu], "
                     "\"U\": {\"L1\": %.2f, \"L2\": %.2f, \"L3\": %.2f, \"L1(one)\": %.2f, \"L2(one)\": %.2f, \"L3(one)\": %.2f, \"L1(1012)\": %.2f, \"L2(1012)\": %.2f, \"L3(1012)\": %.2f}, "
                     "\"ang_U\":{ \"L2\":%.2f, \"L3\": %.2f}, "
                     "\"ang_I\":{ \"L1\":%.2f, \"L2\": %.2f, \"L3\": %.2f}, "
@@ -373,6 +379,7 @@ int main(void)
   xTaskCreate((TaskFunction_t)SPI_get_data, "Get ADE values", configMINIMAL_STACK_SIZE * 2, NULL, configMAX_PRIORITIES - 2, NULL);
   influx_init();
   //dmr_task_init();
+  mqtt_init();
 
 
   SEGGER_RTT_printf(0, "Tasks running\n");
