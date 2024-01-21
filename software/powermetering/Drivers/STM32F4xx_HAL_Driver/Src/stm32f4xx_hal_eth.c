@@ -941,6 +941,7 @@ HAL_StatusTypeDef HAL_ETH_TransmitFrame(ETH_HandleTypeDef *heth, uint32_t FrameL
     heth->TxDesc->Status |=ETH_DMATXDESC_FS|ETH_DMATXDESC_LS;
     /* Set frame size */
     heth->TxDesc->ControlBufferSize = (FrameLength & ETH_DMATXDESC_TBS1);
+    __DMB();
     /* Set Own bit of the Tx descriptor Status: gives the buffer back to ETHERNET DMA */
     heth->TxDesc->Status |= ETH_DMATXDESC_OWN;
     /* Point to next descriptor */
@@ -969,14 +970,14 @@ HAL_StatusTypeDef HAL_ETH_TransmitFrame(ETH_HandleTypeDef *heth, uint32_t FrameL
         size = FrameLength - (bufcount-1U)*ETH_TX_BUF_SIZE;
         heth->TxDesc->ControlBufferSize = (size & ETH_DMATXDESC_TBS1);
       }
-      
+      __DMB();
       /* Set Own bit of the Tx descriptor Status: gives the buffer back to ETHERNET DMA */
       heth->TxDesc->Status |= ETH_DMATXDESC_OWN;
       /* point to next descriptor */
       heth->TxDesc = (ETH_DMADescTypeDef *)(heth->TxDesc->Buffer2NextDescAddr);
     }
   }
-  
+  __DMB();
   /* When Tx Buffer unavailable flag is set: clear it and resume transmission */
   if (((heth->Instance)->DMASR & ETH_DMASR_TBUS) != (uint32_t)RESET)
   {
