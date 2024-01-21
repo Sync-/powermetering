@@ -356,6 +356,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
   for(q = p; q != NULL; q = q->next)
     {
       /* Is this buffer available? If not, goto error */
+      __DMB();
       if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
       {
         errval = ERR_USE;
@@ -376,6 +377,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
         DmaTxDesc = (ETH_DMADescTypeDef *)(DmaTxDesc->Buffer2NextDescAddr);
       
         /* Check if the buffer is available */
+        __DMB();
         if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
         {
           errval = ERR_USE;
@@ -397,6 +399,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
     }
   
   /* Prepare transmit descriptors to give to DMA */ 
+  __DMB();
   HAL_ETH_TransmitFrame(&heth, framelength);
   
   errval = ERR_OK;
@@ -410,6 +413,7 @@ error:
     heth.Instance->DMASR = ETH_DMASR_TUS;
 
     /* Resume DMA transmission*/
+    __DMB();
     heth.Instance->DMATPDR = 0;
   }
   return errval;
@@ -440,6 +444,7 @@ static struct pbuf * low_level_input(struct netif *netif)
   // https://community.st.com/s/question/0D50X0000BOtUflSQF/bug-stm32-lwip-ethernet-driver-rx-deadlock
   HAL_StatusTypeDef status;
   LOCK_TCPIP_CORE();
+  __DMB();
   status = HAL_ETH_GetReceivedFrame_IT(&heth);
   UNLOCK_TCPIP_CORE();
   if (status != HAL_OK) {
@@ -491,6 +496,7 @@ static struct pbuf * low_level_input(struct netif *netif)
     /* Set Own bit in Rx descriptors: gives the buffers back to DMA */
     for (i=0; i< heth.RxFrameInfos.SegCount; i++)
     {  
+      __DMB();
       dmarxdesc->Status |= ETH_DMARXDESC_OWN;
       dmarxdesc = (ETH_DMADescTypeDef *)(dmarxdesc->Buffer2NextDescAddr);
     }
@@ -539,6 +545,9 @@ void ethernetif_input( void const * argument )
         }
       } while(p!=NULL);
     }
+    //TODO: do dhcp and link stuff here?
+    //devrease portMAX_DELAY
+    //https://community.st.com/t5/stm32cubemx-mcus/cubemx-lwip-ethernet-link-thread-bug/m-p/126556
   }
 }
 
