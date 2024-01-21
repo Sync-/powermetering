@@ -12,6 +12,7 @@ project(powermeter)
 
 add_executable(${PROJECT_NAME}.elf
     Core/Src/main.c
+    Core/Src/syscalls.c
     Core/Src/fwupdate.c
     Core/Src/influx.c
     Core/Src/mqtt_client.c
